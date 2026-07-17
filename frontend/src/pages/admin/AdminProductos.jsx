@@ -13,6 +13,7 @@ const PRODUCTO_VACIO = {
   category: "General",
   image_url: "",
   stock: 10,
+  featured: false,
 };
 
 export default function AdminProductos() {
@@ -41,7 +42,10 @@ export default function AdminProductos() {
 
   useEffect(cargar, []);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+  };
 
   const handleEditar = (producto) => {
     setForm(producto);
@@ -69,6 +73,7 @@ export default function AdminProductos() {
       category: form.category,
       image_url: form.image_url,
       stock: Number(form.stock),
+      featured: form.featured,
     };
 
     try {
@@ -137,6 +142,11 @@ export default function AdminProductos() {
             </label>
           </div>
 
+          <label className="zz-admin__checkbox">
+            <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} />
+            Mostrar en "Piezas destacadas" del inicio
+          </label>
+
           <div className="zz-admin__form-acciones">
             <button className="btn" type="submit" disabled={guardando}>
               {guardando ? "Guardando…" : form.id ? "Guardar cambios" : "Crear producto"}
@@ -167,7 +177,10 @@ export default function AdminProductos() {
                 <div className="zz-admin__producto-placeholder" />
               )}
               <div className="zz-admin__producto-info">
-                <p className="zz-admin__producto-nombre">{producto.name}</p>
+                <p className="zz-admin__producto-nombre">
+                  {producto.featured && <span title="Destacado en inicio">⭐ </span>}
+                  {producto.name}
+                </p>
                 <p className="zz-admin__producto-meta">
                   {producto.category} · S/ {producto.price} · Stock: {producto.stock}
                 </p>

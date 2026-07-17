@@ -19,6 +19,13 @@ export default function Bazar() {
   const [categoria, setCategoria] = useState("Todas");
   const [orden, setOrden] = useState("recientes");
   const [precioMax, setPrecioMax] = useState("");
+  const [agregadoId, setAgregadoId] = useState(null);
+
+  const handleAgregar = (pieza) => {
+    addItem(pieza);
+    setAgregadoId(pieza.id);
+    setTimeout(() => setAgregadoId(null), 900);
+  };
 
   useEffect(() => {
     let activo = true;
@@ -191,11 +198,11 @@ export default function Bazar() {
                       )}
                     </div>
                     <button
-                      className="btn btn-ghost zz-bazar__addbtn"
-                      onClick={() => addItem(pieza)}
+                      className={`btn btn-ghost zz-bazar__addbtn ${agregadoId === pieza.id ? "zz-bazar__addbtn--ok" : ""}`}
+                      onClick={() => handleAgregar(pieza)}
                       disabled={pieza.stock === 0}
                     >
-                      {pieza.stock === 0 ? "Agotado" : "Agregar"}
+                      {pieza.stock === 0 ? "Agotado" : agregadoId === pieza.id ? "✓ Agregado" : "Agregar"}
                     </button>
                   </div>
                 </article>

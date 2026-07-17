@@ -98,8 +98,8 @@ export default function ProductoDetalle() {
                 <button onClick={() => setCantidad((q) => Math.min(producto.stock, q + 1))}>+</button>
               </div>
 
-              <button className="btn" onClick={handleAgregar}>
-                {agregado ? "¡Agregado!" : "Agregar al carrito"}
+              <button className={`btn ${agregado ? "zz-bazar__addbtn--ok" : ""}`} onClick={handleAgregar}>
+                {agregado ? "✓ ¡Agregado!" : "Agregar al carrito"}
               </button>
             </div>
           )}

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import SvgDefs from "./components/SvgDefs";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -21,13 +21,16 @@ import AdminProductos from "./pages/admin/AdminProductos";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
+  const location = useLocation();
+
   return (
     <AuthProvider>
       <CartProvider>
         <SvgDefs />
         <Navbar />
         <main>
-          <Routes>
+          <div key={location.pathname} className="zz-page-fade">
+            <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/grimorio" element={<Grimorio />} />
             <Route path="/bazar" element={<Bazar />} />
@@ -63,7 +66,8 @@ export default function App() {
               }
             />
             <Route path="*" element={<NotFound />} />
-          </Routes>
+            </Routes>
+          </div>
         </main>
         <Footer />
       </CartProvider>

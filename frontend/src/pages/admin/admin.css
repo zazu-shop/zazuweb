@@ -341,3 +341,22 @@ a.zz-admin__pedido-header {
   font-size: 1.1rem;
   margin: 0.3rem 0 var(--space-sm);
 }
+
+.zz-admin__checkbox {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.6rem;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.9rem !important;
+  color: var(--zz-parchment) !important;
+  margin: var(--space-sm) 0;
+}
+
+.zz-admin__checkbox input {
+  accent-color: var(--zz-gold);
+  width: 16px;
+  height: 16px;
+}

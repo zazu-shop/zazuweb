@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useCart } from "../lib/CartContext";
 import { crearPedido } from "../lib/ordersService";
 import { descargarResumenPedido } from "../lib/receiptGenerator";
+import ChispasDoradas from "../components/ChispasDoradas";
 import "./carrito.css";
 
 const WHATSAPP_NUMERO = import.meta.env.VITE_WHATSAPP_NUMERO || "";
@@ -115,6 +116,7 @@ export default function Carrito() {
 
   return (
     <section className="section">
+      {vista === "confirmado" && <ChispasDoradas />}
       <div className="container zz-carrito">
         {/* ---- Columna izquierda: items del carrito o resumen del pedido confirmado ---- */}
         <div className="zz-carrito__col-izq">

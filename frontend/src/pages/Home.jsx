@@ -1,24 +1,36 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Sigil from "../components/Sigil";
 import RoughDivider from "../components/RoughDivider";
+import { supabase } from "../lib/supabaseClient";
 import "./home.css";
 
-const PIEZAS = [
-  {
-    titulo: "Amuleto de Cuervo Negro",
-    desc: "Tallado en madera de roble ahumado, engastado en latón envejecido.",
-  },
-  {
-    titulo: "Grimorio de Bolsillo",
-    desc: "Cubierta en cuero repujado a mano con el sigilo de la casa.",
-  },
-  {
-    titulo: "Vela de Vigilia Púrpura",
-    desc: "Cera de soja con resina de mirra, para rituales de introspección.",
-  },
-];
-
 export default function Home() {
+  const [piezas, setPiezas] = useState([]);
+  const [estado, setEstado] = useState("cargando"); // cargando | listo | error
+
+  useEffect(() => {
+    if (!supabase) {
+      setEstado("error");
+      return;
+    }
+
+    supabase
+      .from("products")
+      .select("id, name, description, image_url")
+      .eq("featured", true)
+      .order("created_at", { ascending: false })
+      .limit(3)
+      .then(({ data, error }) => {
+        if (error) {
+          setEstado("error");
+          return;
+        }
+        setPiezas(data);
+        setEstado("listo");
+      });
+  }, []);
+
   return (
     <>
       {/* ---- Hero: el sigilo como tesis visual ---- */}
@@ -73,23 +85,42 @@ export default function Home() {
         <RoughDivider label="Capítulo II · Piezas Destacadas" />
       </div>
 
-      {/* ---- Piezas destacadas ---- */}
+      {/* ---- Piezas destacadas (desde Supabase, marcadas en el admin) ---- */}
       <section className="section">
         <div className="container">
           <p className="eyebrow">Del bazar</p>
           <h2 className="zz-section-title">Piezas destacadas</h2>
 
-          <div className="grid grid-3 zz-pieces">
-            {PIEZAS.map((p) => (
-              <article className="card" key={p.titulo}>
-                <div className="zz-piece__mark">
-                  <Sigil size={30} />
-                </div>
-                <h3>{p.titulo}</h3>
-                <p>{p.desc}</p>
-              </article>
-            ))}
-          </div>
+          {estado === "cargando" && <p className="zz-bazar__status">Invocando piezas…</p>}
+
+          {estado === "error" && (
+            <p className="zz-bazar__status">No pudimos cargar las piezas destacadas.</p>
+          )}
+
+          {estado === "listo" && piezas.length === 0 && (
+            <p className="zz-bazar__status">
+              Aún no marcaste ninguna pieza como destacada — hazlo desde{" "}
+              <Link to="/admin/productos">el panel de productos</Link>.
+            </p>
+          )}
+
+          {estado === "listo" && piezas.length > 0 && (
+            <div className="grid grid-3 zz-pieces">
+              {piezas.map((p) => (
+                <Link to={`/bazar/${p.id}`} className="card zz-pieces__card" key={p.id}>
+                  {p.image_url ? (
+                    <img src={p.image_url} alt={p.name} className="zz-pieces__imagen" />
+                  ) : (
+                    <div className="zz-piece__mark">
+                      <Sigil size={30} />
+                    </div>
+                  )}
+                  <h3>{p.name}</h3>
+                  <p>{p.description}</p>
+                </Link>
+              ))}
+            </div>
+          )}
 
           <div className="zz-pieces__cta">
             <Link to="/bazar" className="btn btn-ghost">Ver todo el bazar →</Link>

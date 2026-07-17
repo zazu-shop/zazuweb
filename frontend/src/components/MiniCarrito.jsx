@@ -6,7 +6,19 @@ import "./miniCarrito.css";
 export default function MiniCarrito() {
   const { items, totalItems, totalPrice } = useCart();
   const [abierto, setAbierto] = useState(false);
+  const [saltando, setSaltando] = useState(false);
   const ref = useRef(null);
+  const anteriorRef = useRef(totalItems);
+
+  useEffect(() => {
+    if (totalItems > anteriorRef.current) {
+      setSaltando(true);
+      const t = setTimeout(() => setSaltando(false), 400);
+      anteriorRef.current = totalItems;
+      return () => clearTimeout(t);
+    }
+    anteriorRef.current = totalItems;
+  }, [totalItems]);
 
   useEffect(() => {
     const handleClickFuera = (e) => {
@@ -19,7 +31,7 @@ export default function MiniCarrito() {
   return (
     <div className="zz-minicart" ref={ref}>
       <button
-        className="zz-nav__cart"
+        className={`zz-nav__cart ${saltando ? "zz-nav__cart--bump" : ""}`}
         onClick={() => setAbierto((v) => !v)}
         aria-expanded={abierto}
       >

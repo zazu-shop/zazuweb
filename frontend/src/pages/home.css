@@ -114,3 +114,18 @@
 .zz-cta__inner .lead {
   margin-bottom: var(--space-md);
 }
+
+.zz-pieces__card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.zz-pieces__imagen {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: calc(var(--space-md) * -1) calc(var(--space-md) * -1) var(--space-sm);
+  width: calc(100% + var(--space-md) * 2);
+}

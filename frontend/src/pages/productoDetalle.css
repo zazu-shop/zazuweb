@@ -79,3 +79,15 @@
 .zz-detalle__notfound {
   text-align: center;
 }
+
+@keyframes zz-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.zz-bazar__addbtn--ok {
+  background: var(--zz-gold) !important;
+  color: var(--zz-void) !important;
+  animation: zz-pop 0.35s ease;
+}
