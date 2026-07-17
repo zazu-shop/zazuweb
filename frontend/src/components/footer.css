@@ -59,3 +59,12 @@
   border-top: 1px solid var(--zz-line-soft);
   margin-top: var(--space-sm);
 }
+
+.zz-footer__admin-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.zz-footer__admin-link:hover {
+  color: var(--zz-gold-bright);
+}

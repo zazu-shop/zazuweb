@@ -19,7 +19,7 @@ export default function Footer() {
         </nav>
 
         <p className="zz-footer__copy">
-          © {new Date().getFullYear()} Zazu. Todos los sigilos reservados.
+          © <a href="/admin/login" className="zz-footer__admin-link">{new Date().getFullYear()}</a> Zazu. Todos los sigilos reservados.
         </p>
       </div>
     </footer>
