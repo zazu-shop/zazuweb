@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { sonidos8bit } from "../../lib/sonidos8bit";
 
 const CASILLAS = 9;
 const DURACION = 30; // segundos
@@ -32,6 +33,7 @@ export default function AtrapaSigilo() {
           clearInterval(cronometroRef.current);
           setJugando(false);
           setActiva(null);
+          sonidos8bit.finJuego();
           return 0;
         }
         return t - 1;
@@ -54,6 +56,7 @@ export default function AtrapaSigilo() {
 
   const atrapar = (i) => {
     if (i === activa) {
+      sonidos8bit.atrapar();
       setPuntaje((p) => p + 1);
       setActiva(null);
     }

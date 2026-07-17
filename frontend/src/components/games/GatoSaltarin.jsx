@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { sonidos8bit } from "../../lib/sonidos8bit";
 
 const ANCHO = 560;
 const ALTO = 180;
@@ -34,6 +35,7 @@ export default function GatoSaltarin() {
     if (s && !s.saltando) {
       s.saltando = true;
       s.velocidadY = SALTO;
+      sonidos8bit.salto();
     }
   };
 
@@ -84,6 +86,7 @@ export default function GatoSaltarin() {
         const colisionX = gatoX + gatoAncho > o.x && gatoX < o.x + o.ancho;
         const colisionY = s.gatoY + 28 > SUELO + 30 - o.alto;
         if (colisionX && colisionY) {
+          sonidos8bit.golpe();
           setJugando(false);
           setTerminado(true);
           const finalScore = Math.floor(s.puntaje);
