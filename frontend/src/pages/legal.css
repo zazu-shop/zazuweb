@@ -1,0 +1,39 @@
+.zz-legal {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.zz-legal__intro {
+  margin: var(--space-sm) 0 var(--space-md);
+}
+
+.zz-legal h2 {
+  font-size: var(--fs-h3);
+  color: var(--zz-gold-bright);
+  margin: var(--space-lg) 0 var(--space-sm);
+}
+
+.zz-legal p {
+  color: var(--zz-parchment-dim);
+  line-height: 1.8;
+  margin-bottom: var(--space-sm);
+}
+
+.zz-legal a {
+  color: var(--zz-gold);
+  text-decoration: underline;
+}
+
+.zz-legal__lista {
+  margin: var(--space-sm) 0 var(--space-md) 1.2rem;
+  color: var(--zz-parchment-dim);
+  line-height: 1.8;
+}
+
+.zz-legal__lista li {
+  margin-bottom: 0.5rem;
+}
+
+.zz-legal__lista strong {
+  color: var(--zz-parchment);
+}

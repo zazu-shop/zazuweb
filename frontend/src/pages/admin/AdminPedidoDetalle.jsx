@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
+import Modal from "../../components/Modal";
 import "./admin.css";
 
 const ESTADOS = [
@@ -25,6 +26,8 @@ export default function AdminPedidoDetalle() {
   const { id } = useParams();
   const [pedido, setPedido] = useState(null);
   const [estadoCarga, setEstadoCarga] = useState("cargando");
+  const [productoModal, setProductoModal] = useState(null);
+  const [cargandoProducto, setCargandoProducto] = useState(false);
 
   const cargar = () => {
     supabase
@@ -50,6 +53,14 @@ export default function AdminPedidoDetalle() {
   const cambiarEstado = async (nuevoEstado) => {
     const { error } = await supabase.from("orders").update({ status: nuevoEstado }).eq("id", id);
     if (!error) setPedido({ ...pedido, status: nuevoEstado });
+  };
+
+  const verProducto = async (productId) => {
+    if (!productId) return;
+    setCargandoProducto(true);
+    const { data } = await supabase.from("products").select("*").eq("id", productId).single();
+    setProductoModal(data || null);
+    setCargandoProducto(false);
   };
 
   if (estadoCarga === "cargando") {
@@ -131,7 +142,11 @@ export default function AdminPedidoDetalle() {
             <tbody>
               {pedido.order_items.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.name}</td>
+                  <td>
+                    <button className="zz-admin__item-link" onClick={() => verProducto(item.product_id)}>
+                      {item.name}
+                    </button>
+                  </td>
                   <td>{item.qty}</td>
                   <td>S/ {(item.price * item.qty).toFixed(2)}</td>
                 </tr>
@@ -156,6 +171,29 @@ export default function AdminPedidoDetalle() {
           </label>
         </div>
       </div>
+
+      {(cargandoProducto || productoModal !== null) && (
+        <Modal onClose={() => setProductoModal(null)}>
+          {cargandoProducto ? (
+            <p className="zz-bazar__status">Cargando producto…</p>
+          ) : productoModal ? (
+            <>
+              {productoModal.image_url ? (
+                <img src={productoModal.image_url} alt={productoModal.name} className="zz-admin__modal-imagen" />
+              ) : (
+                <div className="zz-admin__modal-imagen zz-admin__producto-placeholder" />
+              )}
+              <p className="eyebrow">{productoModal.category || "General"}</p>
+              <h2>{productoModal.name}</h2>
+              <p className="zz-admin__modal-precio">S/ {productoModal.price}</p>
+              <p>{productoModal.description}</p>
+              <p className="zz-admin__envio-costo">Stock actual: {productoModal.stock}</p>
+            </>
+          ) : (
+            <p className="zz-bazar__status">Este producto ya no existe en el catálogo.</p>
+          )}
+        </Modal>
+      )}
     </section>
   );
 }

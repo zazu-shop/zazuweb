@@ -311,3 +311,33 @@ a.zz-admin__pedido-header {
 .zz-admin__eliminar:hover {
   background: rgba(214, 122, 106, 0.15);
 }
+
+.zz-admin__item-link {
+  background: none;
+  border: none;
+  color: var(--zz-gold);
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+}
+
+.zz-admin__item-link:hover {
+  color: var(--zz-gold-bright);
+}
+
+.zz-admin__modal-imagen {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: var(--radius-soft);
+  margin-bottom: var(--space-sm);
+}
+
+.zz-admin__modal-precio {
+  font-family: var(--font-mono);
+  color: var(--zz-gold-bright);
+  font-size: 1.1rem;
+  margin: 0.3rem 0 var(--space-sm);
+}
