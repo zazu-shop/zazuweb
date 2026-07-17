@@ -68,3 +68,13 @@
 .zz-footer__admin-link:hover {
   color: var(--zz-gold-bright);
 }
+
+.zz-footer__links--legal {
+  font-size: 0.75rem;
+  color: var(--zz-parchment-dim);
+  width: 100%;
+  justify-content: center;
+  border-top: 1px solid var(--zz-line-soft);
+  padding-top: var(--space-sm);
+  margin-top: var(--space-sm);
+}

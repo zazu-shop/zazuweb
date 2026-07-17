@@ -7,6 +7,7 @@ const LINKS = [
   { to: "/", label: "Inicio" },
   { to: "/grimorio", label: "El Grimorio" },
   { to: "/bazar", label: "Bazar" },
+  { to: "/seguimiento", label: "Mi pedido" },
   { to: "/contacto", label: "Contacto" },
 ];
 

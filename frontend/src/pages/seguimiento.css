@@ -1,0 +1,44 @@
+.zz-seguimiento {
+  max-width: 560px;
+}
+
+.zz-seguimiento__intro {
+  margin: var(--space-sm) 0 var(--space-lg);
+}
+
+.zz-seguimiento__form {
+  max-width: 400px;
+}
+
+.zz-seguimiento__resultado {
+  margin-top: var(--space-md);
+}
+
+.zz-seguimiento__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-sm);
+}
+
+.zz-seguimiento__fecha {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--zz-parchment-dim);
+  margin-bottom: var(--space-md);
+}
+
+.zz-seguimiento__items {
+  margin: var(--space-md) 0;
+}
+
+.zz-seguimiento__envio {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--zz-parchment-dim);
+  margin-top: var(--space-sm);
+}
+
+.zz-seguimiento__otro {
+  margin-top: var(--space-md);
+}

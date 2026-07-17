@@ -11,6 +11,9 @@ import Bazar from "./pages/Bazar";
 import ProductoDetalle from "./pages/ProductoDetalle";
 import Carrito from "./pages/Carrito";
 import Contacto from "./pages/Contacto";
+import Seguimiento from "./pages/Seguimiento";
+import PoliticaEnvios from "./pages/PoliticaEnvios";
+import Terminos from "./pages/Terminos";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminPedidos from "./pages/admin/AdminPedidos";
 import AdminPedidoDetalle from "./pages/admin/AdminPedidoDetalle";
@@ -31,6 +34,9 @@ export default function App() {
             <Route path="/bazar/:id" element={<ProductoDetalle />} />
             <Route path="/carrito" element={<Carrito />} />
             <Route path="/contacto" element={<Contacto />} />
+            <Route path="/seguimiento" element={<Seguimiento />} />
+            <Route path="/politica-envios" element={<PoliticaEnvios />} />
+            <Route path="/terminos" element={<Terminos />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route
               path="/admin/pedidos"

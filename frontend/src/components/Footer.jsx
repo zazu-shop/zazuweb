@@ -15,7 +15,13 @@ export default function Footer() {
         <nav className="zz-footer__links">
           <a href="/grimorio">El Grimorio</a>
           <a href="/bazar">Bazar</a>
+          <a href="/seguimiento">Mi pedido</a>
           <a href="/contacto">Contacto</a>
+        </nav>
+
+        <nav className="zz-footer__links zz-footer__links--legal">
+          <a href="/politica-envios">Envíos y devoluciones</a>
+          <a href="/terminos">Términos y condiciones</a>
         </nav>
 
         <p className="zz-footer__copy">
