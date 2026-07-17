@@ -1,0 +1,116 @@
+.zz-hero {
+  padding: var(--space-xl) 0 var(--space-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.zz-hero__inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.zz-hero__title {
+  font-family: var(--font-feral);
+  font-weight: 400;
+  font-size: var(--fs-hero);
+  letter-spacing: 0.01em;
+  margin: var(--space-sm) 0 var(--space-md);
+}
+
+.zz-hero__title em {
+  font-style: normal;
+  color: var(--zz-gold);
+}
+
+.zz-hero__actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.zz-hero__sigil {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 60px rgba(124, 77, 190, 0.35));
+}
+
+.zz-hero__aura {
+  position: absolute;
+  opacity: 0.55;
+}
+
+.zz-hero__logo {
+  position: relative;
+  width: min(280px, 60vw);
+  filter: drop-shadow(0 0 18px rgba(201, 162, 39, 0.25));
+}
+
+@media (max-width: 860px) {
+  .zz-hero__inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .zz-hero__actions {
+    justify-content: center;
+  }
+}
+
+.zz-story {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .zz-story {
+    grid-template-columns: 1fr;
+  }
+}
+
+.zz-section-title {
+  margin-bottom: var(--space-md);
+}
+
+.zz-pieces {
+  margin-top: var(--space-md);
+}
+
+.zz-piece__mark {
+  margin-bottom: var(--space-sm);
+  opacity: 0.9;
+}
+
+.zz-pieces article h3 {
+  font-size: var(--fs-h3);
+  margin-bottom: 0.5rem;
+}
+
+.zz-pieces article p {
+  color: var(--zz-parchment-dim);
+  font-size: 0.95rem;
+}
+
+.zz-pieces__cta {
+  margin-top: var(--space-lg);
+  text-align: center;
+}
+
+.zz-cta {
+  text-align: center;
+  background: radial-gradient(ellipse at center, rgba(75, 33, 112, 0.25), transparent 70%);
+}
+
+.zz-cta__inner h2 {
+  margin-bottom: var(--space-sm);
+}
+
+.zz-cta__inner .lead {
+  margin-bottom: var(--space-md);
+}

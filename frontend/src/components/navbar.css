@@ -1,0 +1,145 @@
+.zz-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 7, 16, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--zz-line-soft);
+}
+
+.zz-nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-sm);
+  padding-bottom: var(--space-sm);
+}
+
+.zz-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  letter-spacing: 0.32em;
+  color: var(--zz-parchment);
+}
+
+.zz-nav__mark {
+  height: 42px;
+  width: auto;
+}
+
+.zz-nav__links {
+  display: flex;
+  gap: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.zz-nav__links a {
+  position: relative;
+  color: var(--zz-parchment-dim);
+  padding: 0.4rem 0;
+  transition: color 0.25s ease;
+}
+
+.zz-nav__links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: var(--zz-gold);
+  transition: width 0.25s ease;
+}
+
+.zz-nav__links a:hover,
+.zz-nav__links a.is-active {
+  color: var(--zz-gold-bright);
+}
+
+.zz-nav__links a:hover::after,
+.zz-nav__links a.is-active::after {
+  width: 100%;
+}
+
+.zz-nav__cart {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--zz-parchment-dim);
+  cursor: pointer;
+  padding: 0.4rem 0;
+}
+
+.zz-nav__cart:hover {
+  color: var(--zz-gold-bright);
+}
+
+.zz-nav__cart-label {
+  margin-right: 0.15rem;
+}
+
+.zz-nav__cart-count {
+  background: var(--zz-gold);
+  color: var(--zz-void);
+  font-size: 0.68rem;
+  font-weight: 700;
+  border-radius: 999px;
+  min-width: 1.2rem;
+  height: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.35rem;
+  margin-left: 0.1rem;
+}
+
+.zz-nav__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+}
+
+.zz-nav__toggle span {
+  width: 22px;
+  height: 1.5px;
+  background: var(--zz-gold);
+}
+
+@media (max-width: 760px) {
+  .zz-nav__toggle {
+    display: flex;
+  }
+
+  .zz-nav__links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: var(--zz-void-2);
+    padding: var(--space-md);
+    gap: var(--space-sm);
+    border-bottom: 1px solid var(--zz-line-soft);
+    display: none;
+  }
+
+  .zz-nav__links--open {
+    display: flex;
+  }
+}

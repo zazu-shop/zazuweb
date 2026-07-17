@@ -1,0 +1,63 @@
+.zz-contacto__inner {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .zz-contacto__inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.zz-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.zz-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--zz-parchment-dim);
+}
+
+.zz-form input,
+.zz-form textarea {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--zz-parchment);
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: var(--radius-soft);
+  padding: 0.75rem 1rem;
+  resize: vertical;
+}
+
+.zz-form input:focus,
+.zz-form textarea:focus {
+  border-color: var(--zz-gold);
+}
+
+.zz-form button {
+  align-self: flex-start;
+}
+
+.zz-form__status {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.zz-form__status--ok {
+  color: var(--zz-gold-bright);
+}
+
+.zz-form__status--error {
+  color: #d67a6a;
+}

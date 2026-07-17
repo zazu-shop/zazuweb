@@ -1,0 +1,41 @@
+:root {
+  /* ---- Paleta Zazu ---- */
+  --zz-void: #0b0710;        /* fondo primario, vacío arcano */
+  --zz-void-2: #150f1e;      /* superficie secundaria (cards, nav) */
+  --zz-void-3: #1d1428;      /* superficie elevada (hover cards) */
+  --zz-parchment: #ece3ce;   /* texto principal, tono pergamino */
+  --zz-parchment-dim: #b9ae95; /* texto secundario */
+  --zz-gold: #c9a227;        /* dorado envejecido, acento primario */
+  --zz-gold-bright: #e8c468; /* dorado vivo, hover / foco */
+  --zz-purple: #4b2170;      /* púrpura profundo, acento secundario */
+  --zz-purple-2: #7c4dbe;    /* púrpura de resplandor / glow */
+  --zz-line: rgba(201, 162, 39, 0.35); /* línea de tinta translúcida */
+  --zz-line-soft: rgba(236, 227, 206, 0.12);
+
+  /* ---- Tipografía ---- */
+  --font-display: "Cinzel", serif;                 /* títulos tallados */
+  --font-sub: "Cormorant Garamond", serif;          /* subtítulos, citas */
+  --font-body: "EB Garamond", serif;                /* cuerpo de texto */
+  --font-mono: "JetBrains Mono", monospace;         /* etiquetas, códices */
+  --font-feral: "Pirata One", var(--font-display);  /* solo el titular del hero: eco del wordmark del logo */
+
+  /* ---- Escala tipográfica ---- */
+  --fs-hero: clamp(2.8rem, 6vw, 5.4rem);
+  --fs-h1: clamp(2.2rem, 4vw, 3.4rem);
+  --fs-h2: clamp(1.6rem, 3vw, 2.3rem);
+  --fs-h3: clamp(1.2rem, 2vw, 1.5rem);
+  --fs-body: 1.05rem;
+  --fs-small: 0.85rem;
+  --fs-eyebrow: 0.75rem;
+
+  /* ---- Espaciado ---- */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 4rem;
+  --space-xl: 7rem;
+
+  /* ---- Bordes / radios ---- */
+  --radius-soft: 2px; /* casi recto: el "boceto" vive en el trazo, no en curvas suaves */
+  --max-width: 1180px;
+}

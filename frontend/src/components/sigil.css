@@ -1,0 +1,23 @@
+.zz-sigil {
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+.zz-sigil--animated {
+  animation: zz-spin 60s linear infinite;
+}
+
+.zz-sigil:hover,
+a:hover .zz-sigil {
+  filter: url(#zz-roughen) drop-shadow(0 0 10px rgba(232, 196, 104, 0.55));
+}
+
+@keyframes zz-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zz-sigil--animated {
+    animation: none;
+  }
+}
