@@ -14,45 +14,77 @@
   flex-wrap: wrap;
 }
 
-/* ---- Gabinete: la ilustración SVG de fondo + los carretes reales encima ---- */
-/* El viewBox de SlotMachineFrame es 380x460; convertimos sus coordenadas a % */
+/* ---- Gabinete: imagen real 1024x1024, con overlays posicionados en % ---- */
 .zz-bingo__gabinete {
   position: relative;
-  width: 380px;
-  max-width: 90vw;
-  aspect-ratio: 380 / 460;
+  width: 460px;
+  max-width: 92vw;
+  aspect-ratio: 1 / 1;
 }
 
+.zz-bingo__gabinete--girando {
+  animation: zz-frame-shake 0.15s ease-in-out infinite;
+}
+
+@keyframes zz-frame-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px) rotate(-0.3deg); }
+  75% { transform: translateX(2px) rotate(0.3deg); }
+}
+
+.zz-bingo__imagen {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Texto sobre la cinta/banner vacía de la ilustración */
+.zz-bingo__banner-texto {
+  position: absolute;
+  left: 26.6%;
+  top: 26.5%;
+  width: 46.5%;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: clamp(0.5rem, 1.6vw, 0.72rem);
+  letter-spacing: 0.04em;
+  color: var(--zz-void);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+/* Las dos ventanas: coordenadas medidas sobre la imagen 1024x1024 */
 .zz-bingo__ventana {
   position: absolute;
-  /* ventana del SVG: x=70 y=182 w=240 h=150 sobre 380x460 */
-  left: 18.4%;
-  top: 39.5%;
-  width: 63.2%;
-  height: 32.6%;
+  top: 40.5%;
+  height: 33.9%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10%;
-  padding: 4%;
+  overflow: hidden;
 }
 
-.zz-bingo__carrete {
-  flex: 1;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--zz-void);
-  border: 2px solid var(--zz-line);
-  border-radius: 8px;
+.zz-bingo__ventana--1 {
+  left: 17.97%;
+  width: 30.57%;
+}
+
+.zz-bingo__ventana--2 {
+  left: 51.07%;
+  width: 30.66%;
+}
+
+.zz-bingo__ventana span {
   font-family: var(--font-feral);
-  font-size: clamp(2rem, 9vw, 3.4rem);
+  font-size: clamp(2.2rem, 11vw, 4rem);
   color: var(--zz-gold-bright);
-  box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 0 12px rgba(232, 196, 104, 0.6);
 }
 
 .zz-bingo__carrete--girando {
+  display: inline-block;
   animation: zz-bingo-blur 0.09s linear infinite;
 }
 
@@ -62,70 +94,38 @@
   100% { filter: blur(0px); transform: translateY(0); }
 }
 
-.zz-bingo__controles {
+/* Zona clickeable invisible sobre la palanca dibujada en la imagen */
+.zz-bingo__palanca-zona {
   position: absolute;
-  bottom: -4.5rem;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--space-md);
-}
-
-.zz-bingo__boton {
-  min-width: 180px;
-  font-size: 0.85rem;
-  padding: 0.9rem 1.8rem;
-}
-
-/* ---- Palanca decorativa ---- */
-.zz-bingo__palanca {
-  width: 2.2rem;
-  height: 90px;
+  right: -2%;
+  top: 44%;
+  width: 12%;
+  height: 32%;
   background: none;
   border: none;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 0.3rem;
 }
 
-.zz-bingo__palanca-barra {
-  width: 7px;
-  flex: 1;
-  background: linear-gradient(180deg, var(--zz-gold-bright), var(--zz-gold));
-  border-radius: 4px;
-  transition: transform 0.25s ease;
-  transform-origin: bottom center;
-}
-
-.zz-bingo__palanca-bola {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #e8c468, #8a1f1f 80%);
-  box-shadow: 0 0 12px rgba(201, 162, 39, 0.5);
-  margin-bottom: -4px;
-  transition: transform 0.25s ease;
-}
-
-.zz-bingo__palanca:disabled {
+.zz-bingo__palanca-zona:disabled {
   cursor: not-allowed;
-  opacity: 0.6;
 }
 
-.zz-bingo__palanca--activa .zz-bingo__palanca-barra {
-  transform: scaleY(0.7);
+.zz-bingo__palanca-zona--activa {
+  animation: zz-pop 0.3s ease;
 }
 
-.zz-bingo__palanca--activa .zz-bingo__palanca-bola {
-  transform: translateY(30px);
+.zz-bingo__controles-abajo {
+  display: flex;
+  justify-content: center;
 }
 
-/* ---- Pantalla LCD, ahora en tono ámbar ---- */
+.zz-bingo__boton {
+  min-width: 200px;
+  font-size: 0.85rem;
+  padding: 0.9rem 2rem;
+}
+
+/* ---- Pantalla LCD, tono ámbar ---- */
 .zz-bingo__lcd {
   display: flex;
   flex-direction: column;
@@ -136,8 +136,6 @@
   border: 3px solid #333;
   border-radius: 16px;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-  align-self: center;
-  margin-top: 4.5rem;
 }
 
 .zz-bingo__lcd-titulo {
@@ -150,7 +148,7 @@
 }
 
 .zz-bingo__lcd-pantalla {
-  height: 260px;
+  height: 300px;
   overflow-y: auto;
   background: #1f1305;
   border: 1px solid #4d3311;
@@ -187,22 +185,25 @@
   font-size: 0.75rem;
 }
 
+@keyframes zz-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zz-bingo__gabinete--girando {
+    animation: none;
+  }
+}
+
 @media (max-width: 720px) {
   .zz-bingo__conjunto {
     flex-direction: column;
   }
 
-  .zz-bingo__gabinete {
-    margin-bottom: 5rem;
-  }
-
-  .zz-bingo__palanca {
-    display: none;
-  }
-
   .zz-bingo__lcd {
     width: 100%;
     max-width: 340px;
-    margin-top: 0;
   }
 }

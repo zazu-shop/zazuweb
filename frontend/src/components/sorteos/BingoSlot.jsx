@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { sonidos8bit } from "../../lib/sonidos8bit";
-import SlotMachineFrame from "./SlotMachineFrame";
 import "./bingoSlot.css";
 
 export default function BingoSlot({ letras, numeros }) {
@@ -49,34 +48,36 @@ export default function BingoSlot({ letras, numeros }) {
       )}
 
       <div className="zz-bingo__conjunto">
-        {/* ---- Gabinete ilustrado con los carretes superpuestos ---- */}
-        <div className="zz-bingo__gabinete">
-          <SlotMachineFrame girando={girando} />
+        {/* ---- Gabinete real (imagen) con los carretes superpuestos ---- */}
+        <div className={`zz-bingo__gabinete ${girando ? "zz-bingo__gabinete--girando" : ""}`}>
+          <img
+            src="/sorteos/gabinete-bingo.png"
+            alt=""
+            className="zz-bingo__imagen"
+            aria-hidden="true"
+          />
 
-          <div className="zz-bingo__ventana">
-            <div className={`zz-bingo__carrete ${girando ? "zz-bingo__carrete--girando" : ""}`}>
-              {letraActual}
-            </div>
-            <div className={`zz-bingo__carrete ${girando ? "zz-bingo__carrete--girando" : ""}`}>
-              {numeroActual}
-            </div>
+          <p className="zz-bingo__banner-texto">Gira y descubre tu suerte</p>
+
+          <div className="zz-bingo__ventana zz-bingo__ventana--1">
+            <span className={girando ? "zz-bingo__carrete--girando" : ""}>{letraActual}</span>
+          </div>
+          <div className="zz-bingo__ventana zz-bingo__ventana--2">
+            <span className={girando ? "zz-bingo__carrete--girando" : ""}>{numeroActual}</span>
           </div>
 
-          <div className="zz-bingo__controles">
-            <button className="btn zz-bingo__boton" onClick={girar} disabled={!listo || girando}>
-              {girando ? "Girando…" : "Girar"}
-            </button>
+          <button
+            className={`zz-bingo__palanca-zona ${girando ? "zz-bingo__palanca-zona--activa" : ""}`}
+            onClick={girar}
+            disabled={!listo || girando}
+            aria-label="Tirar de la palanca"
+          />
+        </div>
 
-            <button
-              className={`zz-bingo__palanca ${girando ? "zz-bingo__palanca--activa" : ""}`}
-              onClick={girar}
-              disabled={!listo || girando}
-              aria-label="Tirar de la palanca"
-            >
-              <span className="zz-bingo__palanca-barra" />
-              <span className="zz-bingo__palanca-bola" />
-            </button>
-          </div>
+        <div className="zz-bingo__controles-abajo">
+          <button className="btn zz-bingo__boton" onClick={girar} disabled={!listo || girando}>
+            {girando ? "Girando…" : "Girar"}
+          </button>
         </div>
 
         {/* ---- Pantalla LCD ámbar con el historial ---- */}
