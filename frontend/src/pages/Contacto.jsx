@@ -97,7 +97,7 @@ export default function Contacto() {
           )}
           {envio === "error" && (
             <p className="zz-form__status zz-form__status--error">
-              No se pudo enviar. Intenta de nuevo en unos minutos.
+              No se pudo enviar. Intenta de nuevo en unos minutos por favor.
             </p>
           )}
         </form>
