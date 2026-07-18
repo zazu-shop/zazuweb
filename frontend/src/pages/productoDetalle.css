@@ -91,3 +91,40 @@
   color: var(--zz-void) !important;
   animation: zz-pop 0.35s ease;
 }
+
+.zz-detalle__descripcion {
+  margin: var(--space-sm) 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--zz-void-2);
+  border-left: 2px solid var(--zz-gold);
+  border-radius: 4px;
+}
+
+.zz-detalle__descripcion .eyebrow {
+  margin-bottom: 0.3rem;
+}
+
+.zz-detalle__caracteristicas {
+  margin-bottom: var(--space-md);
+}
+
+.zz-detalle__caracteristicas ul {
+  margin-top: 0.5rem;
+  padding-left: 1.2rem;
+  color: var(--zz-parchment-dim);
+  line-height: 1.8;
+}
+
+.zz-detalle__caracteristicas li {
+  list-style: none;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.zz-detalle__caracteristicas li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  color: var(--zz-gold);
+  font-size: 0.75rem;
+}

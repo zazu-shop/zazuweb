@@ -64,5 +64,19 @@ export async function crearPedido({ cliente, items, total, paymentMethod = "yape
     throw new Error(errorItems.message);
   }
 
+  // Reservamos el stock al crear el pedido (no al confirmarse el pago),
+  // así dos personas no pueden comprar la última unidad al mismo tiempo
+  // mientras se verifica el Yape. Si el pedido se cancela, se restaura.
+  const itemsParaStock = items.map((item) => ({ product_id: item.id, qty: item.qty }));
+  const { error: errorStock } = await supabase.rpc("decrementar_stock_pedido", {
+    items: itemsParaStock,
+  });
+
+  if (errorStock) {
+    // No bloqueamos el pedido por esto (ya se creó), pero lo dejamos en
+    // consola para que puedas detectarlo si pasa seguido.
+    console.error("[Zazu] No se pudo descontar el stock:", errorStock.message);
+  }
+
   return { orderId, orderNumber };
 }

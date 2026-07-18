@@ -84,7 +84,26 @@ export default function ProductoDetalle() {
             <p className="zz-detalle__price-old">S/ {producto.compare_at_price}</p>
           )}
           <p className="zz-detalle__price">S/ {producto.price}</p>
-          <p className="lead">{producto.description}</p>
+
+          <div className="zz-detalle__descripcion">
+            <p className="eyebrow">Descripción</p>
+            <p className="lead">{producto.description}</p>
+          </div>
+
+          {producto.features && (
+            <div className="zz-detalle__caracteristicas">
+              <p className="eyebrow">Características</p>
+              <ul>
+                {producto.features
+                  .split("\n")
+                  .map((f) => f.trim())
+                  .filter(Boolean)
+                  .map((f, i) => (
+                    <li key={i}>{f}</li>
+                  ))}
+              </ul>
+            </div>
+          )}
 
           <p className="zz-detalle__stock">
             {agotado ? "Sin stock por ahora" : `${producto.stock} disponibles`}

@@ -8,6 +8,7 @@ const PRODUCTO_VACIO = {
   id: null,
   name: "",
   description: "",
+  features: "",
   price: "",
   compare_at_price: "",
   category: "General",
@@ -82,6 +83,7 @@ export default function AdminProductos() {
     const payload = {
       name: form.name,
       description: form.description,
+      features: form.features,
       price: Number(form.price),
       compare_at_price: form.compare_at_price ? Number(form.compare_at_price) : null,
       category: form.category,
@@ -132,6 +134,16 @@ export default function AdminProductos() {
           <label>
             Descripción
             <textarea name="description" rows="2" value={form.description} onChange={handleChange} />
+          </label>
+          <label>
+            Características (una por línea)
+            <textarea
+              name="features"
+              rows="4"
+              value={form.features}
+              onChange={handleChange}
+              placeholder={"Madera de roble ahumado\nLatón envejecido a mano\nMide 8cm de alto"}
+            />
           </label>
           <div className="zz-admin__form-fila">
             <label>

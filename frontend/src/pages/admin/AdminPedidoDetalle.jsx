@@ -51,8 +51,22 @@ export default function AdminPedidoDetalle() {
   }, [id]);
 
   const cambiarEstado = async (nuevoEstado) => {
+    const estadoAnterior = pedido.status;
     const { error } = await supabase.from("orders").update({ status: nuevoEstado }).eq("id", id);
-    if (!error) setPedido({ ...pedido, status: nuevoEstado });
+    if (error) return;
+
+    setPedido({ ...pedido, status: nuevoEstado });
+
+    // Solo restauramos stock la primera vez que se cancela (evita sumarlo
+    // dos veces si alguien cambia el estado varias veces por error).
+    if (nuevoEstado === "cancelado" && estadoAnterior !== "cancelado") {
+      const { error: errorStock } = await supabase.rpc("restaurar_stock_pedido", {
+        p_order_id: id,
+      });
+      if (errorStock) {
+        console.error("[Zazu] No se pudo restaurar el stock:", errorStock.message);
+      }
+    }
   };
 
   const verProducto = async (productId) => {

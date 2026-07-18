@@ -38,10 +38,14 @@
 
 .zz-footer__links {
   display: flex;
-  gap: var(--space-md);
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
+  column-gap: var(--space-md);
+  justify-content: center;
   font-family: var(--font-mono);
   font-size: var(--fs-small);
   color: var(--zz-parchment-dim);
+  max-width: 100%;
 }
 
 .zz-footer__links a:hover {
@@ -77,4 +81,11 @@
   border-top: 1px solid var(--zz-line-soft);
   padding-top: var(--space-sm);
   margin-top: var(--space-sm);
+}
+
+@media (max-width: 640px) {
+  .zz-footer__links {
+    column-gap: var(--space-sm);
+    font-size: 0.78rem;
+  }
 }
