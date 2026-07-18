@@ -18,6 +18,8 @@ export default function AdminPedidos() {
   const [busqueda, setBusqueda] = useState("");
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
+  const [pagina, setPagina] = useState(1);
+  const TAMANO_PAGINA = 15;
 
   useEffect(() => {
     supabase
@@ -46,6 +48,16 @@ export default function AdminPedidos() {
       return true;
     });
   }, [pedidos, busqueda, desde, hasta]);
+
+  useEffect(() => {
+    setPagina(1);
+  }, [busqueda, desde, hasta]);
+
+  const totalPaginas = Math.max(1, Math.ceil(pedidosFiltrados.length / TAMANO_PAGINA));
+  const pedidosPagina = pedidosFiltrados.slice(
+    (pagina - 1) * TAMANO_PAGINA,
+    pagina * TAMANO_PAGINA
+  );
 
   const totales = useMemo(() => {
     const pagado = pedidosFiltrados
@@ -120,21 +132,35 @@ export default function AdminPedidos() {
           )}
 
           {pedidosFiltrados.length > 0 && (
-            <div className="zz-admin__lista">
-              {pedidosFiltrados.map((pedido) => (
-                <Link to={`/admin/pedidos/${pedido.id}`} className="zz-admin__pedido-header" key={pedido.id}>
-                  <span className="zz-admin__numero">{pedido.order_number}</span>
-                  <span>{pedido.customer_name}</span>
-                  <span className="zz-admin__fecha">
-                    {new Date(pedido.created_at).toLocaleDateString("es-PE")}
-                  </span>
-                  <span className={`zz-admin__badge zz-admin__badge--${pedido.status}`}>
-                    {ESTADOS.find((e) => e.value === pedido.status)?.label || pedido.status}
-                  </span>
-                  <span className="zz-admin__total">S/ {Number(pedido.total).toFixed(2)}</span>
-                </Link>
-              ))}
-            </div>
+            <>
+              <div className="zz-admin__lista">
+                {pedidosPagina.map((pedido) => (
+                  <Link to={`/admin/pedidos/${pedido.id}`} className="zz-admin__pedido-header" key={pedido.id}>
+                    <span className="zz-admin__numero">{pedido.order_number}</span>
+                    <span>{pedido.customer_name}</span>
+                    <span className="zz-admin__fecha">
+                      {new Date(pedido.created_at).toLocaleDateString("es-PE")}
+                    </span>
+                    <span className={`zz-admin__badge zz-admin__badge--${pedido.status}`}>
+                      {ESTADOS.find((e) => e.value === pedido.status)?.label || pedido.status}
+                    </span>
+                    <span className="zz-admin__total">S/ {Number(pedido.total).toFixed(2)}</span>
+                  </Link>
+                ))}
+              </div>
+
+              {totalPaginas > 1 && (
+                <div className="zz-admin__paginacion">
+                  <button className="btn btn-ghost" onClick={() => setPagina((p) => Math.max(1, p - 1))} disabled={pagina === 1}>
+                    ← Anterior
+                  </button>
+                  <span>Página {pagina} de {totalPaginas}</span>
+                  <button className="btn btn-ghost" onClick={() => setPagina((p) => Math.min(totalPaginas, p + 1))} disabled={pagina === totalPaginas}>
+                    Siguiente →
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </>
       )}

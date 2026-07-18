@@ -268,9 +268,9 @@ a.zz-admin__pedido-header {
 }
 
 .zz-admin__producto-fila {
-  display: grid;
-  grid-template-columns: 56px 1fr auto auto;
+  display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-sm);
   background: var(--zz-void-2);
   border: 1px solid var(--zz-line-soft);
@@ -285,6 +285,18 @@ a.zz-admin__pedido-header {
   object-fit: cover;
   border-radius: var(--radius-soft);
   background: var(--zz-void-3);
+  flex-shrink: 0;
+}
+
+.zz-admin__producto-info {
+  flex: 1;
+  min-width: 160px;
+}
+
+.zz-admin__producto-fila .btn,
+.zz-admin__producto-fila .zz-admin__eliminar {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .zz-admin__producto-nombre {
@@ -359,4 +371,15 @@ a.zz-admin__pedido-header {
   accent-color: var(--zz-gold);
   width: 16px;
   height: 16px;
+}
+
+.zz-admin__paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--zz-parchment-dim);
 }
