@@ -30,11 +30,15 @@ export default function BingoSlot({ letras, numeros }) {
         const numeroFinal = numeros[Math.floor(Math.random() * numeros.length)].value;
         setLetraActual(letraFinal);
         setNumeroActual(numeroFinal);
-        setHistorial((h) => [`${letraFinal}-${numeroFinal}`, ...h].slice(0, 15));
+        setHistorial((h) => [`${letraFinal}-${numeroFinal}`, ...h].slice(0, 30));
         setGirando(false);
         sonidos8bit.atrapar();
       }
     }, 90);
+  };
+
+  const reiniciar = () => {
+    setHistorial([]);
   };
 
   return (
@@ -45,29 +49,59 @@ export default function BingoSlot({ letras, numeros }) {
         </p>
       )}
 
-      <div className="zz-bingo__maquina">
-        <div className={`zz-bingo__carrete ${girando ? "zz-bingo__carrete--girando" : ""}`}>
-          {letraActual}
+      <div className="zz-bingo__conjunto">
+        {/* ---- Gabinete de tragamonedas ---- */}
+        <div className="zz-bingo__gabinete">
+          <div className="zz-bingo__remaches">
+            <span /><span /><span /><span />
+          </div>
+
+          <p className="zz-bingo__titulo">Zazu Bingo</p>
+
+          <div className="zz-bingo__maquina">
+            <div className={`zz-bingo__carrete ${girando ? "zz-bingo__carrete--girando" : ""}`}>
+              {letraActual}
+            </div>
+            <div className={`zz-bingo__carrete ${girando ? "zz-bingo__carrete--girando" : ""}`}>
+              {numeroActual}
+            </div>
+          </div>
+
+          <button className="btn zz-bingo__boton" onClick={girar} disabled={!listo || girando}>
+            {girando ? "Girando…" : "Girar"}
+          </button>
+
+          {/* Palanca decorativa, también dispara el giro */}
+          <button
+            className={`zz-bingo__palanca ${girando ? "zz-bingo__palanca--activa" : ""}`}
+            onClick={girar}
+            disabled={!listo || girando}
+            aria-label="Tirar de la palanca"
+          >
+            <span className="zz-bingo__palanca-barra" />
+            <span className="zz-bingo__palanca-bola" />
+          </button>
         </div>
-        <div className={`zz-bingo__carrete ${girando ? "zz-bingo__carrete--girando" : ""}`}>
-          {numeroActual}
+
+        {/* ---- Pantalla LCD con el historial ---- */}
+        <div className="zz-bingo__lcd">
+          <p className="zz-bingo__lcd-titulo">Cantadas</p>
+          <div className="zz-bingo__lcd-pantalla">
+            {historial.length === 0 ? (
+              <p className="zz-bingo__lcd-vacio">— sin registros aún —</p>
+            ) : (
+              <ul>
+                {historial.map((h, i) => (
+                  <li key={i}>{h}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <button className="btn btn-ghost zz-bingo__reiniciar" onClick={reiniciar} disabled={historial.length === 0}>
+            Empezar de nuevo
+          </button>
         </div>
       </div>
-
-      <button className="btn zz-bingo__boton" onClick={girar} disabled={!listo || girando}>
-        {girando ? "Girando…" : "Girar"}
-      </button>
-
-      {historial.length > 0 && (
-        <div className="zz-bingo__historial">
-          <p className="eyebrow">Cantadas en esta sesión</p>
-          <div className="zz-bingo__chips">
-            {historial.map((h, i) => (
-              <span className="zz-chip" key={i}>{h}</span>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
