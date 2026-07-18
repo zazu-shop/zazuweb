@@ -3,6 +3,8 @@ import SvgDefs from "./components/SvgDefs";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
+import WhatsAppFloat from "./components/WhatsAppFloat";
+import BackToTop from "./components/BackToTop";
 import { CartProvider } from "./lib/CartContext";
 import { AuthProvider } from "./lib/AuthContext";
 import Home from "./pages/Home";
@@ -17,6 +19,7 @@ import Terminos from "./pages/Terminos";
 import FAQ from "./pages/FAQ";
 import Instagram from "./pages/Instagram";
 import Sorteos from "./pages/Sorteos";
+import Cuidados from "./pages/Cuidados";
 import CuentaLogin from "./pages/cuenta/CuentaLogin";
 import CuentaPerfil from "./pages/cuenta/CuentaPerfil";
 import AdminLogin from "./pages/admin/AdminLogin";
@@ -49,6 +52,7 @@ export default function App() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/instagram" element={<Instagram />} />
             <Route path="/sorteos" element={<Sorteos />} />
+            <Route path="/cuidados" element={<Cuidados />} />
             <Route path="/cuenta/login" element={<CuentaLogin />} />
             <Route path="/cuenta" element={<CuentaPerfil />} />
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -89,6 +93,8 @@ export default function App() {
           </div>
         </main>
         <Footer />
+        <BackToTop />
+        <WhatsAppFloat />
       </CartProvider>
     </AuthProvider>
   );

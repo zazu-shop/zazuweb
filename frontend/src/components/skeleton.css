@@ -26,3 +26,28 @@
     animation: none;
   }
 }
+
+.zz-skeleton-detalle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.zz-skeleton-detalle__img {
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+}
+
+.zz-skeleton-detalle__info {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 860px) {
+  .zz-skeleton-detalle {
+    grid-template-columns: 1fr;
+  }
+}

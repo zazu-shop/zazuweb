@@ -1,0 +1,39 @@
+.zz-back-top {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 90;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-gold);
+  color: var(--zz-gold-bright);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  animation: zz-fade-in 0.25s ease;
+}
+
+.zz-back-top:hover {
+  background: var(--zz-gold);
+  color: var(--zz-void);
+  transform: translateY(-3px);
+}
+
+@keyframes zz-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .zz-back-top {
+    left: 1rem;
+    bottom: 1rem;
+    width: 42px;
+    height: 42px;
+  }
+}

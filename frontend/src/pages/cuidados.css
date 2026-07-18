@@ -1,0 +1,55 @@
+.zz-cuidados__intro {
+  margin: var(--space-sm) 0 var(--space-lg);
+  max-width: 640px;
+}
+
+.zz-cuidados__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+@media (max-width: 900px) {
+  .zz-cuidados__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .zz-cuidados__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.zz-cuidados__card h2 {
+  font-size: var(--fs-h3);
+  margin-bottom: var(--space-sm);
+}
+
+.zz-cuidados__icono {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.zz-cuidados__card ul {
+  padding-left: 1.1rem;
+  color: var(--zz-parchment-dim);
+  line-height: 1.7;
+  font-size: 0.9rem;
+}
+
+.zz-cuidados__card li {
+  margin-bottom: 0.5rem;
+}
+
+.zz-cuidados__nota {
+  margin-top: var(--space-xl);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--zz-parchment-dim);
+}
+
+.zz-cuidados__nota a {
+  color: var(--zz-gold);
+}

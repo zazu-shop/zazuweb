@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import { useCart } from "../lib/CartContext";
+import { SkeletonDetalle } from "../components/Skeleton";
 import "./productoDetalle.css";
 
 export default function ProductoDetalle() {
@@ -48,8 +49,8 @@ export default function ProductoDetalle() {
 
   if (estado === "cargando") {
     return (
-      <section className="section container">
-        <p className="zz-bazar__status">Invocando la pieza…</p>
+      <section className="section">
+        <SkeletonDetalle />
       </section>
     );
   }
