@@ -39,6 +39,7 @@ export default function Bazar() {
     supabase
       .from("products")
       .select("id, name, description, price, compare_at_price, category, image_url, stock, created_at")
+      .eq("active", true)
       .order("created_at", { ascending: false })
       .then(({ data, error }) => {
         if (!activo) return;

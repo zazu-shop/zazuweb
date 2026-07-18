@@ -383,3 +383,9 @@ a.zz-admin__pedido-header {
   font-size: 0.82rem;
   color: var(--zz-parchment-dim);
 }
+
+.zz-admin__no-disponible {
+  color: #d67a6a;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}

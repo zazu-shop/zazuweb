@@ -1,0 +1,57 @@
+.zz-bingo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.zz-bingo__maquina {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--zz-void-2);
+  border: 2px solid var(--zz-gold);
+  border-radius: 16px;
+  box-shadow: 0 0 40px rgba(201, 162, 39, 0.15);
+}
+
+.zz-bingo__carrete {
+  width: 120px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--zz-void);
+  border: 1px solid var(--zz-line);
+  border-radius: 10px;
+  font-family: var(--font-feral);
+  font-size: 3.2rem;
+  color: var(--zz-gold-bright);
+}
+
+.zz-bingo__carrete--girando {
+  animation: zz-bingo-blur 0.09s linear infinite;
+}
+
+@keyframes zz-bingo-blur {
+  0% { filter: blur(0px); transform: translateY(0); }
+  50% { filter: blur(2px); transform: translateY(-4px); }
+  100% { filter: blur(0px); transform: translateY(0); }
+}
+
+.zz-bingo__boton {
+  min-width: 160px;
+}
+
+.zz-bingo__historial {
+  text-align: center;
+}
+
+.zz-bingo__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-top: 0.6rem;
+  max-width: 500px;
+}

@@ -16,6 +16,7 @@ import PoliticaEnvios from "./pages/PoliticaEnvios";
 import Terminos from "./pages/Terminos";
 import FAQ from "./pages/FAQ";
 import Instagram from "./pages/Instagram";
+import Sorteos from "./pages/Sorteos";
 import CuentaLogin from "./pages/cuenta/CuentaLogin";
 import CuentaPerfil from "./pages/cuenta/CuentaPerfil";
 import AdminLogin from "./pages/admin/AdminLogin";
@@ -47,6 +48,7 @@ export default function App() {
             <Route path="/terminos" element={<Terminos />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/instagram" element={<Instagram />} />
+            <Route path="/sorteos" element={<Sorteos />} />
             <Route path="/cuenta/login" element={<CuentaLogin />} />
             <Route path="/cuenta" element={<CuentaPerfil />} />
             <Route path="/admin/login" element={<AdminLogin />} />

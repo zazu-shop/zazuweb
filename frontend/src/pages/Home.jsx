@@ -19,6 +19,7 @@ export default function Home() {
     supabase
       .from("products")
       .select("id, name, description, image_url")
+      .eq("active", true)
       .eq("featured", true)
       .order("created_at", { ascending: false })
       .limit(3)

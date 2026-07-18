@@ -14,6 +14,7 @@ const PRODUCTO_VACIO = {
   image_url: "",
   stock: 10,
   featured: false,
+  active: true,
 };
 
 export default function AdminProductos() {
@@ -55,9 +56,22 @@ export default function AdminProductos() {
   const handleNuevo = () => setForm(PRODUCTO_VACIO);
 
   const handleEliminar = async (id) => {
-    if (!confirm("¿Eliminar este producto? Esta acción no se puede deshacer.")) return;
+    if (!confirm("¿Eliminar este producto permanentemente? Si prefieres solo ocultarlo del Bazar sin perder el historial de pedidos, usa \"Marcar no disponible\" en vez de esto.")) return;
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (!error) setProductos((prev) => prev.filter((p) => p.id !== id));
+    else alert("No se pudo eliminar: " + error.message);
+  };
+
+  const alternarDisponibilidad = async (producto) => {
+    const { error } = await supabase
+      .from("products")
+      .update({ active: !producto.active })
+      .eq("id", producto.id);
+    if (!error) {
+      setProductos((prev) =>
+        prev.map((p) => (p.id === producto.id ? { ...p, active: !p.active } : p))
+      );
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -74,6 +88,7 @@ export default function AdminProductos() {
       image_url: form.image_url,
       stock: Number(form.stock),
       featured: form.featured,
+      active: form.active,
     };
 
     try {
@@ -181,11 +196,15 @@ export default function AdminProductos() {
                 <p className="zz-admin__producto-nombre">
                   {producto.featured && <span title="Destacado en inicio">⭐ </span>}
                   {producto.name}
+                  {!producto.active && <span className="zz-admin__no-disponible"> · No disponible</span>}
                 </p>
                 <p className="zz-admin__producto-meta">
                   {producto.category} · S/ {producto.price} · Stock: {producto.stock}
                 </p>
               </div>
+              <button className="btn btn-ghost" onClick={() => alternarDisponibilidad(producto)}>
+                {producto.active ? "Marcar no disponible" : "Reactivar"}
+              </button>
               <button className="btn btn-ghost" onClick={() => handleEditar(producto)}>Editar</button>
               <button className="zz-admin__eliminar" onClick={() => handleEliminar(producto.id)}>Eliminar</button>
             </div>

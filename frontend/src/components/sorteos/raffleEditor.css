@@ -1,0 +1,62 @@
+.zz-raffle-editor__aviso {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--zz-parchment-dim);
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 8px;
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.zz-sorteos-admin__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+@media (max-width: 900px) {
+  .zz-sorteos-admin__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.zz-sorteos-admin__agregar {
+  display: flex;
+  gap: 0.5rem;
+  margin: var(--space-sm) 0;
+}
+
+.zz-sorteos-admin__agregar input {
+  flex: 1;
+}
+
+.zz-sorteos-admin__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.zz-sorteos-admin__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--zz-void-3);
+  border-radius: 6px;
+  padding: 0.5rem 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.zz-sorteos-admin__item button {
+  background: none;
+  border: none;
+  color: var(--zz-parchment-dim);
+  cursor: pointer;
+}
+
+.zz-sorteos-admin__item button:hover {
+  color: #d67a6a;
+}
