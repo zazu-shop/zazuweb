@@ -31,10 +31,6 @@ export default function Sorteos() {
     <section className="section container zz-sorteos">
       <p className="eyebrow">Sorteos</p>
       <h1>La rueda y el destino</h1>
-      <p className="lead zz-sorteos__intro">
-        Dos formas de dejar que la suerte elija: el tragamonedas del bingo, o la ruleta de la
-        fortuna. Ambas listas son editables por cualquiera, ideales para usar en vivo.
-      </p>
 
       <div className="zz-sorteos__tabs">
         <button

@@ -10,16 +10,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-lg);
+  gap: var(--space-xl);
   flex-wrap: wrap;
 }
 
-/* ---- Gabinete: imagen real 1024x1024, con overlays posicionados en % ---- */
+.zz-bingo__columna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* ---- Gabinete: imagen real 1024x1536, overlays posicionados en % ---- */
 .zz-bingo__gabinete {
   position: relative;
-  width: 460px;
-  max-width: 92vw;
-  aspect-ratio: 1 / 1;
+  width: 620px;
+  max-width: min(88vw, 620px);
+  aspect-ratio: 1024 / 1536;
 }
 
 .zz-bingo__gabinete--girando {
@@ -28,8 +35,8 @@
 
 @keyframes zz-frame-shake {
   0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-2px) rotate(-0.3deg); }
-  75% { transform: translateX(2px) rotate(0.3deg); }
+  25% { transform: translateX(-3px) rotate(-0.3deg); }
+  75% { transform: translateX(3px) rotate(0.3deg); }
 }
 
 .zz-bingo__imagen {
@@ -43,23 +50,23 @@
 /* Texto sobre la cinta/banner vacía de la ilustración */
 .zz-bingo__banner-texto {
   position: absolute;
-  left: 26.6%;
-  top: 26.5%;
-  width: 46.5%;
+  left: 22%;
+  top: 25.2%;
+  width: 56%;
   text-align: center;
   font-family: var(--font-mono);
-  font-size: clamp(0.5rem, 1.6vw, 0.72rem);
-  letter-spacing: 0.04em;
+  font-size: clamp(0.55rem, 1.4vw, 0.85rem);
+  letter-spacing: 0.03em;
   color: var(--zz-void);
   font-weight: 700;
   pointer-events: none;
 }
 
-/* Las dos ventanas: coordenadas medidas sobre la imagen 1024x1024 */
+/* Las dos ventanas: coordenadas medidas sobre la imagen 1024x1536 */
 .zz-bingo__ventana {
   position: absolute;
-  top: 40.5%;
-  height: 33.9%;
+  top: 42.58%;
+  height: 25.13%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,20 +74,20 @@
 }
 
 .zz-bingo__ventana--1 {
-  left: 17.97%;
-  width: 30.57%;
+  left: 19.82%;
+  width: 26.86%;
 }
 
 .zz-bingo__ventana--2 {
-  left: 51.07%;
-  width: 30.66%;
+  left: 52.83%;
+  width: 26.66%;
 }
 
 .zz-bingo__ventana span {
   font-family: var(--font-feral);
-  font-size: clamp(2.2rem, 11vw, 4rem);
+  font-size: clamp(2.6rem, 9vw, 5.5rem);
   color: var(--zz-gold-bright);
-  text-shadow: 0 0 12px rgba(232, 196, 104, 0.6);
+  text-shadow: 0 0 16px rgba(232, 196, 104, 0.6);
 }
 
 .zz-bingo__carrete--girando {
@@ -90,17 +97,17 @@
 
 @keyframes zz-bingo-blur {
   0% { filter: blur(0px); transform: translateY(0); }
-  50% { filter: blur(3px); transform: translateY(-4px); }
+  50% { filter: blur(4px); transform: translateY(-6px); }
   100% { filter: blur(0px); transform: translateY(0); }
 }
 
 /* Zona clickeable invisible sobre la palanca dibujada en la imagen */
 .zz-bingo__palanca-zona {
   position: absolute;
-  right: -2%;
-  top: 44%;
-  width: 12%;
-  height: 32%;
+  right: -1%;
+  top: 38%;
+  width: 13%;
+  height: 30%;
   background: none;
   border: none;
   cursor: pointer;
@@ -110,71 +117,51 @@
   cursor: not-allowed;
 }
 
-.zz-bingo__palanca-zona--activa {
-  animation: zz-pop 0.3s ease;
-}
-
-.zz-bingo__controles-abajo {
-  display: flex;
-  justify-content: center;
-}
-
 .zz-bingo__boton {
-  min-width: 200px;
-  font-size: 0.85rem;
-  padding: 0.9rem 2rem;
+  min-width: 220px;
+  font-size: 0.95rem;
+  padding: 1rem 2.2rem;
 }
 
-/* ---- Pantalla LCD, tono ámbar ---- */
-.zz-bingo__lcd {
+/* ---- Historial "Cantadas", con el estilo del resto del sitio (no LCD ámbar) ---- */
+.zz-bingo__historial {
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
-  width: 220px;
+  width: 280px;
   padding: var(--space-md);
-  background: linear-gradient(180deg, #1a1a1a, #0a0a0a);
-  border: 3px solid #333;
-  border-radius: 16px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 12px;
+  align-self: stretch;
 }
 
-.zz-bingo__lcd-titulo {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #ffb84d;
-  text-align: center;
-}
-
-.zz-bingo__lcd-pantalla {
-  height: 300px;
+.zz-bingo__historial-lista {
+  flex: 1;
+  min-height: 340px;
+  max-height: 55vh;
   overflow-y: auto;
-  background: #1f1305;
-  border: 1px solid #4d3311;
-  border-radius: 8px;
-  padding: 0.6rem;
-  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.7);
-}
-
-.zz-bingo__lcd-pantalla ul {
-  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.5rem;
+  padding: var(--space-sm) 0;
+  border-top: 1px solid var(--zz-line-soft);
+  border-bottom: 1px solid var(--zz-line-soft);
 }
 
-.zz-bingo__lcd-pantalla li {
+.zz-bingo__historial-item {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: #ffb84d;
-  text-shadow: 0 0 4px rgba(255, 184, 77, 0.5);
+  font-size: 1rem;
+  color: var(--zz-gold-bright);
+  padding: 0.35rem 0.6rem;
+  background: var(--zz-void-3);
+  border-radius: 6px;
 }
 
-.zz-bingo__lcd-vacio {
+.zz-bingo__historial-vacio {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: #7a5a2a;
+  font-size: 0.78rem;
+  color: var(--zz-parchment-dim);
   text-align: center;
   margin-top: var(--space-md);
 }
@@ -182,13 +169,7 @@
 .zz-bingo__reiniciar {
   width: 100%;
   justify-content: center;
-  font-size: 0.75rem;
-}
-
-@keyframes zz-pop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-  100% { transform: scale(1); }
+  font-size: 0.78rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -197,13 +178,17 @@
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   .zz-bingo__conjunto {
     flex-direction: column;
   }
 
-  .zz-bingo__lcd {
+  .zz-bingo__historial {
     width: 100%;
-    max-width: 340px;
+    max-width: 400px;
+  }
+
+  .zz-bingo__historial-lista {
+    min-height: 160px;
   }
 }
