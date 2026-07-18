@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Sigil from "../components/Sigil";
 import RoughDivider from "../components/RoughDivider";
 import { supabase } from "../lib/supabaseClient";
+import { SkeletonGrid } from "../components/Skeleton";
 import "./home.css";
 
 export default function Home() {
@@ -91,7 +92,7 @@ export default function Home() {
           <p className="eyebrow">Del bazar</p>
           <h2 className="zz-section-title">Piezas destacadas</h2>
 
-          {estado === "cargando" && <p className="zz-bazar__status">Invocando piezas…</p>}
+          {estado === "cargando" && <SkeletonGrid cantidad={3} />}
 
           {estado === "error" && (
             <p className="zz-bazar__status">No pudimos cargar las piezas destacadas.</p>

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import { useCart } from "../lib/CartContext";
+import { SkeletonGrid } from "../components/Skeleton";
 import "./bazar.css";
 
 const ORDEN_OPCIONES = [
@@ -99,9 +100,7 @@ export default function Bazar() {
           vuelve a fabricarse igual.
         </p>
 
-        {estado === "cargando" && (
-          <p className="zz-bazar__status">Invocando el catálogo…</p>
-        )}
+        {estado === "cargando" && <SkeletonGrid cantidad={6} />}
 
         {estado === "sin-config" && (
           <p className="zz-bazar__status">

@@ -14,10 +14,15 @@ import Contacto from "./pages/Contacto";
 import Seguimiento from "./pages/Seguimiento";
 import PoliticaEnvios from "./pages/PoliticaEnvios";
 import Terminos from "./pages/Terminos";
+import FAQ from "./pages/FAQ";
+import Instagram from "./pages/Instagram";
+import CuentaLogin from "./pages/cuenta/CuentaLogin";
+import CuentaPerfil from "./pages/cuenta/CuentaPerfil";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminPedidos from "./pages/admin/AdminPedidos";
 import AdminPedidoDetalle from "./pages/admin/AdminPedidoDetalle";
 import AdminProductos from "./pages/admin/AdminProductos";
+import AdminCupones from "./pages/admin/AdminCupones";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -40,6 +45,10 @@ export default function App() {
             <Route path="/seguimiento" element={<Seguimiento />} />
             <Route path="/politica-envios" element={<PoliticaEnvios />} />
             <Route path="/terminos" element={<Terminos />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/instagram" element={<Instagram />} />
+            <Route path="/cuenta/login" element={<CuentaLogin />} />
+            <Route path="/cuenta" element={<CuentaPerfil />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route
               path="/admin/pedidos"
@@ -62,6 +71,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <AdminProductos />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/cupones"
+              element={
+                <ProtectedRoute>
+                  <AdminCupones />
                 </ProtectedRoute>
               }
             />

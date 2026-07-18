@@ -16,7 +16,7 @@ function generarNumeroPedido() {
  * ya conocidos por el cliente (no dependemos de leer de vuelta la fila,
  * así no hace falta abrir permiso de lectura pública sobre pedidos).
  */
-export async function crearPedido({ cliente, items, total, paymentMethod = "yape_manual", shipping = {} }) {
+export async function crearPedido({ cliente, items, total, paymentMethod = "yape_manual", shipping = {}, coupon = null, userId = null }) {
   if (!supabase) {
     throw new Error("Supabase no está configurado (revisa frontend/.env).");
   }
@@ -40,6 +40,9 @@ export async function crearPedido({ cliente, items, total, paymentMethod = "yape
       shipping_address: shipping.address || null,
       shipping_reference: shipping.reference || null,
       shipping_time_range: shipping.timeRange || null,
+      coupon_code: coupon?.code || null,
+      discount_amount: coupon?.discountAmount || 0,
+      user_id: userId,
     },
   ]);
 

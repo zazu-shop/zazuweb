@@ -69,6 +69,7 @@ export default function AdminPedidos() {
         </div>
         <div className="zz-admin__header-acciones">
           <Link to="/admin/productos" className="btn btn-ghost">Gestionar productos</Link>
+          <Link to="/admin/cupones" className="btn btn-ghost">Cupones</Link>
           <button className="btn btn-ghost" onClick={logout}>Cerrar sesión</button>
         </div>
       </div>

@@ -1,0 +1,28 @@
+.zz-skeleton {
+  background: linear-gradient(90deg, var(--zz-void-2) 25%, var(--zz-void-3) 50%, var(--zz-void-2) 75%);
+  background-size: 200% 100%;
+  animation: zz-shimmer 1.4s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+@keyframes zz-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.zz-skeleton-card__img {
+  height: 200px;
+  margin: calc(var(--space-md) * -1) calc(var(--space-md) * -1) var(--space-sm);
+  border-radius: 0;
+}
+
+.zz-skeleton-card__linea {
+  height: 0.8rem;
+  margin-bottom: 0.6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zz-skeleton {
+    animation: none;
+  }
+}

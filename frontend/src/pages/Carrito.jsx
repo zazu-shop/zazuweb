@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../lib/CartContext";
+import { useAuth } from "../lib/AuthContext";
+import { supabase } from "../lib/supabaseClient";
 import { crearPedido } from "../lib/ordersService";
 import { descargarResumenPedido } from "../lib/receiptGenerator";
 import ChispasDoradas from "../components/ChispasDoradas";
@@ -29,6 +31,7 @@ const ETIQUETAS_ENVIO = {
 
 export default function Carrito() {
   const { items, updateQty, removeItem, totalPrice, clearCart } = useCart();
+  const { session } = useAuth();
 
   const [vista, setVista] = useState("resumen"); // resumen | formulario | confirmado
   const [form, setForm] = useState(FORM_INICIAL);
@@ -38,10 +41,44 @@ export default function Carrito() {
   const [generandoResumen, setGenerandoResumen] = useState(false);
   const [errorResumen, setErrorResumen] = useState(null);
 
+  const [cuponInput, setCuponInput] = useState("");
+  const [cupon, setCupon] = useState(null);
+  const [cuponEstado, setCuponEstado] = useState("idle"); // idle | validando | valido | invalido
+
   const costoEnvio = form.shippingMethod === "delivery" ? COSTO_DELIVERY : 0;
-  const totalConEnvio = totalPrice + costoEnvio;
+  const descuento = cupon ? (totalPrice * cupon.discount_percent) / 100 : 0;
+  const totalConEnvio = Math.max(0, totalPrice - descuento) + costoEnvio;
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const validarCupon = async () => {
+    if (!cuponInput.trim() || !supabase) return;
+    setCuponEstado("validando");
+
+    const { data, error } = await supabase
+      .from("coupons")
+      .select("*")
+      .eq("code", cuponInput.trim().toUpperCase())
+      .eq("active", true)
+      .maybeSingle();
+
+    const vencido = data?.expires_at && new Date(data.expires_at) < new Date();
+
+    if (error || !data || vencido) {
+      setCupon(null);
+      setCuponEstado("invalido");
+      return;
+    }
+
+    setCupon(data);
+    setCuponEstado("valido");
+  };
+
+  const quitarCupon = () => {
+    setCupon(null);
+    setCuponInput("");
+    setCuponEstado("idle");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +91,8 @@ export default function Carrito() {
         cliente: form,
         items: snapshotItems,
         total: totalConEnvio,
+        userId: session?.user?.id || null,
+        coupon: cupon ? { code: cupon.code, discountAmount: descuento } : null,
         shipping: {
           method: form.shippingMethod,
           cost: costoEnvio,
@@ -73,6 +112,8 @@ export default function Carrito() {
         total: totalConEnvio,
         shippingMethod: form.shippingMethod,
         shippingCost: costoEnvio,
+        couponCode: cupon?.code || null,
+        discount: descuento,
       });
       clearCart();
       setVista("confirmado");
@@ -168,10 +209,17 @@ export default function Carrito() {
           )}
 
           {vista === "confirmado" && (
-            <p className="zz-carrito__envio-info">
-              Envío: {ETIQUETAS_ENVIO[pedido.shippingMethod]}
-              {pedido.shippingCost > 0 && ` — S/ ${pedido.shippingCost.toFixed(2)}`}
-            </p>
+            <>
+              <p className="zz-carrito__envio-info">
+                Envío: {ETIQUETAS_ENVIO[pedido.shippingMethod]}
+                {pedido.shippingCost > 0 && ` — S/ ${pedido.shippingCost.toFixed(2)}`}
+              </p>
+              {pedido.couponCode && (
+                <p className="zz-carrito__envio-info">
+                  Cupón {pedido.couponCode} aplicado: -S/ {pedido.discount.toFixed(2)}
+                </p>
+              )}
+            </>
           )}
         </div>
 
@@ -212,6 +260,32 @@ export default function Carrito() {
                   Celular (WhatsApp)
                   <input type="tel" name="phone" value={form.phone} onChange={handleChange} required />
                 </label>
+
+                <label>
+                  Cupón de descuento (opcional)
+                  <div className="zz-cupon__fila">
+                    <input
+                      type="text"
+                      value={cuponInput}
+                      onChange={(e) => setCuponInput(e.target.value)}
+                      placeholder="BRUJA10"
+                      disabled={cuponEstado === "valido"}
+                    />
+                    {cuponEstado === "valido" ? (
+                      <button type="button" className="btn btn-ghost" onClick={quitarCupon}>Quitar</button>
+                    ) : (
+                      <button type="button" className="btn btn-ghost" onClick={validarCupon} disabled={cuponEstado === "validando"}>
+                        {cuponEstado === "validando" ? "Validando…" : "Aplicar"}
+                      </button>
+                    )}
+                  </div>
+                </label>
+                {cuponEstado === "valido" && (
+                  <p className="zz-cupon__ok">✓ Cupón {cupon.code}: -{cupon.discount_percent}%</p>
+                )}
+                {cuponEstado === "invalido" && (
+                  <p className="zz-form__status zz-form__status--error">Ese cupón no es válido o ya venció.</p>
+                )}
 
                 <fieldset className="zz-envio">
                   <legend>Método de envío</legend>
@@ -275,6 +349,13 @@ export default function Carrito() {
                         required
                       />
                     </label>
+                  </div>
+                )}
+
+                {descuento > 0 && (
+                  <div className="zz-checkout__linea">
+                    <span>Descuento ({cupon.code})</span>
+                    <span>-S/ {descuento.toFixed(2)}</span>
                   </div>
                 )}
 

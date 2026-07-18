@@ -1,0 +1,50 @@
+.zz-cuenta {
+  max-width: 640px;
+}
+
+.zz-cuenta__intro {
+  margin: var(--space-sm) 0 var(--space-lg);
+}
+
+.zz-cuenta__form {
+  max-width: 400px;
+}
+
+.zz-cuenta__cambiar {
+  display: block;
+  margin-top: var(--space-md);
+  background: none;
+  border: none;
+  color: var(--zz-gold);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.zz-cuenta__seguimiento {
+  margin-top: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--zz-parchment-dim);
+}
+
+.zz-cuenta__seguimiento a {
+  color: var(--zz-gold);
+}
+
+.zz-cuenta__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.zz-cuenta__pedidos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.zz-cuenta__pedido {
+  max-width: none;
+}

@@ -16,6 +16,8 @@ export default function Footer() {
           <a href="/grimorio">El Grimorio</a>
           <a href="/bazar">Bazar</a>
           <a href="/seguimiento">Mi pedido</a>
+          <a href="/faq">Preguntas frecuentes</a>
+          <a href="/instagram">Instagram</a>
           <a href="/contacto">Contacto</a>
         </nav>
 

@@ -8,6 +8,7 @@ const LINKS = [
   { to: "/grimorio", label: "El Grimorio" },
   { to: "/bazar", label: "Bazar" },
   { to: "/seguimiento", label: "Mi pedido" },
+  { to: "/cuenta", label: "Mi cuenta" },
   { to: "/contacto", label: "Contacto" },
 ];
 

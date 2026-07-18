@@ -305,3 +305,19 @@
   border-radius: 10px;
   margin-top: 0.4rem;
 }
+
+.zz-cupon__fila {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.zz-cupon__fila input {
+  flex: 1;
+}
+
+.zz-cupon__ok {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: #7fd68a;
+  margin-top: -0.5rem;
+}

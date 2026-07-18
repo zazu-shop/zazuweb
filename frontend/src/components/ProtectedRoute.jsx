@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 
 export default function ProtectedRoute({ children }) {
-  const { session, cargando } = useAuth();
+  const { session, esAdmin, cargando } = useAuth();
 
   if (cargando) {
     return (
@@ -12,7 +12,7 @@ export default function ProtectedRoute({ children }) {
     );
   }
 
-  if (!session) {
+  if (!session || !esAdmin) {
     return <Navigate to="/admin/login" replace />;
   }
 
