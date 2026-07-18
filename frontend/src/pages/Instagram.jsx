@@ -16,7 +16,7 @@ export default function Instagram() {
 
       <a
         className="btn zz-ig__boton"
-        href={`https://instagram.com/${shouldProcessLinkClick.zazu}`}
+        href={`https://instagram.com/${shop.zazu}`}
         target="_blank"
         rel="noreferrer"
       >
