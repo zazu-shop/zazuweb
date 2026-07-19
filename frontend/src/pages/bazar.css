@@ -191,3 +191,17 @@
   color: var(--zz-void) !important;
   animation: zz-pop 0.35s ease;
 }
+
+.zz-bazar__item--no-disponible .zz-bazar__image {
+  filter: grayscale(0.8) brightness(0.6);
+}
+
+.zz-bazar__item--no-disponible h3,
+.zz-bazar__item--no-disponible p {
+  opacity: 0.6;
+}
+
+.zz-bazar__discount--gris {
+  background: #3a3a3a;
+  color: var(--zz-parchment-dim);
+}

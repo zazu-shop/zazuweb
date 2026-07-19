@@ -39,8 +39,7 @@ export default function Bazar() {
 
     supabase
       .from("products")
-      .select("id, name, description, price, compare_at_price, category, image_url, stock, created_at")
-      .eq("active", true)
+      .select("id, name, description, price, compare_at_price, category, image_url, stock, active, created_at")
       .order("created_at", { ascending: false })
       .then(({ data, error }) => {
         if (!activo) return;
@@ -170,17 +169,21 @@ export default function Bazar() {
             <div className="grid grid-3">
               {piezasFiltradas.map((pieza, i) => (
                 <Reveal key={pieza.id} delay={(i % 3) * 100}>
-                <article className="card zz-bazar__item">
+                <article className={`card zz-bazar__item ${!pieza.active ? "zz-bazar__item--no-disponible" : ""}`}>
                   <Link to={`/bazar/${pieza.id}`} className="zz-bazar__imagelink">
                     {pieza.image_url ? (
                       <img src={pieza.image_url} alt={pieza.name} className="zz-bazar__image" loading="lazy" />
                     ) : (
                       <div className="zz-bazar__image zz-bazar__image--placeholder" />
                     )}
-                    {pieza.compare_at_price > pieza.price && (
-                      <span className="zz-bazar__discount">
-                        -{Math.round(100 - (pieza.price / pieza.compare_at_price) * 100)}%
-                      </span>
+                    {!pieza.active ? (
+                      <span className="zz-bazar__discount zz-bazar__discount--gris">No disponible</span>
+                    ) : (
+                      pieza.compare_at_price > pieza.price && (
+                        <span className="zz-bazar__discount">
+                          -{Math.round(100 - (pieza.price / pieza.compare_at_price) * 100)}%
+                        </span>
+                      )
                     )}
                   </Link>
 
@@ -202,9 +205,9 @@ export default function Bazar() {
                     <button
                       className={`btn btn-ghost zz-bazar__addbtn ${agregadoId === pieza.id ? "zz-bazar__addbtn--ok" : ""}`}
                       onClick={() => handleAgregar(pieza)}
-                      disabled={pieza.stock === 0}
+                      disabled={pieza.stock === 0 || !pieza.active}
                     >
-                      {pieza.stock === 0 ? "Agotado" : agregadoId === pieza.id ? "✓ Agregado" : "Agregar"}
+                      {!pieza.active ? "No disponible" : pieza.stock === 0 ? "Agotado" : agregadoId === pieza.id ? "✓ Agregado" : "Agregar"}
                     </button>
                   </div>
                 </article>
