@@ -72,7 +72,7 @@ export default function Terminos() {
         <h2>9. Contacto</h2>
         <p>
           Si tienes dudas sobre estos términos, escríbenos desde nuestra página de{" "}
-          <a href="/contacto">Contacto</a>.
+          <a href="/pedido-personalizado">Pedido personalizado</a>.
         </p>
       </div>
     </section>

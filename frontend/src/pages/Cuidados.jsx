@@ -85,7 +85,7 @@ export default function Cuidados() {
 
         <p className="zz-cuidados__nota">
           ¿Tienes dudas sobre una pieza en particular? Escríbenos desde{" "}
-          <a href="/contacto">Contacto</a>.
+          <a href="/pedido-personalizado">Pedido personalizado</a>.
         </p>
       </div>
     </section>

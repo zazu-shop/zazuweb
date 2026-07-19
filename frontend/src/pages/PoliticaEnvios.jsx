@@ -66,7 +66,7 @@ export default function PoliticaEnvios() {
         <h2>Contacto</h2>
         <p>
           Para cualquier duda sobre tu pedido, envío o esta política, puedes escribirnos desde
-          nuestra página de <a href="/contacto">Contacto</a> o por WhatsApp usando el número que
+          nuestra página de <a href="/pedido-personalizado">Pedido personalizado</a> o por WhatsApp usando el número que
           te compartimos al finalizar tu compra.
         </p>
       </div>

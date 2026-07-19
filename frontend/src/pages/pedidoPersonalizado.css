@@ -1,0 +1,41 @@
+.zz-pedido-personalizado__inner {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .zz-pedido-personalizado__inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.zz-pedido-personalizado__tips {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--zz-void-2);
+  border-left: 2px solid var(--zz-gold);
+  border-radius: 8px;
+}
+
+.zz-pedido-personalizado__tips ul {
+  margin-top: 0.6rem;
+  padding-left: 1.1rem;
+  color: var(--zz-parchment-dim);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+.zz-pedido-personalizado--ok {
+  max-width: 480px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.zz-pedido-personalizado--ok h1 {
+  color: var(--zz-gold-bright);
+}

@@ -5,6 +5,7 @@ import { useCart } from "../lib/CartContext";
 import { SkeletonGrid } from "../components/Skeleton";
 import Reveal from "../components/Reveal";
 import HeartButton from "../components/HeartButton";
+import QuickView from "../components/QuickView";
 import "./bazar.css";
 
 const ORDEN_OPCIONES = [
@@ -23,6 +24,7 @@ export default function Bazar() {
   const [orden, setOrden] = useState("recientes");
   const [precioMax, setPrecioMax] = useState("");
   const [agregadoId, setAgregadoId] = useState(null);
+  const [vistaRapida, setVistaRapida] = useState(null);
 
   const handleAgregar = (pieza) => {
     addItem(pieza);
@@ -188,6 +190,13 @@ export default function Bazar() {
                     )}
                   </Link>
                   <HeartButton productId={pieza.id} className="zz-bazar__corazon" />
+                  <button
+                    className="zz-bazar__vista-rapida"
+                    onClick={() => setVistaRapida(pieza)}
+                    aria-label="Vista rápida"
+                  >
+                    👁
+                  </button>
 
                   <p className="eyebrow zz-bazar__category">{pieza.category || "General"}</p>
                   <Link to={`/bazar/${pieza.id}`}>
@@ -219,6 +228,17 @@ export default function Bazar() {
           </>
         )}
       </div>
+
+      {vistaRapida && (
+        <QuickView
+          producto={vistaRapida}
+          onClose={() => setVistaRapida(null)}
+          onAgregar={(p) => {
+            handleAgregar(p);
+            setVistaRapida(null);
+          }}
+        />
+      )}
     </section>
   );
 }

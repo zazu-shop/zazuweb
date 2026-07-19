@@ -54,6 +54,11 @@ export default function AdminProductos() {
     );
   }, [productos, busqueda]);
 
+  const categoriasExistentes = useMemo(() => {
+    const set = new Set(productos.map((p) => p.category).filter(Boolean));
+    return Array.from(set).sort();
+  }, [productos]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
@@ -184,7 +189,19 @@ export default function AdminProductos() {
             <div className="zz-admin__form-fila">
               <label>
                 Categoría
-                <input type="text" name="category" value={form.category} onChange={handleChange} />
+                <input
+                  type="text"
+                  name="category"
+                  list="zz-categorias-existentes"
+                  value={form.category}
+                  onChange={handleChange}
+                  placeholder="Elige una existente o escribe una nueva"
+                />
+                <datalist id="zz-categorias-existentes">
+                  {categoriasExistentes.map((cat) => (
+                    <option key={cat} value={cat} />
+                  ))}
+                </datalist>
               </label>
               <label>
                 URL de imagen

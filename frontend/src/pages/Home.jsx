@@ -146,7 +146,7 @@ export default function Home() {
         <Reveal className="container zz-cta__inner">
           <h2>¿Buscas una pieza a la medida de tu ritual?</h2>
           <p className="lead">Escríbenos y forjamos algo único para ti.</p>
-          <Link to="/contacto" className="btn">Invocar contacto</Link>
+          <Link to="/pedido-personalizado" className="btn">Encargar una pieza</Link>
         </Reveal>
       </section>
     </>

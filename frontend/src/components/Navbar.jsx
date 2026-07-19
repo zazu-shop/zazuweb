@@ -8,7 +8,7 @@ const LINKS = [
   { to: "/", label: "Inicio" },
   { to: "/grimorio", label: "El Grimorio" },
   { to: "/bazar", label: "Bazar" },
-  { to: "/contacto", label: "Contacto" },
+  { to: "/pedido-personalizado", label: "Pedido personalizado" },
 ];
 
 export default function Navbar() {

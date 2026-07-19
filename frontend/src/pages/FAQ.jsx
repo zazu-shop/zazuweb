@@ -57,7 +57,7 @@ export default function FAQ() {
       </div>
 
       <p className="zz-faq__nota">
-        ¿No encontraste tu respuesta crack? Escríbenos desde <a href="/contacto">Contacto</a>.
+        ¿No encontraste tu respuesta? Escríbenos desde <a href="/pedido-personalizado">Pedido personalizado</a>.
       </p>
     </section>
   );

@@ -13,7 +13,7 @@ import Grimorio from "./pages/Grimorio";
 import Bazar from "./pages/Bazar";
 import ProductoDetalle from "./pages/ProductoDetalle";
 import Carrito from "./pages/Carrito";
-import Contacto from "./pages/Contacto";
+import PedidoPersonalizado from "./pages/PedidoPersonalizado";
 import Seguimiento from "./pages/Seguimiento";
 import PoliticaEnvios from "./pages/PoliticaEnvios";
 import Terminos from "./pages/Terminos";
@@ -49,7 +49,7 @@ export default function App() {
             <Route path="/bazar/:id" element={<ProductoDetalle />} />
             <Route path="/carrito" element={<Carrito />} />
             <Route path="/favoritos" element={<Favoritos />} />
-            <Route path="/contacto" element={<Contacto />} />
+            <Route path="/pedido-personalizado" element={<PedidoPersonalizado />} />
             <Route path="/seguimiento" element={<Seguimiento />} />
             <Route path="/politica-envios" element={<PoliticaEnvios />} />
             <Route path="/terminos" element={<Terminos />} />

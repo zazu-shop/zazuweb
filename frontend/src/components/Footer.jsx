@@ -20,7 +20,7 @@ export default function Footer() {
           <a href="/cuidados">Cuidados de tu pieza</a>
           <a href="/sorteos">Sorteos</a>
           <a href="/instagram">Instagram</a>
-          <a href="/contacto">Contacto</a>
+          <a href="/pedido-personalizado">Pedido personalizado</a>
         </nav>
 
         <nav className="zz-footer__links zz-footer__links--legal">
