@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import WhatsAppFloat from "./components/WhatsAppFloat";
 import BackToTop from "./components/BackToTop";
 import { CartProvider } from "./lib/CartContext";
+import { WishlistProvider } from "./lib/WishlistContext";
 import { AuthProvider } from "./lib/AuthContext";
 import Home from "./pages/Home";
 import Grimorio from "./pages/Grimorio";
@@ -20,6 +21,7 @@ import FAQ from "./pages/FAQ";
 import Instagram from "./pages/Instagram";
 import Sorteos from "./pages/Sorteos";
 import Cuidados from "./pages/Cuidados";
+import Favoritos from "./pages/Favoritos";
 import CuentaLogin from "./pages/cuenta/CuentaLogin";
 import CuentaPerfil from "./pages/cuenta/CuentaPerfil";
 import AdminLogin from "./pages/admin/AdminLogin";
@@ -35,6 +37,7 @@ export default function App() {
   return (
     <AuthProvider>
       <CartProvider>
+      <WishlistProvider>
         <SvgDefs />
         <Navbar />
         <main>
@@ -45,6 +48,7 @@ export default function App() {
             <Route path="/bazar" element={<Bazar />} />
             <Route path="/bazar/:id" element={<ProductoDetalle />} />
             <Route path="/carrito" element={<Carrito />} />
+            <Route path="/favoritos" element={<Favoritos />} />
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/seguimiento" element={<Seguimiento />} />
             <Route path="/politica-envios" element={<PoliticaEnvios />} />
@@ -95,6 +99,7 @@ export default function App() {
         <Footer />
         <BackToTop />
         <WhatsAppFloat />
+      </WishlistProvider>
       </CartProvider>
     </AuthProvider>
   );

@@ -205,3 +205,10 @@
   background: #3a3a3a;
   color: var(--zz-parchment-dim);
 }
+
+.zz-bazar__corazon {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  z-index: 2;
+}

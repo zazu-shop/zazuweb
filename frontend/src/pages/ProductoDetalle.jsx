@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import { useCart } from "../lib/CartContext";
 import { SkeletonDetalle } from "../components/Skeleton";
+import HeartButton from "../components/HeartButton";
 import "./productoDetalle.css";
 
 export default function ProductoDetalle() {
@@ -76,6 +77,7 @@ export default function ProductoDetalle() {
           ) : (
             <div className="zz-detalle__media--placeholder" />
           )}
+          <HeartButton productId={producto.id} className="zz-detalle__corazon" />
         </div>
 
         <div className="zz-detalle__info">

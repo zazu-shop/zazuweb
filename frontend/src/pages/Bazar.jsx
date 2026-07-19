@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabaseClient";
 import { useCart } from "../lib/CartContext";
 import { SkeletonGrid } from "../components/Skeleton";
 import Reveal from "../components/Reveal";
+import HeartButton from "../components/HeartButton";
 import "./bazar.css";
 
 const ORDEN_OPCIONES = [
@@ -186,6 +187,7 @@ export default function Bazar() {
                       )
                     )}
                   </Link>
+                  <HeartButton productId={pieza.id} className="zz-bazar__corazon" />
 
                   <p className="eyebrow zz-bazar__category">{pieza.category || "General"}</p>
                   <Link to={`/bazar/${pieza.id}`}>

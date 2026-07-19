@@ -389,3 +389,8 @@ a.zz-admin__pedido-header {
   font-family: var(--font-mono);
   font-size: 0.75rem;
 }
+
+.zz-admin__badge--completado {
+  color: var(--zz-gold-bright);
+  border-color: var(--zz-gold);
+}

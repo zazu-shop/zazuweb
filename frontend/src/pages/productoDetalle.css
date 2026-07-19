@@ -128,3 +128,14 @@
   color: var(--zz-gold);
   font-size: 0.75rem;
 }
+
+.zz-detalle__media {
+  position: relative;
+}
+
+.zz-detalle__corazon {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  z-index: 2;
+}

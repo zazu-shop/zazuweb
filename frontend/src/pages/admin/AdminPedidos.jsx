@@ -7,6 +7,7 @@ import "./admin.css";
 const ESTADOS = [
   { value: "pendiente_verificacion", label: "Pendiente de verificación" },
   { value: "pagado", label: "Pagado" },
+  { value: "completado", label: "Entregado" },
   { value: "cancelado", label: "Cancelado" },
 ];
 

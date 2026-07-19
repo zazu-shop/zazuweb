@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuth } from "../../lib/AuthContext";
+import OrderTimeline from "../../components/OrderTimeline";
 import "./cuenta.css";
 
 const ESTADOS_LABEL = {
   pendiente_verificacion: "Pendiente de verificación",
   pagado: "Pagado",
+  completado: "Entregado",
   cancelado: "Cancelado",
 };
 
@@ -74,6 +76,8 @@ export default function CuentaPerfil() {
                   {ESTADOS_LABEL[pedido.status] || pedido.status}
                 </span>
               </div>
+
+              <OrderTimeline status={pedido.status} />
 
               {pedido.order_items.map((item) => (
                 <div className="zz-checkout__linea" key={item.id}>

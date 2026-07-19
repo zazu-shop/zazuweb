@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import OrderTimeline from "../components/OrderTimeline";
 import "./seguimiento.css";
 
 const ESTADOS_LABEL = {
   pendiente_verificacion: "Pendiente de verificación",
   pagado: "Pagado",
+  completado: "Entregado",
   cancelado: "Cancelado",
 };
 
@@ -128,6 +130,8 @@ export default function Seguimiento() {
                 day: "numeric",
               })}
             </p>
+
+            <OrderTimeline status={pedido.status} />
 
             <div className="zz-seguimiento__items">
               {pedido.items?.map((item, i) => (
