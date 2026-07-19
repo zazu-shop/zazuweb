@@ -1,4 +1,5 @@
 import RoughDivider from "../components/RoughDivider";
+import Reveal from "../components/Reveal";
 import "./cuidados.css";
 
 const MATERIALES = [
@@ -67,16 +68,18 @@ export default function Cuidados() {
         <RoughDivider />
 
         <div className="zz-cuidados__grid">
-          {MATERIALES.map((m) => (
-            <div className="zz-panel zz-cuidados__card" key={m.titulo}>
-              <p className="zz-cuidados__icono">{m.icono}</p>
-              <h2>{m.titulo}</h2>
-              <ul>
-                {m.consejos.map((c, i) => (
-                  <li key={i}>{c}</li>
-                ))}
-              </ul>
-            </div>
+          {MATERIALES.map((m, i) => (
+            <Reveal key={m.titulo} delay={(i % 3) * 100}>
+              <div className="zz-panel zz-cuidados__card">
+                <p className="zz-cuidados__icono">{m.icono}</p>
+                <h2>{m.titulo}</h2>
+                <ul>
+                  {m.consejos.map((c, j) => (
+                    <li key={j}>{c}</li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
           ))}
         </div>
 

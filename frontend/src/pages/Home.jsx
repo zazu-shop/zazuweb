@@ -4,6 +4,7 @@ import Sigil from "../components/Sigil";
 import RoughDivider from "../components/RoughDivider";
 import { supabase } from "../lib/supabaseClient";
 import { SkeletonGrid } from "../components/Skeleton";
+import Reveal from "../components/Reveal";
 import "./home.css";
 
 export default function Home() {
@@ -70,16 +71,20 @@ export default function Home() {
       {/* ---- Teaser de marca ---- */}
       <section className="section">
         <div className="container zz-story">
-          <div>
-            <p className="eyebrow">Quiénes somos</p>
-            <h2>Un oficio nacido en los márgenes del mapa</h2>
-          </div>
-          <p className="lead">
-            Zazu nace de la creencia de que cada objeto forjado a mano
-            guarda una intención. Trabajamos con madera, metal y cera para
-            crear piezas que parecen rescatadas de una biblioteca olvidada:
-            ásperas al tacto, precisas en su forma.
-          </p>
+          <Reveal>
+            <div>
+              <p className="eyebrow">Quiénes somos</p>
+              <h2>Un oficio nacido en los márgenes del mapa</h2>
+            </div>
+          </Reveal>
+          <Reveal delay={120}>
+            <p className="lead">
+              Zazu nace de la creencia de que cada objeto forjado a mano
+              guarda una intención. Trabajamos con madera, metal y cera para
+              crear piezas que parecen rescatadas de una biblioteca olvidada:
+              ásperas al tacto, precisas en su forma.
+            </p>
+          </Reveal>
         </div>
       </section>
 
@@ -108,18 +113,20 @@ export default function Home() {
 
           {estado === "listo" && piezas.length > 0 && (
             <div className="grid grid-3 zz-pieces">
-              {piezas.map((p) => (
-                <Link to={`/bazar/${p.id}`} className="card zz-pieces__card" key={p.id}>
-                  {p.image_url ? (
-                    <img src={p.image_url} alt={p.name} className="zz-pieces__imagen" />
-                  ) : (
-                    <div className="zz-piece__mark">
-                      <Sigil size={30} />
-                    </div>
-                  )}
-                  <h3>{p.name}</h3>
-                  <p>{p.description}</p>
-                </Link>
+              {piezas.map((p, i) => (
+                <Reveal key={p.id} delay={i * 100}>
+                  <Link to={`/bazar/${p.id}`} className="card zz-pieces__card">
+                    {p.image_url ? (
+                      <img src={p.image_url} alt={p.name} className="zz-pieces__imagen" loading="lazy" />
+                    ) : (
+                      <div className="zz-piece__mark">
+                        <Sigil size={30} />
+                      </div>
+                    )}
+                    <h3>{p.name}</h3>
+                    <p>{p.description}</p>
+                  </Link>
+                </Reveal>
               ))}
             </div>
           )}
@@ -136,11 +143,11 @@ export default function Home() {
 
       {/* ---- CTA de contacto ---- */}
       <section className="section zz-cta">
-        <div className="container zz-cta__inner">
+        <Reveal className="container zz-cta__inner">
           <h2>¿Buscas una pieza a la medida de tu ritual?</h2>
           <p className="lead">Escríbenos y forjamos algo único para ti.</p>
           <Link to="/contacto" className="btn">Invocar contacto</Link>
-        </div>
+        </Reveal>
       </section>
     </>
   );

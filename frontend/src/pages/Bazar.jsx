@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import { useCart } from "../lib/CartContext";
 import { SkeletonGrid } from "../components/Skeleton";
+import Reveal from "../components/Reveal";
 import "./bazar.css";
 
 const ORDEN_OPCIONES = [
@@ -167,11 +168,12 @@ export default function Bazar() {
             )}
 
             <div className="grid grid-3">
-              {piezasFiltradas.map((pieza) => (
-                <article className="card zz-bazar__item" key={pieza.id}>
+              {piezasFiltradas.map((pieza, i) => (
+                <Reveal key={pieza.id} delay={(i % 3) * 100}>
+                <article className="card zz-bazar__item">
                   <Link to={`/bazar/${pieza.id}`} className="zz-bazar__imagelink">
                     {pieza.image_url ? (
-                      <img src={pieza.image_url} alt={pieza.name} className="zz-bazar__image" />
+                      <img src={pieza.image_url} alt={pieza.name} className="zz-bazar__image" loading="lazy" />
                     ) : (
                       <div className="zz-bazar__image zz-bazar__image--placeholder" />
                     )}
@@ -206,6 +208,7 @@ export default function Bazar() {
                     </button>
                   </div>
                 </article>
+                </Reveal>
               ))}
             </div>
           </>

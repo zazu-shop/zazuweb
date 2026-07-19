@@ -1,4 +1,5 @@
 import RoughDivider from "../components/RoughDivider";
+import Reveal from "../components/Reveal";
 import "./grimorio.css";
 
 const CAPITULOS = [
@@ -51,10 +52,12 @@ export default function Grimorio() {
         {CAPITULOS.map((cap, i) => (
           <div key={cap.titulo}>
             <RoughDivider label={`Capítulo ${i + 1}`} />
-            <article className="zz-grimorio__cap">
-              <h2>{cap.titulo}</h2>
-              <p>{cap.texto}</p>
-            </article>
+            <Reveal>
+              <article className="zz-grimorio__cap">
+                <h2>{cap.titulo}</h2>
+                <p>{cap.texto}</p>
+              </article>
+            </Reveal>
           </div>
         ))}
       </div>

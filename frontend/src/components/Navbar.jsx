@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import MiniCarrito from "./MiniCarrito";
 import "./navbar.css";
@@ -14,9 +14,16 @@ const LINKS = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [conScroll, setConScroll] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setConScroll(window.scrollY > 12);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="zz-nav">
+    <header className={`zz-nav ${conScroll ? "zz-nav--scrolled" : ""}`}>
       <div className="container zz-nav__inner">
         <NavLink to="/" className="zz-nav__brand" onClick={() => setOpen(false)}>
           <img src="/logo/icon-white.png" alt="" className="zz-nav__mark" />

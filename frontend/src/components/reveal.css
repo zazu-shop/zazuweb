@@ -1,0 +1,18 @@
+.zz-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.zz-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zz-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
