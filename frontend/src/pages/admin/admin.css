@@ -75,8 +75,8 @@
 }
 
 .zz-admin__badge--pagado {
-  color: #7fd68a;
-  border-color: #7fd68a;
+  color: #8fb8e8;
+  border-color: #8fb8e8;
 }
 
 .zz-admin__badge--cancelado {
@@ -169,7 +169,7 @@
   color: var(--zz-parchment);
 }
 
-.zz-admin__stat--pagado strong { color: #7fd68a; }
+.zz-admin__stat--pagado strong { color: #8fb8e8; }
 .zz-admin__stat--pendiente strong { color: var(--zz-gold-bright); }
 .zz-admin__stat--cancelado strong { color: #d67a6a; }
 
@@ -391,8 +391,16 @@ a.zz-admin__pedido-header {
 }
 
 .zz-admin__badge--completado {
-  color: #8fb8e8;
-  border-color: #8fb8e8;
+  color: #7fd68a;
+  border-color: #7fd68a;
+}
+
+/* Insignia genérica en verde, para "Disponible"/"Activo" en productos y
+   cupones — separada de --pagado para que el cambio de color de pedidos
+   no le afecte. */
+.zz-admin__badge--activo {
+  color: #7fd68a;
+  border-color: #7fd68a;
 }
 
 /* ---- Buscador y encabezado de listas ---- */

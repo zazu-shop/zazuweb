@@ -269,7 +269,7 @@ export default function AdminProductos() {
                   <td className="zz-admin__tabla-dim">{producto.stock}</td>
                   <td>
                     {producto.active ? (
-                      <span className="zz-admin__badge zz-admin__badge--pagado">Disponible</span>
+                      <span className="zz-admin__badge zz-admin__badge--activo">Disponible</span>
                     ) : (
                       <span className="zz-admin__badge zz-admin__badge--cancelado">No disponible</span>
                     )}

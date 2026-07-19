@@ -2,8 +2,9 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin: var(--space-sm) 0;
-  max-width: 340px;
+  margin: var(--space-md) auto;
+  max-width: 420px;
+  width: 100%;
 }
 
 .zz-timeline__paso {
@@ -39,8 +40,8 @@
 .zz-timeline__punto {
   position: relative;
   z-index: 1;
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -50,7 +51,7 @@
   border: 2px solid var(--zz-line-soft);
   color: var(--zz-parchment-dim);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.8rem;
 }
 
 .zz-timeline__punto--hecho {
@@ -66,9 +67,9 @@
 }
 
 .zz-timeline__label {
-  margin-top: 0.3rem;
+  margin-top: 0.4rem;
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: 0.68rem;
   letter-spacing: 0.01em;
   color: var(--zz-parchment-dim);
   text-align: center;

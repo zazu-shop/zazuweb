@@ -192,7 +192,7 @@ export default function AdminCupones() {
                   </td>
                   <td>
                     {cupon.active ? (
-                      <span className="zz-admin__badge zz-admin__badge--pagado">Activo</span>
+                      <span className="zz-admin__badge zz-admin__badge--activo">Activo</span>
                     ) : (
                       <span className="zz-admin__badge zz-admin__badge--cancelado">Inactivo</span>
                     )}
