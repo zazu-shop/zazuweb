@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import Modal from "../../components/Modal";
+import OrderTimeline from "../../components/OrderTimeline";
 import "./admin.css";
 
 const ESTADOS = [
   { value: "pendiente_verificacion", label: "Pendiente de verificación" },
   { value: "pagado", label: "Pagado" },
+  { value: "completado", label: "Entregado" },
   { value: "cancelado", label: "Cancelado" },
 ];
 
@@ -19,6 +21,7 @@ const ETIQUETAS_ENVIO = {
 const ESTADO_MENSAJE = {
   pendiente_verificacion: "seguimos verificando tu pago",
   pagado: "confirmamos tu pago, ¡ya estamos preparando tu pedido!",
+  completado: "tu pedido fue entregado, ¡gracias por tu compra!",
   cancelado: "tu pedido fue cancelado",
 };
 
@@ -118,6 +121,8 @@ export default function AdminPedidoDetalle() {
           {ESTADOS.find((e) => e.value === pedido.status)?.label}
         </span>
       </div>
+
+      <OrderTimeline status={pedido.status} />
 
       <div className="zz-admin__detalle-grid">
         <div className="zz-panel">
