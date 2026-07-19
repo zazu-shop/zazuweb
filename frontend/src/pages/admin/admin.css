@@ -391,6 +391,104 @@ a.zz-admin__pedido-header {
 }
 
 .zz-admin__badge--completado {
+  color: #8fb8e8;
+  border-color: #8fb8e8;
+}
+
+/* ---- Buscador y encabezado de listas ---- */
+.zz-admin__lista-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.zz-admin__buscador {
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  color: var(--zz-parchment);
+  font-family: var(--font-body);
+  min-width: 260px;
+}
+
+/* ---- Tabla de gestión (productos / cupones) ---- */
+.zz-admin__tabla-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 12px;
+}
+
+.zz-admin__tabla-productos {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  min-width: 640px;
+}
+
+.zz-admin__tabla-productos thead {
+  background: var(--zz-void-2);
+}
+
+.zz-admin__tabla-productos th {
+  text-align: left;
+  padding: 0.8rem 1rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--zz-parchment-dim);
+  border-bottom: 1px solid var(--zz-line-soft);
+}
+
+.zz-admin__tabla-productos td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--zz-line-soft);
+  color: var(--zz-parchment);
+  vertical-align: middle;
+}
+
+.zz-admin__tabla-productos tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.zz-admin__tabla-productos tbody tr:hover {
+  background: var(--zz-void-2);
+}
+
+.zz-admin__fila--inactiva {
+  opacity: 0.55;
+}
+
+.zz-admin__tabla-dim {
+  color: var(--zz-parchment-dim);
+}
+
+.zz-admin__tabla-codigo {
   color: var(--zz-gold-bright);
-  border-color: var(--zz-gold);
+  font-weight: 600;
+}
+
+.zz-admin__tabla-img {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.zz-admin__tabla-acciones {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: nowrap;
+}
+
+.zz-admin__tabla-acciones .btn,
+.zz-admin__tabla-acciones .zz-admin__eliminar {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.7rem;
+  white-space: nowrap;
 }

@@ -18,12 +18,13 @@ export default function OrderTimeline({ status }) {
 
   const indiceActual = PASOS.findIndex((p) => p.key === status);
   const actual = indiceActual === -1 ? 0 : indiceActual;
+  const esUltimoPaso = actual === PASOS.length - 1;
 
   return (
     <div className="zz-timeline">
       {PASOS.map((paso, i) => {
-        const completado = i < actual;
-        const enCurso = i === actual;
+        const completado = i < actual || (i === actual && esUltimoPaso);
+        const enCurso = i === actual && !esUltimoPaso;
         return (
           <div className="zz-timeline__paso" key={paso.key}>
             <div className="zz-timeline__linea-wrap">

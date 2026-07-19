@@ -66,7 +66,7 @@ export default function ProductoDetalle() {
     );
   }
 
-  const agotado = producto.stock === 0;
+  const agotado = producto.stock === 0 || producto.active === false;
 
   return (
     <section className="section">
@@ -109,7 +109,11 @@ export default function ProductoDetalle() {
           )}
 
           <p className="zz-detalle__stock">
-            {agotado ? "Sin stock por ahora" : `${producto.stock} disponibles`}
+            {producto.active === false
+              ? "Esta pieza ya no está disponible"
+              : agotado
+              ? "Sin stock por ahora"
+              : `${producto.stock} disponibles`}
           </p>
 
           {!agotado && (

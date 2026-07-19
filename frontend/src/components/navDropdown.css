@@ -1,0 +1,70 @@
+.zz-navdrop {
+  position: relative;
+}
+
+.zz-navdrop__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--zz-parchment-dim);
+  cursor: pointer;
+  padding: 0.4rem 0;
+}
+
+.zz-navdrop__toggle:hover {
+  color: var(--zz-gold-bright);
+}
+
+.zz-navdrop__flecha {
+  font-size: 0.6rem;
+  color: var(--zz-gold);
+}
+
+.zz-navdrop__panel {
+  position: absolute;
+  top: calc(100% + 0.8rem);
+  left: 0;
+  min-width: 180px;
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: var(--radius-soft);
+  padding: 0.4rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+}
+
+.zz-navdrop__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--zz-parchment-dim);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.zz-navdrop__item:hover,
+.zz-navdrop__item.is-active {
+  background: var(--zz-void-3);
+  color: var(--zz-gold-bright);
+}
+
+@media (max-width: 760px) {
+  .zz-navdrop__panel {
+    position: static;
+    box-shadow: none;
+    margin-top: 0.4rem;
+  }
+}

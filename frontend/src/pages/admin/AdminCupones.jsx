@@ -15,6 +15,7 @@ export default function AdminCupones() {
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState(null);
   const [generandoId, setGenerandoId] = useState(null);
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
   const cargar = () => {
     setEstado("cargando");
@@ -41,10 +42,14 @@ export default function AdminCupones() {
 
   const handleEditar = (cupon) => {
     setForm({ ...cupon, expires_at: cupon.expires_at ? cupon.expires_at.slice(0, 10) : "" });
+    setMostrarFormulario(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleNuevo = () => setForm(CUPON_VACIO);
+  const handleNuevo = () => {
+    setForm(CUPON_VACIO);
+    setMostrarFormulario(true);
+  };
 
   const handleEliminar = async (id) => {
     if (!confirm("¿Eliminar este cupón?")) return;
@@ -73,6 +78,7 @@ export default function AdminCupones() {
         if (error) throw error;
       }
       setForm(CUPON_VACIO);
+      setMostrarFormulario(false);
       cargar();
     } catch (err) {
       setError(err.message);
@@ -104,41 +110,56 @@ export default function AdminCupones() {
         </div>
       </div>
 
-      <div className="zz-panel">
-        <h2>{form.id ? "Editar cupón" : "Nuevo cupón"}</h2>
-        <form className="zz-form zz-admin__form-producto" onSubmit={handleSubmit}>
-          <div className="zz-admin__form-fila">
-            <label>
-              Código
-              <input type="text" name="code" value={form.code} onChange={handleChange} placeholder="BRUJA10" required />
-            </label>
-            <label>
-              Descuento (%)
-              <input type="number" step="0.01" name="discount_percent" value={form.discount_percent} onChange={handleChange} required />
-            </label>
-            <label>
-              Vence (opcional)
-              <input type="date" name="expires_at" value={form.expires_at} onChange={handleChange} />
-            </label>
-          </div>
+      {!mostrarFormulario && (
+        <button className="btn" onClick={handleNuevo} style={{ marginBottom: "1.5rem" }}>
+          + Nuevo cupón
+        </button>
+      )}
 
-          <label className="zz-admin__checkbox">
-            <input type="checkbox" name="active" checked={form.active} onChange={handleChange} />
-            Activo
-          </label>
+      {mostrarFormulario && (
+        <div className="zz-panel">
+          <h2>{form.id ? "Editar cupón" : "Nuevo cupón"}</h2>
+          <form className="zz-form zz-admin__form-producto" onSubmit={handleSubmit}>
+            <div className="zz-admin__form-fila">
+              <label>
+                Código
+                <input type="text" name="code" value={form.code} onChange={handleChange} placeholder="BRUJA10" required />
+              </label>
+              <label>
+                Descuento (%)
+                <input type="number" step="0.01" name="discount_percent" value={form.discount_percent} onChange={handleChange} required />
+              </label>
+              <label>
+                Vence (opcional)
+                <input type="date" name="expires_at" value={form.expires_at} onChange={handleChange} />
+              </label>
+            </div>
 
-          <div className="zz-admin__form-acciones">
-            <button className="btn" type="submit" disabled={guardando}>
-              {guardando ? "Guardando…" : form.id ? "Guardar cambios" : "Crear cupón"}
-            </button>
-            {form.id && (
-              <button type="button" className="btn btn-ghost" onClick={handleNuevo}>Cancelar edición</button>
-            )}
-          </div>
+            <label className="zz-admin__checkbox">
+              <input type="checkbox" name="active" checked={form.active} onChange={handleChange} />
+              Activo
+            </label>
 
-          {error && <p className="zz-form__status zz-form__status--error">{error}</p>}
-        </form>
-      </div>
+            <div className="zz-admin__form-acciones">
+              <button className="btn" type="submit" disabled={guardando}>
+                {guardando ? "Guardando…" : form.id ? "Guardar cambios" : "Crear cupón"}
+              </button>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => {
+                  setForm(CUPON_VACIO);
+                  setMostrarFormulario(false);
+                }}
+              >
+                Cancelar
+              </button>
+            </div>
+
+            {error && <p className="zz-form__status zz-form__status--error">{error}</p>}
+          </form>
+        </div>
+      )}
 
       <h2 style={{ marginTop: "2.5rem", marginBottom: "1rem" }}>Cupones existentes</h2>
 
@@ -150,29 +171,45 @@ export default function AdminCupones() {
       )}
 
       {estado === "listo" && cupones.length > 0 && (
-        <div className="zz-admin__lista">
-          {cupones.map((cupon) => (
-            <div className="zz-admin__producto-fila" key={cupon.id}>
-              <div className="zz-admin__producto-placeholder" style={{ display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-mono)", color: "var(--zz-gold-bright)", fontSize: "0.7rem" }}>
-                -{cupon.discount_percent}%
-              </div>
-              <div className="zz-admin__producto-info">
-                <p className="zz-admin__producto-nombre">
-                  {cupon.code} {!cupon.active && <span style={{ color: "#d67a6a" }}>(inactivo)</span>}
-                </p>
-                <p className="zz-admin__producto-meta">
-                  {cupon.expires_at
-                    ? `Vence: ${new Date(cupon.expires_at).toLocaleDateString("es-PE")}`
-                    : "Sin fecha de vencimiento"}
-                </p>
-              </div>
-              <button className="btn btn-ghost" onClick={() => handleDescargar(cupon)} disabled={generandoId === cupon.id}>
-                {generandoId === cupon.id ? "Generando…" : "Descargar para Instagram"}
-              </button>
-              <button className="btn btn-ghost" onClick={() => handleEditar(cupon)}>Editar</button>
-              <button className="zz-admin__eliminar" onClick={() => handleEliminar(cupon.id)}>Eliminar</button>
-            </div>
-          ))}
+        <div className="zz-admin__tabla-wrap">
+          <table className="zz-admin__tabla-productos">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Descuento</th>
+                <th>Vence</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {cupones.map((cupon) => (
+                <tr key={cupon.id} className={!cupon.active ? "zz-admin__fila--inactiva" : ""}>
+                  <td className="zz-admin__tabla-codigo">{cupon.code}</td>
+                  <td className="zz-admin__tabla-dim">-{cupon.discount_percent}%</td>
+                  <td className="zz-admin__tabla-dim">
+                    {cupon.expires_at ? new Date(cupon.expires_at).toLocaleDateString("es-PE") : "Sin vencimiento"}
+                  </td>
+                  <td>
+                    {cupon.active ? (
+                      <span className="zz-admin__badge zz-admin__badge--pagado">Activo</span>
+                    ) : (
+                      <span className="zz-admin__badge zz-admin__badge--cancelado">Inactivo</span>
+                    )}
+                  </td>
+                  <td>
+                    <div className="zz-admin__tabla-acciones">
+                      <button className="btn btn-ghost" onClick={() => handleDescargar(cupon)} disabled={generandoId === cupon.id}>
+                        {generandoId === cupon.id ? "Generando…" : "Para Instagram"}
+                      </button>
+                      <button className="btn btn-ghost" onClick={() => handleEditar(cupon)}>Editar</button>
+                      <button className="zz-admin__eliminar" onClick={() => handleEliminar(cupon.id)}>Eliminar</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </section>

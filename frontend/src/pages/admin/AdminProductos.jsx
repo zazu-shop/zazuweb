@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuth } from "../../lib/AuthContext";
@@ -25,6 +25,8 @@ export default function AdminProductos() {
   const [form, setForm] = useState(PRODUCTO_VACIO);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState(null);
+  const [busqueda, setBusqueda] = useState("");
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
   const cargar = () => {
     setEstado("cargando");
@@ -44,6 +46,14 @@ export default function AdminProductos() {
 
   useEffect(cargar, []);
 
+  const productosFiltrados = useMemo(() => {
+    if (!busqueda.trim()) return productos;
+    const q = busqueda.trim().toLowerCase();
+    return productos.filter(
+      (p) => p.name.toLowerCase().includes(q) || (p.category || "").toLowerCase().includes(q)
+    );
+  }, [productos, busqueda]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
@@ -51,10 +61,14 @@ export default function AdminProductos() {
 
   const handleEditar = (producto) => {
     setForm(producto);
+    setMostrarFormulario(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleNuevo = () => setForm(PRODUCTO_VACIO);
+  const handleNuevo = () => {
+    setForm(PRODUCTO_VACIO);
+    setMostrarFormulario(true);
+  };
 
   const handleEliminar = async (id) => {
     if (!confirm("¿Eliminar este producto permanentemente? Si prefieres solo ocultarlo del Bazar sin perder el historial de pedidos, usa \"Marcar no disponible\" en vez de esto.")) return;
@@ -102,6 +116,7 @@ export default function AdminProductos() {
         if (error) throw error;
       }
       setForm(PRODUCTO_VACIO);
+      setMostrarFormulario(false);
       cargar();
     } catch (err) {
       setError(err.message);
@@ -124,103 +139,154 @@ export default function AdminProductos() {
         </div>
       </div>
 
-      <div className="zz-panel">
-        <h2>{form.id ? "Editar producto" : "Nuevo producto"}</h2>
-        <form className="zz-form zz-admin__form-producto" onSubmit={handleSubmit}>
-          <label>
-            Nombre
-            <input type="text" name="name" value={form.name} onChange={handleChange} required />
-          </label>
-          <label>
-            Descripción
-            <textarea name="description" rows="2" value={form.description} onChange={handleChange} />
-          </label>
-          <label>
-            Características (una por línea)
-            <textarea
-              name="features"
-              rows="4"
-              value={form.features}
-              onChange={handleChange}
-              placeholder={"Madera de roble ahumado\nLatón envejecido a mano\nMide 8cm de alto"}
-            />
-          </label>
-          <div className="zz-admin__form-fila">
-            <label>
-              Precio (S/)
-              <input type="number" step="0.01" name="price" value={form.price} onChange={handleChange} required />
-            </label>
-            <label>
-              Precio tachado (opcional)
-              <input type="number" step="0.01" name="compare_at_price" value={form.compare_at_price} onChange={handleChange} />
-            </label>
-            <label>
-              Stock
-              <input type="number" name="stock" value={form.stock} onChange={handleChange} required />
-            </label>
-          </div>
-          <div className="zz-admin__form-fila">
-            <label>
-              Categoría
-              <input type="text" name="category" value={form.category} onChange={handleChange} />
-            </label>
-            <label>
-              URL de imagen
-              <input type="text" name="image_url" value={form.image_url} onChange={handleChange} />
-            </label>
-          </div>
+      {!mostrarFormulario && (
+        <button className="btn" onClick={handleNuevo} style={{ marginBottom: "1.5rem" }}>
+          + Nuevo producto
+        </button>
+      )}
 
-          <label className="zz-admin__checkbox">
-            <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} />
-            Mostrar en "Piezas destacadas" del inicio
-          </label>
+      {mostrarFormulario && (
+        <div className="zz-panel">
+          <h2>{form.id ? "Editar producto" : "Nuevo producto"}</h2>
+          <form className="zz-form zz-admin__form-producto" onSubmit={handleSubmit}>
+            <label>
+              Nombre
+              <input type="text" name="name" value={form.name} onChange={handleChange} required />
+            </label>
+            <label>
+              Descripción
+              <textarea name="description" rows="2" value={form.description} onChange={handleChange} />
+            </label>
+            <label>
+              Características (una por línea)
+              <textarea
+                name="features"
+                rows="4"
+                value={form.features}
+                onChange={handleChange}
+                placeholder={"Madera de roble ahumado\nLatón envejecido a mano\nMide 8cm de alto"}
+              />
+            </label>
+            <div className="zz-admin__form-fila">
+              <label>
+                Precio (S/)
+                <input type="number" step="0.01" name="price" value={form.price} onChange={handleChange} required />
+              </label>
+              <label>
+                Precio tachado (opcional)
+                <input type="number" step="0.01" name="compare_at_price" value={form.compare_at_price} onChange={handleChange} />
+              </label>
+              <label>
+                Stock
+                <input type="number" name="stock" value={form.stock} onChange={handleChange} required />
+              </label>
+            </div>
+            <div className="zz-admin__form-fila">
+              <label>
+                Categoría
+                <input type="text" name="category" value={form.category} onChange={handleChange} />
+              </label>
+              <label>
+                URL de imagen
+                <input type="text" name="image_url" value={form.image_url} onChange={handleChange} />
+              </label>
+            </div>
 
-          <div className="zz-admin__form-acciones">
-            <button className="btn" type="submit" disabled={guardando}>
-              {guardando ? "Guardando…" : form.id ? "Guardar cambios" : "Crear producto"}
-            </button>
-            {form.id && (
-              <button type="button" className="btn btn-ghost" onClick={handleNuevo}>
-                Cancelar edición
+            <label className="zz-admin__checkbox">
+              <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} />
+              Mostrar en "Piezas destacadas" del inicio
+            </label>
+
+            <div className="zz-admin__form-acciones">
+              <button className="btn" type="submit" disabled={guardando}>
+                {guardando ? "Guardando…" : form.id ? "Guardar cambios" : "Crear producto"}
               </button>
-            )}
-          </div>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => {
+                  setForm(PRODUCTO_VACIO);
+                  setMostrarFormulario(false);
+                }}
+              >
+                Cancelar
+              </button>
+            </div>
 
-          {error && <p className="zz-form__status zz-form__status--error">{error}</p>}
-        </form>
+            {error && <p className="zz-form__status zz-form__status--error">{error}</p>}
+          </form>
+        </div>
+      )}
+
+      <div className="zz-admin__lista-header">
+        <h2>Catálogo actual</h2>
+        <input
+          type="text"
+          className="zz-admin__buscador"
+          placeholder="Buscar por nombre o categoría…"
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
       </div>
-
-      <h2 style={{ marginTop: "2.5rem", marginBottom: "1rem" }}>Catálogo actual</h2>
 
       {estado === "cargando" && <p className="zz-bazar__status">Cargando productos…</p>}
       {estado === "error" && <p className="zz-bazar__status">No se pudieron cargar los productos.</p>}
 
-      {estado === "listo" && (
-        <div className="zz-admin__lista">
-          {productos.map((producto) => (
-            <div className="zz-admin__producto-fila" key={producto.id}>
-              {producto.image_url ? (
-                <img src={producto.image_url} alt={producto.name} />
-              ) : (
-                <div className="zz-admin__producto-placeholder" />
-              )}
-              <div className="zz-admin__producto-info">
-                <p className="zz-admin__producto-nombre">
-                  {producto.featured && <span title="Destacado en inicio">⭐ </span>}
-                  {producto.name}
-                  {!producto.active && <span className="zz-admin__no-disponible"> · No disponible</span>}
-                </p>
-                <p className="zz-admin__producto-meta">
-                  {producto.category} · S/ {producto.price} · Stock: {producto.stock}
-                </p>
-              </div>
-              <button className="btn btn-ghost" onClick={() => alternarDisponibilidad(producto)}>
-                {producto.active ? "Marcar no disponible" : "Reactivar"}
-              </button>
-              <button className="btn btn-ghost" onClick={() => handleEditar(producto)}>Editar</button>
-              <button className="zz-admin__eliminar" onClick={() => handleEliminar(producto.id)}>Eliminar</button>
-            </div>
-          ))}
+      {estado === "listo" && productosFiltrados.length === 0 && (
+        <p className="zz-bazar__status">No hay productos que coincidan con tu búsqueda.</p>
+      )}
+
+      {estado === "listo" && productosFiltrados.length > 0 && (
+        <div className="zz-admin__tabla-wrap">
+          <table className="zz-admin__tabla-productos">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {productosFiltrados.map((producto) => (
+                <tr key={producto.id} className={!producto.active ? "zz-admin__fila--inactiva" : ""}>
+                  <td>
+                    {producto.image_url ? (
+                      <img src={producto.image_url} alt={producto.name} className="zz-admin__tabla-img" />
+                    ) : (
+                      <div className="zz-admin__producto-placeholder zz-admin__tabla-img" />
+                    )}
+                  </td>
+                  <td>
+                    {producto.featured && <span title="Destacado en inicio">⭐ </span>}
+                    {producto.name}
+                  </td>
+                  <td className="zz-admin__tabla-dim">{producto.category}</td>
+                  <td className="zz-admin__tabla-dim">S/ {producto.price}</td>
+                  <td className="zz-admin__tabla-dim">{producto.stock}</td>
+                  <td>
+                    {producto.active ? (
+                      <span className="zz-admin__badge zz-admin__badge--pagado">Disponible</span>
+                    ) : (
+                      <span className="zz-admin__badge zz-admin__badge--cancelado">No disponible</span>
+                    )}
+                  </td>
+                  <td>
+                    <div className="zz-admin__tabla-acciones">
+                      <button className="btn btn-ghost" onClick={() => alternarDisponibilidad(producto)}>
+                        {producto.active ? "Ocultar" : "Reactivar"}
+                      </button>
+                      <button className="btn btn-ghost" onClick={() => handleEditar(producto)}>Editar</button>
+                      <button className="zz-admin__eliminar" onClick={() => handleEliminar(producto.id)}>Eliminar</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </section>
