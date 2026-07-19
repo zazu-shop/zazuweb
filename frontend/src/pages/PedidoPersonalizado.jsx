@@ -84,6 +84,15 @@ export default function PedidoPersonalizado() {
             idea y la tallamos para ti.
           </p>
 
+          <div className="zz-pedido-personalizado__aviso">
+            <p>
+              <strong>Antes de enviar tu idea:</strong> trabajamos encargos que se acercan a las
+              piezas que ya ves en el <a href="/bazar">Bazar</a> o a nuestro estilo — esotérico,
+              medieval y de fantasía, hecho a mano. Si tu idea calza con eso, ¡adelante! Si es muy
+              distinta a lo que trabajamos, es probable que no podamos tomar el encargo.
+            </p>
+          </div>
+
           <div className="zz-pedido-personalizado__tips">
             <p className="eyebrow">Para que la propuesta sea más precisa</p>
             <ul>
