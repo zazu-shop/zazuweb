@@ -51,6 +51,7 @@
 }
 
 .zz-ruleta__etiqueta span {
+  display: inline-block;
   font-family: var(--font-mono);
   font-size: 1.05rem;
   color: var(--zz-parchment);

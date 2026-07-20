@@ -68,9 +68,9 @@ export default function RuletaMedieval({ opciones }) {
               <div
                 key={op.id}
                 className="zz-ruleta__etiqueta"
-                style={{ transform: `rotate(${angulo}deg)` }}
+                style={{ transform: `rotate(${angulo - 90}deg)` }}
               >
-                <span>{op.value}</span>
+                <span style={{ transform: `rotate(${-(angulo - 90)}deg)` }}>{op.value}</span>
               </div>
             );
           })}

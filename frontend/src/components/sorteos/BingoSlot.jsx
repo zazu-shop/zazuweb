@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { sonidos8bit } from "../../lib/sonidos8bit";
 import "./bingoSlot.css";
 
@@ -7,7 +7,6 @@ export default function BingoSlot({ letras, numeros }) {
   const [numeroActual, setNumeroActual] = useState(numeros[0]?.value || "?");
   const [girando, setGirando] = useState(false);
   const [historial, setHistorial] = useState([]);
-  const intervaloRef = useRef(null);
 
   const listo = letras.length > 0 && numeros.length > 0;
 
@@ -15,17 +14,28 @@ export default function BingoSlot({ letras, numeros }) {
     if (girando || !listo) return;
     setGirando(true);
 
-    let ticks = 0;
-    const totalTicks = 18;
+    // Intervalos crecientes: empieza rápido y va frenando, como una
+    // tragamonedas real. Dura ~3.4s en total (antes ~1.6s parando en seco).
+    const intervalos = [
+      90, 90, 90, 90, 90, 90, 90, 90,
+      110, 110, 110, 130, 130, 150, 170,
+      200, 240, 290, 350, 420,
+    ];
 
-    intervaloRef.current = setInterval(() => {
+    let i = 0;
+    const paso = () => {
       setLetraActual(letras[Math.floor(Math.random() * letras.length)].value);
       setNumeroActual(numeros[Math.floor(Math.random() * numeros.length)].value);
-      sonidos8bit.punto();
-      ticks++;
 
-      if (ticks >= totalTicks) {
-        clearInterval(intervaloRef.current);
+      const esUltimo = i === intervalos.length - 1;
+      if (!esUltimo) {
+        sonidos8bit.punto();
+      }
+
+      i++;
+      if (i < intervalos.length) {
+        setTimeout(paso, intervalos[i]);
+      } else {
         const letraFinal = letras[Math.floor(Math.random() * letras.length)].value;
         const numeroFinal = numeros[Math.floor(Math.random() * numeros.length)].value;
         setLetraActual(letraFinal);
@@ -34,7 +44,9 @@ export default function BingoSlot({ letras, numeros }) {
         setGirando(false);
         sonidos8bit.atrapar();
       }
-    }, 90);
+    };
+
+    paso();
   };
 
   const reiniciar = () => setHistorial([]);
