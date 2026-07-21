@@ -29,3 +29,11 @@ export async function contarSellos(userId) {
     .eq("user_id", userId);
   return count || 0;
 }
+
+export async function reclamarRecompensaTarjeta(tarjetaNumero) {
+  const { data, error } = await supabase.rpc("reclamar_recompensa_tarjeta", {
+    p_tarjeta_numero: tarjetaNumero,
+  });
+  if (error) throw new Error(error.message);
+  return data; // código del cupón
+}

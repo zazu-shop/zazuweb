@@ -73,22 +73,14 @@ export function imprimirBoleta(pedido) {
   .encabezado p { margin: 2px 0; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #6b4f2a; }
   .sello {
     position: absolute;
-    top: 24px;
-    right: 30px;
-    width: 86px;
-    height: 86px;
-    border: 3px solid #8b1f1f;
-    border-radius: 50%;
-    color: #8b1f1f;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-family: 'Cinzel', Georgia, serif;
-    font-size: 11px;
-    letter-spacing: 1px;
-    transform: rotate(-14deg);
-    opacity: 0.85;
+    top: 20px;
+    right: 26px;
+    width: 90px;
+  }
+  .sello img {
+    width: 100%;
+    display: block;
+    opacity: 0.92;
   }
   .datos { margin: 22px 0; font-size: 13px; line-height: 1.8; }
   .datos strong { color: #3a2a15; }
@@ -112,19 +104,11 @@ export function imprimirBoleta(pedido) {
     text-transform: uppercase;
     color: #6b4f2a;
   }
-  .firma {
-    margin-top: 50px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: #6b4f2a;
-  }
-  .firma div { width: 45%; border-top: 1px solid #6b4f2a; padding-top: 4px; text-align: center; }
 </style>
 </head>
 <body onload="window.print()">
   <div class="marco">
-    <div class="sello">ZAZU<br/>SHOP</div>
+    <div class="sello"><img src="${window.location.origin}/logo/logo-original.png" alt="" /></div>
     <div class="encabezado">
       <h1>Zazu Shop</h1>
       <p>Boleta de entrega</p>
@@ -150,11 +134,6 @@ export function imprimirBoleta(pedido) {
         <tr class="total-fila"><td colspan="2">TOTAL</td><td style="text-align:right">S/ ${Number(pedido.total).toFixed(2)}</td></tr>
       </tbody>
     </table>
-
-    <div class="firma">
-      <div>Entregado por</div>
-      <div>Recibido conforme</div>
-    </div>
 
     <p class="pie">Objetos con memoria, hechos a mano</p>
   </div>

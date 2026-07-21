@@ -20,7 +20,7 @@ export default function StampCard({ total }) {
       <div className="zz-stampcard__grid">
         {Array.from({ length: SELLOS_POR_TARJETA }).map((_, i) => (
           <div key={i} className={`zz-stampcard__slot ${i < enTarjetaActual ? "zz-stampcard__slot--lleno" : ""}`}>
-            {i < enTarjetaActual && <img src="/logo/gato-cabeza-gold.png" alt="" />}
+            {i < enTarjetaActual && <img src="/logo/sello-gato-gold.png" alt="" />}
           </div>
         ))}
       </div>

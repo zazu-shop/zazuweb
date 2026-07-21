@@ -88,10 +88,7 @@ export default function ProductoDetalle() {
           )}
           <p className="zz-detalle__price">S/ {producto.price}</p>
 
-          <div className="zz-detalle__descripcion">
-            <p className="eyebrow">Descripción</p>
-            <p className="lead">{producto.description}</p>
-          </div>
+          <p className="lead" style={{ margin: "var(--space-sm) 0" }}>{producto.description}</p>
 
           {producto.lore && (
             <blockquote className="zz-detalle__lore">

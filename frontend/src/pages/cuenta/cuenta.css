@@ -73,3 +73,60 @@
   border-radius: 8px;
   padding: 0.6rem 1rem;
 }
+
+.zz-cuenta__grid-superior {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  align-items: start;
+  margin-bottom: var(--space-md);
+}
+
+.zz-cuenta__grid-superior .zz-stampcard {
+  margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .zz-cuenta__grid-superior {
+    grid-template-columns: 1fr;
+  }
+}
+
+.zz-cuenta__cupones {
+  background: rgba(201, 162, 39, 0.08);
+  border: 1px solid var(--zz-gold);
+  border-radius: 12px;
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.zz-cuenta__cupones-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.zz-cuenta__cupon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--zz-void-2);
+  border: 1px dashed var(--zz-gold);
+  border-radius: 8px;
+}
+
+.zz-cuenta__cupon-codigo {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  color: var(--zz-gold-bright);
+}
+
+.zz-cuenta__cupon-desc {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--zz-parchment-dim);
+}

@@ -4,6 +4,7 @@ import { supabase } from "../../lib/supabaseClient";
 import Modal from "../../components/Modal";
 import OrderTimeline from "../../components/OrderTimeline";
 import { imprimirBoleta } from "../../lib/boletaPrint";
+import { otorgarSelloReferido, registrarSelloCompra } from "../../lib/loyaltyService";
 import "./admin.css";
 
 const ESTADOS = [
@@ -69,6 +70,18 @@ export default function AdminPedidoDetalle() {
       });
       if (errorStock) {
         console.error("[Zazu] No se pudo restaurar el stock:", errorStock.message);
+      }
+    }
+
+    // Los sellos (compra propia + referido) se otorgan solo la primera vez
+    // que el pedido llega a "Entregado" — así una persona no puede generar
+    // sellos infinitos con pedidos que nunca se confirman.
+    if (nuevoEstado === "completado" && estadoAnterior !== "completado") {
+      if (pedido.user_id) {
+        registrarSelloCompra(pedido.user_id, id).catch(() => {});
+      }
+      if (pedido.referral_code_used) {
+        otorgarSelloReferido(pedido.referral_code_used, id).catch(() => {});
       }
     }
   };

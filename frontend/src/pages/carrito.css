@@ -21,6 +21,13 @@
   top: calc(64px + var(--space-md));
 }
 
+.zz-carrito__col-izq {
+  position: sticky;
+  top: calc(64px + var(--space-md));
+  max-height: calc(100vh - 64px - var(--space-lg));
+  overflow-y: auto;
+}
+
 .zz-carrito__lista {
   display: flex;
   flex-direction: column;
@@ -243,6 +250,12 @@
 
   .zz-carrito__col-der {
     position: static;
+  }
+
+  .zz-carrito__col-izq {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
   }
 }
 

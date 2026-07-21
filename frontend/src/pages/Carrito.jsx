@@ -5,7 +5,7 @@ import { useAuth } from "../lib/AuthContext";
 import { supabase } from "../lib/supabaseClient";
 import { crearPedido } from "../lib/ordersService";
 import { descargarResumenPedido } from "../lib/receiptGenerator";
-import { validarCodigoReferido, otorgarSelloReferido, registrarSelloCompra } from "../lib/loyaltyService";
+import { validarCodigoReferido } from "../lib/loyaltyService";
 import ChispasDoradas from "../components/ChispasDoradas";
 import "./carrito.css";
 
@@ -135,14 +135,9 @@ export default function Carrito() {
         },
       });
 
-      // Sellos: uno para quien te refirió (si aplica), uno para ti mismo
-      // si compraste logueado. Ninguno de los dos bloquea el pedido si falla.
-      if (referidoUserId) {
-        otorgarSelloReferido(referidoInput.trim(), orderId).catch(() => {});
-      }
-      if (session?.user?.id) {
-        registrarSelloCompra(session.user.id, orderId).catch(() => {});
-      }
+      // Los sellos (compra y referido) se otorgan cuando el admin marca el
+      // pedido como "Entregado", no aquí — así evitamos sellos infinitos
+      // por pedidos que nunca se llegan a pagar.
       localStorage.removeItem("zazu_ref_code");
 
       setPedido({
