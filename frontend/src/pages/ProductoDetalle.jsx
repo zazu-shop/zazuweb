@@ -93,6 +93,12 @@ export default function ProductoDetalle() {
             <p className="lead">{producto.description}</p>
           </div>
 
+          {producto.lore && (
+            <blockquote className="zz-detalle__lore">
+              <p>{producto.lore}</p>
+            </blockquote>
+          )}
+
           {producto.features && (
             <div className="zz-detalle__caracteristicas">
               <p className="eyebrow">Características</p>

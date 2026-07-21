@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuth } from "../../lib/AuthContext";
+import { obtenerMiCodigoReferido, contarSellos } from "../../lib/loyaltyService";
 import OrderTimeline from "../../components/OrderTimeline";
+import StampCard from "../../components/StampCard";
 import "./cuenta.css";
 
 const ESTADOS_LABEL = {
@@ -16,6 +18,9 @@ export default function CuentaPerfil() {
   const { session, cargando: cargandoAuth, logout } = useAuth();
   const [pedidos, setPedidos] = useState([]);
   const [estado, setEstado] = useState("cargando");
+  const [codigoReferido, setCodigoReferido] = useState(null);
+  const [totalSellos, setTotalSellos] = useState(0);
+  const [copiado, setCopiado] = useState(false);
 
   useEffect(() => {
     if (!session) return;
@@ -32,10 +37,24 @@ export default function CuentaPerfil() {
         setPedidos(data);
         setEstado("listo");
       });
+
+    obtenerMiCodigoReferido().then(setCodigoReferido).catch(() => {});
+    contarSellos(session.user.id).then(setTotalSellos).catch(() => {});
   }, [session]);
 
   if (cargandoAuth) return null;
   if (!session) return <Navigate to="/cuenta/login" replace />;
+
+  const enlaceReferido = codigoReferido
+    ? `${window.location.origin}/bazar?ref=${codigoReferido}`
+    : "";
+
+  const copiarEnlace = () => {
+    navigator.clipboard.writeText(enlaceReferido).then(() => {
+      setCopiado(true);
+      setTimeout(() => setCopiado(false), 2000);
+    });
+  };
 
   return (
     <section className="section container zz-cuenta">
@@ -47,7 +66,29 @@ export default function CuentaPerfil() {
         <button className="btn btn-ghost" onClick={logout}>Cerrar sesión</button>
       </div>
 
-      <h2 style={{ marginTop: "2rem", marginBottom: "1rem" }}>Mis pedidos</h2>
+      <StampCard total={totalSellos} />
+
+      <div className="zz-cuenta__referidos">
+        <p className="eyebrow">Invita y gana</p>
+        <h2>Tu código de referido</h2>
+        <p className="lead" style={{ marginBottom: "1rem" }}>
+          Compártelo — cuando un amigo lo use en su compra, él obtiene 10% de descuento y tú
+          ganas un sello extra en tu tarjeta.
+        </p>
+
+        {codigoReferido ? (
+          <div className="zz-cuenta__codigo-fila">
+            <span className="zz-cuenta__codigo">{codigoReferido}</span>
+            <button className="btn btn-ghost" onClick={copiarEnlace}>
+              {copiado ? "¡Copiado!" : "Copiar enlace"}
+            </button>
+          </div>
+        ) : (
+          <p className="zz-bazar__status">Generando tu código…</p>
+        )}
+      </div>
+
+      <h2 style={{ marginTop: "2.5rem", marginBottom: "1rem" }}>Mis pedidos</h2>
 
       {estado === "cargando" && <p className="zz-bazar__status">Cargando tus pedidos…</p>}
       {estado === "error" && <p className="zz-bazar__status">No se pudieron cargar tus pedidos.</p>}

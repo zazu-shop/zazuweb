@@ -5,10 +5,12 @@ import { useAuth } from "../lib/AuthContext";
 import { supabase } from "../lib/supabaseClient";
 import { crearPedido } from "../lib/ordersService";
 import { descargarResumenPedido } from "../lib/receiptGenerator";
+import { validarCodigoReferido, otorgarSelloReferido, registrarSelloCompra } from "../lib/loyaltyService";
 import ChispasDoradas from "../components/ChispasDoradas";
 import "./carrito.css";
 
 const WHATSAPP_NUMERO = import.meta.env.VITE_WHATSAPP_NUMERO || "";
+const REFERIDO_DESCUENTO_PORCENTAJE = 10;
 
 const FORM_INICIAL = {
   name: "",
@@ -45,9 +47,15 @@ export default function Carrito() {
   const [cupon, setCupon] = useState(null);
   const [cuponEstado, setCuponEstado] = useState("idle"); // idle | validando | valido | invalido
 
+  const [referidoInput, setReferidoInput] = useState(() => localStorage.getItem("zazu_ref_code") || "");
+  const [referidoUserId, setReferidoUserId] = useState(null);
+  const [referidoEstado, setReferidoEstado] = useState("idle"); // idle | validando | valido | invalido
+
   const costoEnvio = form.shippingMethod === "delivery" ? COSTO_DELIVERY : 0;
-  const descuento = cupon ? (totalPrice * cupon.discount_percent) / 100 : 0;
-  const totalConEnvio = Math.max(0, totalPrice - descuento) + costoEnvio;
+  const descuentoCupon = cupon ? (totalPrice * cupon.discount_percent) / 100 : 0;
+  const descuentoReferido = referidoUserId ? (totalPrice * REFERIDO_DESCUENTO_PORCENTAJE) / 100 : 0;
+  const descuentoTotal = descuentoCupon + descuentoReferido;
+  const totalConEnvio = Math.max(0, totalPrice - descuentoTotal) + costoEnvio;
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -80,6 +88,29 @@ export default function Carrito() {
     setCuponEstado("idle");
   };
 
+  const validarReferido = async () => {
+    if (!referidoInput.trim()) return;
+    setReferidoEstado("validando");
+
+    const userId = await validarCodigoReferido(referidoInput);
+
+    if (!userId || userId === session?.user?.id) {
+      // null = no existe; también rechazamos que alguien use su propio código
+      setReferidoUserId(null);
+      setReferidoEstado("invalido");
+      return;
+    }
+
+    setReferidoUserId(userId);
+    setReferidoEstado("valido");
+  };
+
+  const quitarReferido = () => {
+    setReferidoUserId(null);
+    setReferidoInput("");
+    setReferidoEstado("idle");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setEnviando(true);
@@ -87,12 +118,13 @@ export default function Carrito() {
 
     try {
       const snapshotItems = items.map((i) => ({ ...i }));
-      const { orderNumber } = await crearPedido({
+      const { orderId, orderNumber } = await crearPedido({
         cliente: form,
         items: snapshotItems,
         total: totalConEnvio,
         userId: session?.user?.id || null,
-        coupon: cupon ? { code: cupon.code, discountAmount: descuento } : null,
+        coupon: cupon ? { code: cupon.code, discountAmount: descuentoCupon } : null,
+        referralCode: referidoEstado === "valido" ? referidoInput.trim() : null,
         shipping: {
           method: form.shippingMethod,
           cost: costoEnvio,
@@ -102,6 +134,16 @@ export default function Carrito() {
           timeRange: form.timeRange,
         },
       });
+
+      // Sellos: uno para quien te refirió (si aplica), uno para ti mismo
+      // si compraste logueado. Ninguno de los dos bloquea el pedido si falla.
+      if (referidoUserId) {
+        otorgarSelloReferido(referidoInput.trim(), orderId).catch(() => {});
+      }
+      if (session?.user?.id) {
+        registrarSelloCompra(session.user.id, orderId).catch(() => {});
+      }
+      localStorage.removeItem("zazu_ref_code");
 
       setPedido({
         orderNumber,
@@ -113,7 +155,7 @@ export default function Carrito() {
         shippingMethod: form.shippingMethod,
         shippingCost: costoEnvio,
         couponCode: cupon?.code || null,
-        discount: descuento,
+        discount: descuentoTotal,
       });
       clearCart();
       setVista("confirmado");
@@ -214,9 +256,9 @@ export default function Carrito() {
                 Envío: {ETIQUETAS_ENVIO[pedido.shippingMethod]}
                 {pedido.shippingCost > 0 && ` — S/ ${pedido.shippingCost.toFixed(2)}`}
               </p>
-              {pedido.couponCode && (
+              {pedido.discount > 0 && (
                 <p className="zz-carrito__envio-info">
-                  Cupón {pedido.couponCode} aplicado: -S/ {pedido.discount.toFixed(2)}
+                  Descuentos aplicados: -S/ {pedido.discount.toFixed(2)}
                 </p>
               )}
             </>
@@ -287,6 +329,34 @@ export default function Carrito() {
                   <p className="zz-form__status zz-form__status--error">Ese cupón no es válido o ya venció.</p>
                 )}
 
+                <label>
+                  Código de un amigo (opcional)
+                  <div className="zz-cupon__fila">
+                    <input
+                      type="text"
+                      value={referidoInput}
+                      onChange={(e) => setReferidoInput(e.target.value)}
+                      placeholder="ZAZUAB12C"
+                      disabled={referidoEstado === "valido"}
+                    />
+                    {referidoEstado === "valido" ? (
+                      <button type="button" className="btn btn-ghost" onClick={quitarReferido}>Quitar</button>
+                    ) : (
+                      <button type="button" className="btn btn-ghost" onClick={validarReferido} disabled={referidoEstado === "validando"}>
+                        {referidoEstado === "validando" ? "Validando…" : "Aplicar"}
+                      </button>
+                    )}
+                  </div>
+                </label>
+                {referidoEstado === "valido" && (
+                  <p className="zz-cupon__ok">✓ Código válido: -{REFERIDO_DESCUENTO_PORCENTAJE}% por referido</p>
+                )}
+                {referidoEstado === "invalido" && (
+                  <p className="zz-form__status zz-form__status--error">
+                    Ese código no es válido o es el tuyo propio.
+                  </p>
+                )}
+
                 <fieldset className="zz-envio">
                   <legend>Método de envío</legend>
 
@@ -352,10 +422,10 @@ export default function Carrito() {
                   </div>
                 )}
 
-                {descuento > 0 && (
+                {descuentoTotal > 0 && (
                   <div className="zz-checkout__linea">
-                    <span>Descuento ({cupon.code})</span>
-                    <span>-S/ {descuento.toFixed(2)}</span>
+                    <span>Descuentos aplicados</span>
+                    <span>-S/ {descuentoTotal.toFixed(2)}</span>
                   </div>
                 )}
 

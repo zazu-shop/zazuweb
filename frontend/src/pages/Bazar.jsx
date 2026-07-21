@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import { useCart } from "../lib/CartContext";
 import { SkeletonGrid } from "../components/Skeleton";
@@ -16,9 +16,15 @@ const ORDEN_OPCIONES = [
 ];
 
 export default function Bazar() {
+  const [searchParams] = useSearchParams();
   const [piezas, setPiezas] = useState([]);
   const [estado, setEstado] = useState("cargando"); // cargando | listo | error | sin-config
   const { addItem } = useCart();
+
+  useEffect(() => {
+    const ref = searchParams.get("ref");
+    if (ref) localStorage.setItem("zazu_ref_code", ref);
+  }, [searchParams]);
 
   const [categoria, setCategoria] = useState("Todas");
   const [orden, setOrden] = useState("recientes");

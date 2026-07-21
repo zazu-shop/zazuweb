@@ -500,3 +500,18 @@ a.zz-admin__pedido-header {
   font-size: 0.7rem;
   white-space: nowrap;
 }
+
+.zz-admin__alerta-stock {
+  background: rgba(214, 122, 106, 0.1);
+  border: 1px solid rgba(214, 122, 106, 0.4);
+  border-radius: 8px;
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+  color: #d67a6a;
+  font-size: 0.88rem;
+}
+
+.zz-admin__alerta-stock .eyebrow {
+  color: #d67a6a;
+  margin-bottom: 0.3rem;
+}

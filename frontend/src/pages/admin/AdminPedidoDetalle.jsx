@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import Modal from "../../components/Modal";
 import OrderTimeline from "../../components/OrderTimeline";
+import { imprimirBoleta } from "../../lib/boletaPrint";
 import "./admin.css";
 
 const ESTADOS = [
@@ -150,6 +151,10 @@ export default function AdminPedidoDetalle() {
           >
             Escribir por WhatsApp
           </a>
+
+          <button className="btn btn-ghost zz-admin__whatsapp" onClick={() => imprimirBoleta(pedido)}>
+            Imprimir boleta de entrega
+          </button>
         </div>
 
         <div className="zz-panel">

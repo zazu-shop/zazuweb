@@ -1,0 +1,66 @@
+.zz-stampcard {
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 12px;
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.zz-stampcard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.zz-stampcard__completas {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--zz-gold-bright);
+  border: 1px solid var(--zz-gold);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+}
+
+.zz-stampcard__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.6rem;
+  max-width: 420px;
+}
+
+@media (max-width: 480px) {
+  .zz-stampcard__grid {
+    max-width: 100%;
+  }
+}
+
+.zz-stampcard__slot {
+  aspect-ratio: 1 / 1;
+  border: 1px dashed var(--zz-line-soft);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--zz-void);
+}
+
+.zz-stampcard__slot--lleno {
+  border: 1px solid var(--zz-gold);
+  background: var(--zz-void-3);
+  box-shadow: 0 0 10px rgba(201, 162, 39, 0.25);
+}
+
+.zz-stampcard__slot img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+.zz-stampcard__nota {
+  margin-top: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--zz-parchment-dim);
+  line-height: 1.6;
+}

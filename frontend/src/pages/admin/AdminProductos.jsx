@@ -9,6 +9,7 @@ const PRODUCTO_VACIO = {
   name: "",
   description: "",
   features: "",
+  lore: "",
   price: "",
   compare_at_price: "",
   category: "General",
@@ -59,6 +60,11 @@ export default function AdminProductos() {
     return Array.from(set).sort();
   }, [productos]);
 
+  const stockBajo = useMemo(
+    () => productos.filter((p) => p.active && p.stock > 0 && p.stock <= 2),
+    [productos]
+  );
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
@@ -103,6 +109,7 @@ export default function AdminProductos() {
       name: form.name,
       description: form.description,
       features: form.features,
+      lore: form.lore,
       price: Number(form.price),
       compare_at_price: form.compare_at_price ? Number(form.compare_at_price) : null,
       category: form.category,
@@ -144,6 +151,21 @@ export default function AdminProductos() {
         </div>
       </div>
 
+      {stockBajo.length > 0 && (
+        <div className="zz-admin__alerta-stock">
+          <p className="eyebrow">⚠ Stock bajo</p>
+          <p>
+            {stockBajo.length} pieza{stockBajo.length > 1 ? "s" : ""} con 2 unidades o menos:{" "}
+            {stockBajo.map((p, i) => (
+              <span key={p.id}>
+                {p.name} ({p.stock})
+                {i < stockBajo.length - 1 ? ", " : ""}
+              </span>
+            ))}
+          </p>
+        </div>
+      )}
+
       {!mostrarFormulario && (
         <button className="btn" onClick={handleNuevo} style={{ marginBottom: "1.5rem" }}>
           + Nuevo producto
@@ -170,6 +192,16 @@ export default function AdminProductos() {
                 value={form.features}
                 onChange={handleChange}
                 placeholder={"Madera de roble ahumado\nLatón envejecido a mano\nMide 8cm de alto"}
+              />
+            </label>
+            <label>
+              Micro-historia (opcional, breve relato de la pieza)
+              <textarea
+                name="lore"
+                rows="3"
+                value={form.lore}
+                onChange={handleChange}
+                placeholder="Ej. Se dice que este amuleto perteneció a un vigía que nunca dormía..."
               />
             </label>
             <div className="zz-admin__form-fila">

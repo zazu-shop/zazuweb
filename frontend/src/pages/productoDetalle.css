@@ -139,3 +139,19 @@
   right: 0.8rem;
   z-index: 2;
 }
+
+.zz-detalle__lore {
+  margin: var(--space-md) 0;
+  padding: var(--space-md);
+  border-left: 2px solid var(--zz-purple-2);
+  background: rgba(124, 77, 190, 0.08);
+  border-radius: 4px;
+}
+
+.zz-detalle__lore p {
+  font-family: var(--font-sub);
+  font-style: italic;
+  color: var(--zz-parchment);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}

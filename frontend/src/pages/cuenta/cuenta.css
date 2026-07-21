@@ -48,3 +48,28 @@
 .zz-cuenta__pedido {
   max-width: none;
 }
+
+.zz-cuenta__referidos {
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 12px;
+  padding: var(--space-md);
+}
+
+.zz-cuenta__codigo-fila {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.zz-cuenta__codigo {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  color: var(--zz-gold-bright);
+  background: var(--zz-void-3);
+  border: 1px dashed var(--zz-gold);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+}
