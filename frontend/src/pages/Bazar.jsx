@@ -48,7 +48,7 @@ export default function Bazar() {
 
     supabase
       .from("products")
-      .select("id, name, description, price, compare_at_price, category, image_url, stock, active, created_at")
+      .select("id, name, description, price, compare_at_price, category, image_url, stock, active, is_baul, created_at")
       .order("created_at", { ascending: false })
       .then(({ data, error }) => {
         if (!activo) return;
@@ -178,22 +178,25 @@ export default function Bazar() {
             <div className="grid grid-3">
               {piezasFiltradas.map((pieza, i) => (
                 <Reveal key={pieza.id} delay={(i % 3) * 100}>
-                <article className={`card zz-bazar__item ${!pieza.active ? "zz-bazar__item--no-disponible" : ""}`}>
+                <article className={`card zz-bazar__item ${!pieza.active ? "zz-bazar__item--no-disponible" : ""} ${pieza.is_baul ? "zz-baul zz-baul__item" : ""}`}>
                   <Link to={`/bazar/${pieza.id}`} className="zz-bazar__imagelink">
                     {pieza.image_url ? (
                       <img src={pieza.image_url} alt={pieza.name} className="zz-bazar__image" loading="lazy" />
                     ) : (
                       <div className="zz-bazar__image zz-bazar__image--placeholder" />
                     )}
-                    {!pieza.active ? (
-                      <span className="zz-bazar__discount zz-bazar__discount--gris">No disponible</span>
-                    ) : (
-                      pieza.compare_at_price > pieza.price && (
-                        <span className="zz-bazar__discount">
-                          -{Math.round(100 - (pieza.price / pieza.compare_at_price) * 100)}%
-                        </span>
-                      )
-                    )}
+                    <div className="zz-bazar__insignias">
+                      {pieza.is_baul && <span className="zz-baul__badge">Del Baúl</span>}
+                      {!pieza.active ? (
+                        <span className="zz-bazar__discount zz-bazar__discount--gris">No disponible</span>
+                      ) : (
+                        pieza.compare_at_price > pieza.price && (
+                          <span className="zz-bazar__discount">
+                            -{Math.round(100 - (pieza.price / pieza.compare_at_price) * 100)}%
+                          </span>
+                        )
+                      )}
+                    </div>
                   </Link>
                   <HeartButton productId={pieza.id} className="zz-bazar__corazon" />
                   <button
