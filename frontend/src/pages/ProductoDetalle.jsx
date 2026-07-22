@@ -5,6 +5,7 @@ import { useCart } from "../lib/CartContext";
 import { SkeletonDetalle } from "../components/Skeleton";
 import HeartButton from "../components/HeartButton";
 import "./productoDetalle.css";
+import "./baul.css";
 
 export default function ProductoDetalle() {
   const { id } = useParams();
@@ -89,6 +90,12 @@ export default function ProductoDetalle() {
           <p className="zz-detalle__price">S/ {producto.price}</p>
 
           <p className="lead" style={{ margin: "var(--space-sm) 0" }}>{producto.description}</p>
+
+          {producto.is_baul && producto.baul_note && (
+            <p className="zz-baul zz-baul__nota" style={{ maxWidth: "none" }}>
+              <strong>Pieza del Baúl — Detalle:</strong> {producto.baul_note}
+            </p>
+          )}
 
           {producto.lore && (
             <blockquote className="zz-detalle__lore">

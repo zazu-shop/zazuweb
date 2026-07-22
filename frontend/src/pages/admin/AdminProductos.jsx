@@ -16,6 +16,8 @@ const PRODUCTO_VACIO = {
   image_url: "",
   stock: 10,
   featured: false,
+  is_baul: false,
+  baul_note: "",
   active: true,
 };
 
@@ -116,6 +118,8 @@ export default function AdminProductos() {
       image_url: form.image_url,
       stock: Number(form.stock),
       featured: form.featured,
+      is_baul: form.is_baul,
+      baul_note: form.is_baul ? form.baul_note : null,
       active: form.active,
     };
 
@@ -246,6 +250,25 @@ export default function AdminProductos() {
               Mostrar en "Piezas destacadas" del inicio
             </label>
 
+            <label className="zz-admin__checkbox">
+              <input type="checkbox" name="is_baul" checked={form.is_baul} onChange={handleChange} />
+              Enviar al Baúl (piezas con detalle, prototipos o descontinuadas)
+            </label>
+
+            {form.is_baul && (
+              <label>
+                Detalle del Baúl (se muestra públicamente, sé honesto)
+                <textarea
+                  name="baul_note"
+                  rows="2"
+                  value={form.baul_note}
+                  onChange={handleChange}
+                  placeholder="Ej. Pequeña imperfección en el barniz de la base, casi imperceptible."
+                  required
+                />
+              </label>
+            )}
+
             <div className="zz-admin__form-acciones">
               <button className="btn" type="submit" disabled={guardando}>
                 {guardando ? "Guardando…" : form.id ? "Guardar cambios" : "Crear producto"}
@@ -311,6 +334,7 @@ export default function AdminProductos() {
                   </td>
                   <td>
                     {producto.featured && <span title="Destacado en inicio">⭐ </span>}
+                    {producto.is_baul && <span title="En el Baúl">🗝️ </span>}
                     {producto.name}
                   </td>
                   <td className="zz-admin__tabla-dim">{producto.category}</td>

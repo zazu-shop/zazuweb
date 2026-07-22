@@ -15,6 +15,7 @@ export default function Footer() {
         <nav className="zz-footer__links">
           <a href="/grimorio">El Grimorio</a>
           <a href="/bazar">Bazar</a>
+          <a href="/baul">El Baúl</a>
           <a href="/seguimiento">Mi pedido</a>
           <a href="/faq">Preguntas frecuentes</a>
           <a href="/cuidados">Cuidados de tu pieza</a>

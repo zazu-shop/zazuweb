@@ -11,6 +11,7 @@ import { AuthProvider } from "./lib/AuthContext";
 import Home from "./pages/Home";
 import Grimorio from "./pages/Grimorio";
 import Bazar from "./pages/Bazar";
+import Baul from "./pages/Baul";
 import ProductoDetalle from "./pages/ProductoDetalle";
 import Carrito from "./pages/Carrito";
 import PedidoPersonalizado from "./pages/PedidoPersonalizado";
@@ -46,6 +47,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/grimorio" element={<Grimorio />} />
             <Route path="/bazar" element={<Bazar />} />
+            <Route path="/baul" element={<Baul />} />
             <Route path="/bazar/:id" element={<ProductoDetalle />} />
             <Route path="/carrito" element={<Carrito />} />
             <Route path="/favoritos" element={<Favoritos />} />

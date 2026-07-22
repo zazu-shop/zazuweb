@@ -1,0 +1,73 @@
+.zz-baul {
+  --zz-cobre: #c17a4a;
+  --zz-cobre-bright: #e0966a;
+}
+
+.zz-baul__eyebrow {
+  color: var(--zz-cobre-bright) !important;
+}
+
+.zz-baul h1 {
+  background: linear-gradient(120deg, var(--zz-parchment) 40%, var(--zz-cobre-bright));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.zz-baul__intro {
+  margin: var(--space-sm) 0 var(--space-lg);
+  max-width: 640px;
+}
+
+.zz-baul__item {
+  border-color: rgba(193, 122, 74, 0.25);
+}
+
+.zz-baul__item:hover {
+  border-color: var(--zz-cobre);
+}
+
+.zz-baul__badge {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  background: var(--zz-cobre);
+  color: var(--zz-void);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.zz-baul__nota {
+  font-size: 0.85rem;
+  color: var(--zz-cobre-bright);
+  background: rgba(193, 122, 74, 0.1);
+  border-left: 2px solid var(--zz-cobre);
+  padding: 0.5rem 0.7rem;
+  border-radius: 4px;
+  margin: 0.4rem 0;
+  line-height: 1.5;
+}
+
+.zz-baul__nota strong {
+  color: var(--zz-parchment);
+}
+
+.zz-baul__price {
+  font-family: var(--font-mono);
+  color: var(--zz-cobre-bright) !important;
+}
+
+.zz-baul__addbtn {
+  border-color: var(--zz-cobre) !important;
+  color: var(--zz-cobre-bright) !important;
+}
+
+.zz-baul__addbtn:hover:not(:disabled) {
+  background: var(--zz-cobre) !important;
+  color: var(--zz-void) !important;
+}
