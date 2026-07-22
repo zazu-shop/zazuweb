@@ -28,7 +28,7 @@ export default function CuentaLogin() {
         navigate("/cuenta", { replace: true });
       } else {
         await registrar(form.email, form.password);
-        setAviso("Cuenta creada. Si tu proyecto pide confirmación por correo, revisa tu bandeja antes de entrar.");
+        setAviso("Cuenta creada");
       }
     } catch (err) {
       setError(err.message || "No se pudo completar la acción.");
