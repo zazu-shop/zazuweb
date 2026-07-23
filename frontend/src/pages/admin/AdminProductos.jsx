@@ -18,6 +18,7 @@ const PRODUCTO_VACIO = {
   featured: false,
   is_baul: false,
   baul_note: "",
+  gallery_urls: "",
   active: true,
 };
 
@@ -61,11 +62,6 @@ export default function AdminProductos() {
     const set = new Set(productos.map((p) => p.category).filter(Boolean));
     return Array.from(set).sort();
   }, [productos]);
-
-  const stockBajo = useMemo(
-    () => productos.filter((p) => p.active && p.stock > 0 && p.stock <= 2),
-    [productos]
-  );
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -120,6 +116,7 @@ export default function AdminProductos() {
       featured: form.featured,
       is_baul: form.is_baul,
       baul_note: form.is_baul ? form.baul_note : null,
+      gallery_urls: form.gallery_urls,
       active: form.active,
     };
 
@@ -154,21 +151,6 @@ export default function AdminProductos() {
           <button className="btn btn-ghost" onClick={logout}>Cerrar sesión</button>
         </div>
       </div>
-
-      {stockBajo.length > 0 && (
-        <div className="zz-admin__alerta-stock">
-          <p className="eyebrow">⚠ Stock bajo</p>
-          <p>
-            {stockBajo.length} pieza{stockBajo.length > 1 ? "s" : ""} con 2 unidades o menos:{" "}
-            {stockBajo.map((p, i) => (
-              <span key={p.id}>
-                {p.name} ({p.stock})
-                {i < stockBajo.length - 1 ? ", " : ""}
-              </span>
-            ))}
-          </p>
-        </div>
-      )}
 
       {!mostrarFormulario && (
         <button className="btn" onClick={handleNuevo} style={{ marginBottom: "1.5rem" }}>
@@ -244,6 +226,17 @@ export default function AdminProductos() {
                 <input type="text" name="image_url" value={form.image_url} onChange={handleChange} />
               </label>
             </div>
+
+            <label>
+              Galería de fotos adicionales (una URL por línea, opcional)
+              <textarea
+                name="gallery_urls"
+                rows="3"
+                value={form.gallery_urls}
+                onChange={handleChange}
+                placeholder={"https://...foto-perfil.jpg\nhttps://...foto-detalle.jpg\nhttps://...foto-inclinada.jpg"}
+              />
+            </label>
 
             <label className="zz-admin__checkbox">
               <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} />

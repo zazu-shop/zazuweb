@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import { useCart } from "../lib/CartContext";
 import { SkeletonDetalle } from "../components/Skeleton";
 import HeartButton from "../components/HeartButton";
+import Modal from "../components/Modal";
 import "./productoDetalle.css";
 import "./baul.css";
 
@@ -15,6 +16,8 @@ export default function ProductoDetalle() {
   const [estado, setEstado] = useState("cargando"); // cargando | listo | error
   const [cantidad, setCantidad] = useState(1);
   const [agregado, setAgregado] = useState(false);
+  const [imagenActiva, setImagenActiva] = useState(0);
+  const [lightboxAbierto, setLightboxAbierto] = useState(false);
 
   useEffect(() => {
     let activo = true;
@@ -69,16 +72,50 @@ export default function ProductoDetalle() {
 
   const agotado = producto.stock === 0 || producto.active === false;
 
+  const imagenes = useMemo(() => {
+    const lista = [];
+    if (producto.image_url) lista.push(producto.image_url);
+    if (producto.gallery_urls) {
+      producto.gallery_urls
+        .split("\n")
+        .map((u) => u.trim())
+        .filter(Boolean)
+        .forEach((u) => lista.push(u));
+    }
+    return lista;
+  }, [producto]);
+
   return (
     <section className="section">
       <div className="container zz-detalle">
         <div className="zz-detalle__media">
-          {producto.image_url ? (
-            <img src={producto.image_url} alt={producto.name} />
+          {imagenes.length > 0 ? (
+            <button
+              className="zz-detalle__media-boton"
+              onClick={() => setLightboxAbierto(true)}
+              aria-label="Ver imagen en tamaño completo"
+            >
+              <img src={imagenes[imagenActiva]} alt={producto.name} />
+              <span className="zz-detalle__zoom-hint">🔍 Ver en tamaño completo</span>
+            </button>
           ) : (
             <div className="zz-detalle__media--placeholder" />
           )}
           <HeartButton productId={producto.id} className="zz-detalle__corazon" />
+
+          {imagenes.length > 1 && (
+            <div className="zz-detalle__miniaturas">
+              {imagenes.map((url, i) => (
+                <button
+                  key={url + i}
+                  className={`zz-detalle__miniatura ${i === imagenActiva ? "zz-detalle__miniatura--activa" : ""}`}
+                  onClick={() => setImagenActiva(i)}
+                >
+                  <img src={url} alt={`${producto.name} — vista ${i + 1}`} />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="zz-detalle__info">
@@ -145,6 +182,31 @@ export default function ProductoDetalle() {
           </Link>
         </div>
       </div>
+
+      {lightboxAbierto && (
+        <Modal onClose={() => setLightboxAbierto(false)}>
+          <div className="zz-lightbox">
+            <img src={imagenes[imagenActiva]} alt={producto.name} className="zz-lightbox__imagen" />
+            {imagenes.length > 1 && (
+              <div className="zz-lightbox__nav">
+                <button
+                  onClick={() => setImagenActiva((i) => (i - 1 + imagenes.length) % imagenes.length)}
+                  aria-label="Imagen anterior"
+                >
+                  ←
+                </button>
+                <span>{imagenActiva + 1} / {imagenes.length}</span>
+                <button
+                  onClick={() => setImagenActiva((i) => (i + 1) % imagenes.length)}
+                  aria-label="Imagen siguiente"
+                >
+                  →
+                </button>
+              </div>
+            )}
+          </div>
+        </Modal>
+      )}
     </section>
   );
 }
