@@ -52,6 +52,20 @@ export default function ProductoDetalle() {
     setTimeout(() => setAgregado(false), 2000);
   };
 
+  const imagenes = useMemo(() => {
+    if (!producto) return [];
+    const lista = [];
+    if (producto.image_url) lista.push(producto.image_url);
+    if (producto.gallery_urls) {
+      producto.gallery_urls
+        .split("\n")
+        .map((u) => u.trim())
+        .filter(Boolean)
+        .forEach((u) => lista.push(u));
+    }
+    return lista;
+  }, [producto]);
+
   if (estado === "cargando") {
     return (
       <section className="section">
@@ -71,19 +85,6 @@ export default function ProductoDetalle() {
   }
 
   const agotado = producto.stock === 0 || producto.active === false;
-
-  const imagenes = useMemo(() => {
-    const lista = [];
-    if (producto.image_url) lista.push(producto.image_url);
-    if (producto.gallery_urls) {
-      producto.gallery_urls
-        .split("\n")
-        .map((u) => u.trim())
-        .filter(Boolean)
-        .forEach((u) => lista.push(u));
-    }
-    return lista;
-  }, [producto]);
 
   return (
     <section className="section">
