@@ -1,0 +1,112 @@
+.zz-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(5, 3, 8, 0.94);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zz-lightbox-overlay__marco {
+  max-width: 94vw;
+  max-height: 90vh;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zz-lightbox-overlay__marco--zoom {
+  align-items: flex-start;
+  justify-content: flex-start;
+  cursor: grab;
+}
+
+.zz-lightbox-overlay__img {
+  max-width: 94vw;
+  max-height: 90vh;
+  object-fit: contain;
+  cursor: zoom-in;
+  border-radius: 4px;
+  transition: max-width 0.2s ease, max-height 0.2s ease;
+}
+
+.zz-lightbox-overlay__img--zoom {
+  max-width: none;
+  max-height: none;
+  width: auto;
+  height: auto;
+  min-width: 180%;
+  cursor: zoom-out;
+}
+
+.zz-lightbox-overlay__cerrar {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.5rem;
+  background: rgba(21, 15, 30, 0.8);
+  border: 1px solid var(--zz-line-soft);
+  color: var(--zz-parchment);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.zz-lightbox-overlay__cerrar:hover {
+  border-color: var(--zz-gold);
+  color: var(--zz-gold-bright);
+}
+
+.zz-lightbox-overlay__flecha {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(21, 15, 30, 0.8);
+  border: 1px solid var(--zz-line-soft);
+  color: var(--zz-gold-bright);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.zz-lightbox-overlay__flecha:hover {
+  border-color: var(--zz-gold);
+}
+
+.zz-lightbox-overlay__flecha--izq {
+  left: 1rem;
+}
+
+.zz-lightbox-overlay__flecha--der {
+  right: 1rem;
+}
+
+.zz-lightbox-overlay__pie {
+  position: absolute;
+  bottom: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--zz-parchment-dim);
+  background: rgba(21, 15, 30, 0.7);
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .zz-lightbox-overlay__flecha {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+}

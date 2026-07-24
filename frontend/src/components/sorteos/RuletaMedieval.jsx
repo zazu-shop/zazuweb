@@ -14,6 +14,10 @@ export default function RuletaMedieval({ opciones }) {
   const n = opciones.length;
   const anguloPorItem = n > 0 ? 360 / n : 0;
 
+  // Con más opciones los sectores son más angostos: reducimos texto y lo
+  // recortamos a una sola línea para que nunca invada el sector vecino.
+  const escalaEtiqueta = n <= 6 ? "amplia" : n <= 10 ? "media" : "angosta";
+
   const gradiente = n > 0
     ? opciones
         .map((_, i) => {
@@ -70,7 +74,13 @@ export default function RuletaMedieval({ opciones }) {
                 className="zz-ruleta__etiqueta"
                 style={{ transform: `rotate(${angulo - 90}deg)` }}
               >
-                <span style={{ transform: `rotate(${-(angulo - 90)}deg)` }}>{op.value}</span>
+                <span
+                  className={`zz-ruleta__etiqueta-texto zz-ruleta__etiqueta-texto--${escalaEtiqueta}`}
+                  style={{ transform: `rotate(${-(angulo - 90)}deg)` }}
+                  title={op.value}
+                >
+                  {op.value}
+                </span>
               </div>
             );
           })}

@@ -4,7 +4,7 @@ import { supabase } from "../lib/supabaseClient";
 import { useCart } from "../lib/CartContext";
 import { SkeletonDetalle } from "../components/Skeleton";
 import HeartButton from "../components/HeartButton";
-import Modal from "../components/Modal";
+import ImageLightbox from "../components/ImageLightbox";
 import "./productoDetalle.css";
 import "./baul.css";
 
@@ -185,28 +185,11 @@ export default function ProductoDetalle() {
       </div>
 
       {lightboxAbierto && (
-        <Modal onClose={() => setLightboxAbierto(false)}>
-          <div className="zz-lightbox">
-            <img src={imagenes[imagenActiva]} alt={producto.name} className="zz-lightbox__imagen" />
-            {imagenes.length > 1 && (
-              <div className="zz-lightbox__nav">
-                <button
-                  onClick={() => setImagenActiva((i) => (i - 1 + imagenes.length) % imagenes.length)}
-                  aria-label="Imagen anterior"
-                >
-                  ←
-                </button>
-                <span>{imagenActiva + 1} / {imagenes.length}</span>
-                <button
-                  onClick={() => setImagenActiva((i) => (i + 1) % imagenes.length)}
-                  aria-label="Imagen siguiente"
-                >
-                  →
-                </button>
-              </div>
-            )}
-          </div>
-        </Modal>
+        <ImageLightbox
+          imagenes={imagenes}
+          indiceInicial={imagenActiva}
+          onClose={() => setLightboxAbierto(false)}
+        />
       )}
     </section>
   );
