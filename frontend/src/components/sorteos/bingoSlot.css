@@ -192,3 +192,16 @@
     min-height: 160px;
   }
 }
+
+.zz-bingo__config {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: var(--space-sm);
+}
+
+.zz-bingo__restantes {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--zz-parchment-dim);
+}

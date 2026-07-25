@@ -8,7 +8,7 @@ import "./sorteos.css";
 export default function Sorteos() {
   const [juego, setJuego] = useState("bingo"); // bingo | ruleta
   const [mostrarEditor, setMostrarEditor] = useState(false);
-  const [datos, setDatos] = useState({ bingo_letter: [], bingo_number: [], roulette: [] });
+  const [opcionesRuleta, setOpcionesRuleta] = useState([]);
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
@@ -16,14 +16,10 @@ export default function Sorteos() {
     supabase
       .from("raffle_items")
       .select("*")
+      .eq("category", "roulette")
       .order("position", { ascending: true })
       .then(({ data }) => {
-        if (!data) return;
-        setDatos({
-          bingo_letter: data.filter((i) => i.category === "bingo_letter"),
-          bingo_number: data.filter((i) => i.category === "bingo_number"),
-          roulette: data.filter((i) => i.category === "roulette"),
-        });
+        if (data) setOpcionesRuleta(data);
       });
   }, [refreshKey]);
 
@@ -48,20 +44,20 @@ export default function Sorteos() {
       </div>
 
       <div className="zz-sorteos__juego">
-        {juego === "bingo" ? (
-          <BingoSlot letras={datos.bingo_letter} numeros={datos.bingo_number} />
-        ) : (
-          <RuletaMedieval opciones={datos.roulette} />
-        )}
+        {juego === "bingo" ? <BingoSlot /> : <RuletaMedieval opciones={opcionesRuleta} />}
       </div>
 
-      <div className="zz-sorteos__editor-toggle">
-        <button className="btn btn-ghost" onClick={() => setMostrarEditor((v) => !v)}>
-          {mostrarEditor ? "Ocultar listas editables" : "Editar letras, números y opciones"}
-        </button>
-      </div>
+      {juego === "ruleta" && (
+        <div className="zz-sorteos__editor-toggle">
+          <button className="btn btn-ghost" onClick={() => setMostrarEditor((v) => !v)}>
+            {mostrarEditor ? "Ocultar lista editable" : "Editar opciones de la ruleta"}
+          </button>
+        </div>
+      )}
 
-      {mostrarEditor && <RaffleEditor onCambio={() => setRefreshKey((k) => k + 1)} />}
+      {juego === "ruleta" && mostrarEditor && (
+        <RaffleEditor onCambio={() => setRefreshKey((k) => k + 1)} />
+      )}
     </section>
   );
 }

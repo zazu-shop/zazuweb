@@ -76,7 +76,6 @@ export default function RuletaMedieval({ opciones }) {
               >
                 <span
                   className={`zz-ruleta__etiqueta-texto zz-ruleta__etiqueta-texto--${escalaEtiqueta}`}
-                  style={{ transform: `rotate(${-(angulo - 90)}deg)` }}
                   title={op.value}
                 >
                   {op.value}

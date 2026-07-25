@@ -61,7 +61,7 @@
 /* Pocas opciones: hay espacio de sobra, se permiten 2 líneas */
 .zz-ruleta__etiqueta-texto--amplia {
   font-size: 1.05rem;
-  max-width: 170px;
+  max-width: 230px;
   white-space: normal;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -71,8 +71,8 @@
 
 /* Cantidad media: una sola línea, recorte con puntos suspensivos */
 .zz-ruleta__etiqueta-texto--media {
-  font-size: 0.85rem;
-  max-width: 110px;
+  font-size: 0.82rem;
+  max-width: 180px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -80,8 +80,8 @@
 
 /* Muchas opciones: sectores angostos, texto compacto y recortado */
 .zz-ruleta__etiqueta-texto--angosta {
-  font-size: 0.68rem;
-  max-width: 72px;
+  font-size: 0.66rem;
+  max-width: 130px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
