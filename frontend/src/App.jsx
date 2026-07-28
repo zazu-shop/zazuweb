@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import WhatsAppFloat from "./components/WhatsAppFloat";
 import BackToTop from "./components/BackToTop";
+import VisitTracker from "./components/VisitTracker";
 import { CartProvider } from "./lib/CartContext";
 import { WishlistProvider } from "./lib/WishlistContext";
 import { AuthProvider } from "./lib/AuthContext";
@@ -30,6 +31,7 @@ import AdminPedidos from "./pages/admin/AdminPedidos";
 import AdminPedidoDetalle from "./pages/admin/AdminPedidoDetalle";
 import AdminProductos from "./pages/admin/AdminProductos";
 import AdminCupones from "./pages/admin/AdminCupones";
+import AdminVisitas from "./pages/admin/AdminVisitas";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -39,6 +41,7 @@ export default function App() {
     <AuthProvider>
       <CartProvider>
       <WishlistProvider>
+        <VisitTracker />
         <SvgDefs />
         <Navbar />
         <main>
@@ -91,6 +94,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <AdminCupones />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/visitas"
+              element={
+                <ProtectedRoute>
+                  <AdminVisitas />
                 </ProtectedRoute>
               }
             />
