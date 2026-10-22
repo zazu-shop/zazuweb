@@ -1,0 +1,221 @@
+.zz-festin__hero {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.zz-festin__hero h1 {
+  font-family: var(--font-feral);
+  font-weight: 400;
+  font-size: var(--fs-hero);
+}
+
+.zz-festin__datos {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-md);
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--zz-gold-bright);
+  text-transform: capitalize;
+}
+
+.zz-festin__vacio {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.zz-festin__layout {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .zz-festin__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.zz-festin__panel-col {
+  position: sticky;
+  top: calc(64px + var(--space-md));
+}
+
+@media (max-width: 900px) {
+  .zz-festin__panel-col {
+    position: static;
+  }
+}
+
+/* ---- Piezas ---- */
+.zz-festin__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.zz-festin__item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-md);
+  align-items: center;
+  padding: var(--space-md);
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 12px;
+}
+
+.zz-festin__item--agotado {
+  opacity: 0.5;
+}
+
+.zz-festin__item h3 {
+  font-size: var(--fs-h3);
+  margin-bottom: 0.2rem;
+}
+
+.zz-festin__item p {
+  color: var(--zz-parchment-dim);
+  font-size: 0.9rem;
+}
+
+.zz-festin__precio {
+  font-family: var(--font-mono);
+  color: var(--zz-gold-bright) !important;
+  font-size: 1.05rem !important;
+  margin-top: 0.3rem;
+}
+
+.zz-festin__stock {
+  font-family: var(--font-mono);
+  font-size: 0.75rem !important;
+}
+
+.zz-festin__stock--poco {
+  color: #d67a6a !important;
+}
+
+.zz-festin__stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+}
+
+.zz-festin__stepper button {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid var(--zz-line-soft);
+  color: var(--zz-gold-bright);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.zz-festin__stepper button:hover:not(:disabled) {
+  background: var(--zz-void-3);
+  border-color: var(--zz-gold);
+}
+
+.zz-festin__stepper button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.zz-festin__stepper span {
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+/* ---- Panel de pedido ---- */
+.zz-festin__form {
+  margin-top: var(--space-md);
+}
+
+.zz-festin__guardalo {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--zz-parchment-dim);
+  margin-bottom: var(--space-sm);
+}
+
+.zz-festin__recojo {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--zz-gold-bright);
+  margin: var(--space-sm) 0;
+  text-align: left;
+}
+
+/* ---- Memes ---- */
+.zz-festin__memes-bloque {
+  margin-top: var(--space-xl);
+}
+
+.zz-festin__memes {
+  columns: 3 180px;
+  column-gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.zz-festin__meme {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: var(--space-sm);
+  break-inside: avoid;
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--zz-void-2);
+  cursor: zoom-in;
+  transform: rotate(var(--giro, 0deg));
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.zz-festin__meme:hover {
+  transform: rotate(0deg) scale(1.03);
+  border-color: var(--zz-gold);
+}
+
+.zz-festin__meme img {
+  width: 100%;
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zz-festin__meme {
+    transform: none;
+  }
+}
+
+/* ---- Seguimiento ---- */
+.zz-festin__seg {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--zz-line-soft);
+  max-width: 520px;
+}
+
+.zz-festin__seg-form {
+  margin-top: var(--space-md);
+}
+
+.zz-festin__seg-resultado {
+  margin-top: var(--space-md);
+}
