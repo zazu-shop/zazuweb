@@ -1,0 +1,75 @@
+.zz-admin__input-mini {
+  width: 90px;
+  background: var(--zz-void-3);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  color: var(--zz-parchment);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.zz-admin__input-mini--ancho {
+  width: 100%;
+  min-width: 140px;
+}
+
+.zz-admin__input-mini:focus {
+  outline: none;
+  border-color: var(--zz-gold);
+}
+
+.zz-admin__select-mini {
+  background: var(--zz-void-3);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  color: var(--zz-parchment);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.zz-admin__select-mini:disabled {
+  opacity: 0.5;
+}
+
+.zz-admin__panel-platos {
+  margin-top: var(--space-lg);
+}
+
+.zz-admin__nuevo-plato {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  align-items: flex-end;
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--zz-line-soft);
+}
+
+.zz-admin__nuevo-plato label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--zz-parchment-dim);
+}
+
+.zz-admin__resumen-piezas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.zz-admin__pieza-chip {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--zz-gold-bright);
+  border: 1px solid var(--zz-gold);
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+}

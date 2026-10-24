@@ -33,6 +33,9 @@ import AdminProductos from "./pages/admin/AdminProductos";
 import AdminCupones from "./pages/admin/AdminCupones";
 import AdminVisitas from "./pages/admin/AdminVisitas";
 import NotFound from "./pages/NotFound";
+import Festin from "./pages/Festin";
+import AdminFestines from "./pages/admin/AdminFestines";
+import AdminFestinPedidos from "./pages/admin/AdminFestinPedidos";
 
 export default function App() {
   const location = useLocation();
@@ -104,6 +107,15 @@ export default function App() {
                   <AdminVisitas />
                 </ProtectedRoute>
               }
+            />
+            <Route path="/festin/:slug" element={<Festin />} />
+            <Route
+              path="/admin/festines"
+              element={<ProtectedRoute><AdminFestines /></ProtectedRoute>}
+            />
+            <Route
+              path="/admin/festines/:id/pedidos"
+              element={<ProtectedRoute><AdminFestinPedidos /></ProtectedRoute>}
             />
             <Route path="*" element={<NotFound />} />
             </Routes>

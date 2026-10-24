@@ -23,7 +23,6 @@
   font-family: var(--font-mono);
   font-size: 0.85rem;
   color: var(--zz-gold-bright);
-  text-transform: capitalize;
 }
 
 .zz-festin__vacio {

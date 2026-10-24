@@ -1,4 +1,3 @@
-// /home/claude/zazuweb/frontend/src/pages/Festin.jsx 
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { obtenerFestin, crearPedidoFestin, buscarPedidoFestin } from "../lib/festinService";
