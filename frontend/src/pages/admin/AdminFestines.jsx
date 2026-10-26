@@ -226,6 +226,8 @@ export default function AdminFestines() {
         <div className="zz-admin__header-acciones">
           <Link to="/admin/pedidos" className="btn btn-ghost">Pedidos</Link>
           <Link to="/admin/productos" className="btn btn-ghost">Productos</Link>
+          <Link to="/admin/cupones" className="btn btn-ghost">Cupones</Link>
+          <Link to="/admin/visitas" className="btn btn-ghost">Visitas</Link>
           <button className="btn btn-ghost" onClick={logout}>Cerrar sesión</button>
         </div>
       </div>

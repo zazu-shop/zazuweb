@@ -73,3 +73,15 @@
   border-radius: 999px;
   padding: 0.3rem 0.8rem;
 }
+
+.zz-admin__compromiso {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--zz-gold-bright);
+  margin-top: 0.25rem;
+}
+
+.zz-admin__compromiso--vencido {
+  color: #d67a6a;
+  font-weight: 700;
+}

@@ -18,6 +18,10 @@ function telefonoWhatsapp(telefono) {
   return digitos;
 }
 
+function fechaCorta(iso) {
+  return new Date(iso + "T00:00:00").toLocaleDateString("es-PE", { day: "2-digit", month: "2-digit" });
+}
+
 export default function AdminFestinPedidos() {
   const { id } = useParams();
   const { logout } = useAuth();
@@ -25,6 +29,7 @@ export default function AdminFestinPedidos() {
   const [pedidos, setPedidos] = useState([]);
   const [estado, setEstado] = useState("cargando");
   const [busqueda, setBusqueda] = useState("");
+  const hoyLima = new Date().toLocaleDateString("en-CA", { timeZone: "America/Lima" });
 
   const cargar = async () => {
     const { data: f } = await supabase.from("feasts").select("*").eq("id", id).maybeSingle();
@@ -62,9 +67,16 @@ export default function AdminFestinPedidos() {
       cantidad: vigentes.length,
       cobrado: suma(pedidos.filter((p) => p.status === "pagado" || p.status === "completado")),
       pendiente: suma(pedidos.filter((p) => p.status === "pendiente_verificacion")),
+      vencidos: pedidos.filter(
+        (p) =>
+          p.pay_later &&
+          p.status === "pendiente_verificacion" &&
+          p.commitment_date &&
+          p.commitment_date < hoyLima
+      ).length,
       porPieza,
     };
-  }, [pedidos]);
+  }, [pedidos, hoyLima]);
 
   const filtrados = useMemo(() => {
     const q = busqueda.trim().toLowerCase();
@@ -127,6 +139,10 @@ export default function AdminFestinPedidos() {
               <span>Por verificar</span>
               <strong>S/ {resumen.pendiente.toFixed(2)}</strong>
             </div>
+            <div className="zz-admin__stat zz-admin__stat--cancelado">
+              <span>Compromisos vencidos</span>
+              <strong>{resumen.vencidos}</strong>
+            </div>
           </div>
 
           {Object.keys(resumen.porPieza).length > 0 && (
@@ -168,7 +184,19 @@ export default function AdminFestinPedidos() {
                 <tbody>
                   {filtrados.map((p) => (
                     <tr key={p.id} className={p.status === "cancelado" ? "zz-admin__fila--inactiva" : ""}>
-                      <td className="zz-admin__tabla-codigo">{p.order_number}</td>
+                      <td>
+                        <span className="zz-admin__tabla-codigo">{p.order_number}</span>
+                        {p.pay_later && p.status === "pendiente_verificacion" && p.commitment_date && (
+                          <div
+                            className={`zz-admin__compromiso ${
+                              p.commitment_date < hoyLima ? "zz-admin__compromiso--vencido" : ""
+                            }`}
+                          >
+                            Paga el {fechaCorta(p.commitment_date)}
+                            {p.commitment_date < hoyLima ? " · VENCIDO" : ""}
+                          </div>
+                        )}
+                      </td>
                       <td>
                         {p.customer_name}
                         <div className="zz-admin__tabla-dim" style={{ fontSize: "0.72rem" }}>{p.customer_phone}</div>
@@ -194,7 +222,10 @@ export default function AdminFestinPedidos() {
                           className="btn btn-ghost"
                           style={{ padding: "0.4rem 0.7rem", fontSize: "0.7rem" }}
                           href={`https://wa.me/${telefonoWhatsapp(p.customer_phone)}?text=${encodeURIComponent(
-                            `Hola ${p.customer_name}, te escribimos por tu pedido ${p.order_number} de «${festin?.title || "el festín"}».`
+                            `Hola ${p.customer_name}, te escribimos por tu pedido ${p.order_number} de «${festin?.title || "el festín"}».` +
+                              (p.pay_later && p.status === "pendiente_verificacion" && p.commitment_date
+                                ? ` Te recordamos tu compromiso de pago para el ${fechaCorta(p.commitment_date)}.`
+                                : "")
                           )}`}
                           target="_blank"
                           rel="noreferrer"

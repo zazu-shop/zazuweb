@@ -23,12 +23,14 @@ export async function obtenerFestin(slug) {
 
 // El servidor valida stock y toma los precios de la base de datos; lo que
 // mande el navegador solo cuenta como "qué piezas y cuántas".
-export async function crearPedidoFestin({ feastId, name, phone, items }) {
+export async function crearPedidoFestin({ feastId, name, phone, items, payLater = false, commitmentDate = null }) {
   const { data, error } = await supabase.rpc("crear_pedido_festin", {
     p_feast_id: feastId,
     p_name: name,
     p_phone: phone,
     p_items: items.map(({ itemId, qty }) => ({ item_id: itemId, qty })),
+    p_pay_later: payLater,
+    p_commitment_date: payLater ? commitmentDate : null,
   });
   if (error) throw new Error(error.message);
   return data; // { order_number, total, lines: [{ name, price, qty }] }

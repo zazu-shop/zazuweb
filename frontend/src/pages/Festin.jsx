@@ -17,6 +17,14 @@ const ESTADOS_LABEL = {
   cancelado: "Cancelado",
 };
 
+function fechaLarga(iso) {
+  return new Date(iso + "T00:00:00").toLocaleDateString("es-PE", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+}
+
 export default function Festin() {
   const { slug } = useParams();
   const [datos, setDatos] = useState(null); // { festin, items }
@@ -28,6 +36,8 @@ export default function Festin() {
   const [pedido, setPedido] = useState(null);
   const [generandoResumen, setGenerandoResumen] = useState(false);
   const [memeAbierto, setMemeAbierto] = useState(null);
+  const [pagarDespues, setPagarDespues] = useState(false);
+  const [fechaCompromiso, setFechaCompromiso] = useState("");
 
   const [seg, setSeg] = useState({ orderNumber: "", phone: "" });
   const [segEstado, setSegEstado] = useState("idle"); // idle | buscando | encontrado | no-encontrado | error
@@ -73,6 +83,11 @@ export default function Festin() {
 
   const total = lineas.reduce((suma, l) => suma + Number(l.item.price) * l.qty, 0);
 
+  // "Hoy" según Lima; el compromiso de pago no puede pasar del día del evento.
+  const hoyLima = new Date().toLocaleDateString("en-CA", { timeZone: "America/Lima" });
+  const fechaMaxima =
+    festin?.event_date && festin.event_date >= hoyLima ? festin.event_date : undefined;
+
   const cambiarCantidad = (item, delta) => {
     setCantidades((prev) => {
       const actual = prev[item.id] || 0;
@@ -84,6 +99,10 @@ export default function Festin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (lineas.length === 0) return;
+    if (pagarDespues && !fechaCompromiso) {
+      setError("Elige la fecha en la que te comprometes a pagar.");
+      return;
+    }
     setEnviando(true);
     setError(null);
 
@@ -93,6 +112,8 @@ export default function Festin() {
         name: form.name,
         phone: form.phone,
         items: lineas.map((l) => ({ itemId: l.item.id, qty: l.qty })),
+        payLater: pagarDespues,
+        commitmentDate: fechaCompromiso || null,
       });
       setPedido({
         orderNumber: r.order_number,
@@ -100,7 +121,11 @@ export default function Festin() {
         phone: form.phone,
         items: r.lines,
         total: Number(r.total),
+        payLater: pagarDespues,
+        commitmentDate: pagarDespues ? fechaCompromiso : null,
       });
+      setPagarDespues(false);
+      setFechaCompromiso("");
       setCantidades({});
       cargar(); // refresca el stock restante
     } catch (err) {
@@ -171,7 +196,9 @@ export default function Festin() {
 
   const mensajeWhatsapp = pedido
     ? encodeURIComponent(
-        `Hola, soy ${pedido.name}. Ya yapeé mi pedido ${pedido.orderNumber} por S/ ${pedido.total.toFixed(2)} (${festin.title}). Adjunto la captura del pago.`
+        pedido.payLater
+          ? `Hola, soy ${pedido.name}. Reservé mi pedido ${pedido.orderNumber} por S/ ${pedido.total.toFixed(2)} (${festin.title}) y me comprometo a pagar el ${fechaLarga(pedido.commitmentDate)}.`
+          : `Hola, soy ${pedido.name}. Ya yapeé mi pedido ${pedido.orderNumber} por S/ ${pedido.total.toFixed(2)} (${festin.title}). Adjunto la captura del pago.`
       )
     : "";
 
@@ -257,9 +284,17 @@ export default function Festin() {
           <aside className="zz-festin__panel-col">
             {pedido ? (
               <div className="zz-panel zz-panel--confirmado">
-                <p className="eyebrow">Pedido registrado</p>
+                <p className="eyebrow">{pedido.payLater ? "Reserva registrada" : "Pedido registrado"}</p>
                 <h2>{pedido.orderNumber}</h2>
                 <p className="zz-festin__guardalo">Guarda este número: lo necesitas para consultar tu pedido.</p>
+
+                {pedido.payLater && (
+                  <p className="zz-festin__compromiso">
+                    🗓 Te comprometiste a pagar el <strong>{fechaLarga(pedido.commitmentDate)}</strong>.
+                    Tus piezas quedan reservadas hasta esa fecha; si no recibimos el pago, podrían
+                    liberarse. Si quieres, puedes adelantarlo con este QR:
+                  </p>
+                )}
 
                 <img src="/pago/yape-qr.png" alt="Código QR de Yape" className="zz-checkout__qr" />
                 <p className="zz-panel__monto">S/ {pedido.total.toFixed(2)}</p>
@@ -283,7 +318,7 @@ export default function Festin() {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      Enviar captura por WhatsApp
+                      {pedido.payLater ? "Avisar por WhatsApp" : "Enviar captura por WhatsApp"}
                     </a>
                   )}
                   <button className="btn btn-ghost" onClick={descargarResumen} disabled={generandoResumen}>
@@ -338,8 +373,44 @@ export default function Festin() {
                     />
                   </label>
 
+                  <fieldset className="zz-envio">
+                    <legend>Forma de pago</legend>
+                    <label className="zz-envio__opcion">
+                      <input
+                        type="radio"
+                        name="momentoPago"
+                        checked={!pagarDespues}
+                        onChange={() => setPagarDespues(false)}
+                      />
+                      <span>Pagar ahora con Yape</span>
+                    </label>
+                    <label className="zz-envio__opcion">
+                      <input
+                        type="radio"
+                        name="momentoPago"
+                        checked={pagarDespues}
+                        onChange={() => setPagarDespues(true)}
+                      />
+                      <span>Pagar después (reservo ahora y fijo una fecha)</span>
+                    </label>
+                  </fieldset>
+
+                  {pagarDespues && (
+                    <label>
+                      Fecha en la que me comprometo a pagar
+                      <input
+                        type="date"
+                        value={fechaCompromiso}
+                        min={hoyLima}
+                        max={fechaMaxima}
+                        onChange={(e) => setFechaCompromiso(e.target.value)}
+                        required
+                      />
+                    </label>
+                  )}
+
                   <button className="btn" type="submit" disabled={enviando || lineas.length === 0}>
-                    {enviando ? "Reservando…" : "Reservar y pagar"}
+                    {enviando ? "Reservando…" : pagarDespues ? "Reservar sin pagar aún" : "Reservar y pagar"}
                   </button>
 
                   {error && <p className="zz-form__status zz-form__status--error">{error}</p>}
@@ -412,6 +483,12 @@ export default function Festin() {
                 <span>Total</span>
                 <span>S/ {Number(segPedido.total).toFixed(2)}</span>
               </div>
+
+              {segPedido.pay_later && segPedido.commitment_date && segPedido.status === "pendiente_verificacion" && (
+                <p className="zz-festin__compromiso">
+                  🗓 Compromiso de pago: <strong>{fechaLarga(segPedido.commitment_date)}</strong>
+                </p>
+              )}
 
               {segPedido.pickup_info && (
                 <p className="zz-festin__recojo">📍 {segPedido.pickup_info}</p>

@@ -218,3 +218,16 @@
 .zz-festin__seg-resultado {
   margin-top: var(--space-md);
 }
+
+.zz-festin__compromiso {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--zz-gold-bright);
+  background: rgba(201, 162, 39, 0.08);
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  line-height: 1.6;
+  margin: var(--space-sm) 0;
+}
