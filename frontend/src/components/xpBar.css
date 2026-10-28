@@ -1,0 +1,26 @@
+.zz-xpbar {
+  width: 100%;
+}
+
+.zz-xpbar__info {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--zz-parchment-dim);
+  margin-bottom: 0.3rem;
+}
+
+.zz-xpbar__pista {
+  height: 8px;
+  background: var(--zz-void-3);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.zz-xpbar__relleno {
+  height: 100%;
+  background: linear-gradient(90deg, var(--zz-gold), var(--zz-gold-bright));
+  transition: width 0.4s ease;
+}

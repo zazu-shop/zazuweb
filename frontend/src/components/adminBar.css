@@ -1,0 +1,35 @@
+.zz-adminbar {
+  background: var(--zz-void-2);
+  border-bottom: 1px solid var(--zz-line-soft);
+  padding: 0.6rem 0;
+}
+
+.zz-adminbar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.zz-adminbar__link {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.72rem;
+}
+
+.zz-adminbar__link--activo {
+  background: var(--zz-gold);
+  border-color: var(--zz-gold);
+  color: var(--zz-void);
+}
+
+.zz-adminbar__salir {
+  margin-left: auto;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.72rem;
+}
+
+/* La barra de arriba reemplaza a las filas de botones que cada página admin
+   traía por su cuenta; se ocultan para no duplicar los accesos. */
+.zz-admin__header-acciones {
+  display: none;
+}

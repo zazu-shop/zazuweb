@@ -36,6 +36,9 @@ import NotFound from "./pages/NotFound";
 import Festin from "./pages/Festin";
 import AdminFestines from "./pages/admin/AdminFestines";
 import AdminFestinPedidos from "./pages/admin/AdminFestinPedidos";
+import Personaje from "./pages/bitacora/Personaje";
+import Bitacora from "./pages/bitacora/Bitacora";
+import Cronica from "./pages/bitacora/Cronica";
 
 export default function App() {
   const location = useLocation();
@@ -118,6 +121,9 @@ export default function App() {
               element={<ProtectedRoute><AdminFestinPedidos /></ProtectedRoute>}
             />
             <Route path="*" element={<NotFound />} />
+            <Route path="/bitacora/personaje" element={<Personaje />} />
+            <Route path="/bitacora" element={<Bitacora />} />
+            <Route path="/bitacora/cronica" element={<Cronica />} />
             </Routes>
           </div>
         </main>
