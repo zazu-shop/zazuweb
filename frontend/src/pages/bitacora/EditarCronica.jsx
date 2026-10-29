@@ -16,7 +16,7 @@ export default function EditarCronica() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { session } = useAuth();
-  const esNueva = id === "nueva";
+  const esNueva = !id || id === "nueva";
 
   const [f, setF] = useState(VACIA);
   const [personajes, setPersonajes] = useState([]);
@@ -44,12 +44,24 @@ export default function EditarCronica() {
 
   const set = (campo, valor) => setF((prev) => ({ ...prev, [campo]: valor }));
 
+  // Reemplaza la función guardar en EditarCronica.jsx (alrededor de la línea 40)
   const guardar = async (e) => {
     e.preventDefault();
     setGuardando(true);
     setError(null);
     try {
-      const guardada = await guardarCronica(f, session.user.id);
+      const limpio = {
+        ...f,
+        // 🛑 Convertir string vacío de UUID a null
+        character_id: f.character_id ? f.character_id : null,
+      };
+
+      // 🛑 Si es nueva crónica, elimina el id
+      if (esNueva || !limpio.id || limpio.id === "nueva") {
+        delete limpio.id;
+      }
+
+      const guardada = await guardarCronica(limpio, session.user.id);
       navigate(`/bitacora/cronica/${guardada.slug}`);
     } catch (err) {
       setError(err.message);

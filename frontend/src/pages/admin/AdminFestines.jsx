@@ -223,13 +223,6 @@ export default function AdminFestines() {
           <p className="eyebrow">Panel de administración</p>
           <h1>Festines</h1>
         </div>
-        <div className="zz-admin__header-acciones">
-          <Link to="/admin/pedidos" className="btn btn-ghost">Pedidos</Link>
-          <Link to="/admin/productos" className="btn btn-ghost">Productos</Link>
-          <Link to="/admin/cupones" className="btn btn-ghost">Cupones</Link>
-          <Link to="/admin/visitas" className="btn btn-ghost">Visitas</Link>
-          <button className="btn btn-ghost" onClick={logout}>Cerrar sesión</button>
-        </div>
       </div>
 
       {!mostrarFormulario && (

@@ -115,10 +115,6 @@ export default function AdminFestinPedidos() {
           <p className="eyebrow">Pedidos del festín</p>
           <h1>{festin ? festin.title : "Festín"}</h1>
         </div>
-        <div className="zz-admin__header-acciones">
-          <Link to="/admin/festines" className="btn btn-ghost">← Festines</Link>
-          <button className="btn btn-ghost" onClick={logout}>Cerrar sesión</button>
-        </div>
       </div>
 
       {estado === "cargando" && <p className="zz-bazar__status">Cargando pedidos…</p>}

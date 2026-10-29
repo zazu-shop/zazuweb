@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import SvgDefs from "./components/SvgDefs";
 import Navbar from "./components/Navbar";
+import AdminBar from "./components/AdminBar"; // <-- Importado aquí
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import WhatsAppFloat from "./components/WhatsAppFloat";
@@ -9,6 +10,7 @@ import VisitTracker from "./components/VisitTracker";
 import { CartProvider } from "./lib/CartContext";
 import { WishlistProvider } from "./lib/WishlistContext";
 import { AuthProvider } from "./lib/AuthContext";
+
 import Home from "./pages/Home";
 import Grimorio from "./pages/Grimorio";
 import Bazar from "./pages/Bazar";
@@ -39,6 +41,10 @@ import AdminFestinPedidos from "./pages/admin/AdminFestinPedidos";
 import Personaje from "./pages/bitacora/Personaje";
 import Bitacora from "./pages/bitacora/Bitacora";
 import Cronica from "./pages/bitacora/Cronica";
+import AdminEditores from "./pages/admin/AdminEditores";
+import EditorPanel from "./pages/bitacora/EditorPanel";
+import EditarCronica from "./pages/bitacora/EditarCronica";
+import EditarPersonaje from "./pages/bitacora/EditarPersonaje";
 
 export default function App() {
   const location = useLocation();
@@ -46,91 +52,161 @@ export default function App() {
   return (
     <AuthProvider>
       <CartProvider>
-      <WishlistProvider>
-        <VisitTracker />
-        <SvgDefs />
-        <Navbar />
-        <main>
-          <div key={location.pathname} className="zz-page-fade">
-            <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/grimorio" element={<Grimorio />} />
-            <Route path="/bazar" element={<Bazar />} />
-            <Route path="/baul" element={<Baul />} />
-            <Route path="/bazar/:id" element={<ProductoDetalle />} />
-            <Route path="/carrito" element={<Carrito />} />
-            <Route path="/favoritos" element={<Favoritos />} />
-            <Route path="/pedido-personalizado" element={<PedidoPersonalizado />} />
-            <Route path="/seguimiento" element={<Seguimiento />} />
-            <Route path="/politica-envios" element={<PoliticaEnvios />} />
-            <Route path="/terminos" element={<Terminos />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/instagram" element={<Instagram />} />
-            <Route path="/sorteos" element={<Sorteos />} />
-            <Route path="/cuidados" element={<Cuidados />} />
-            <Route path="/cuenta/login" element={<CuentaLogin />} />
-            <Route path="/cuenta" element={<CuentaPerfil />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route
-              path="/admin/pedidos"
-              element={
-                <ProtectedRoute>
-                  <AdminPedidos />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/pedidos/:id"
-              element={
-                <ProtectedRoute>
-                  <AdminPedidoDetalle />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/productos"
-              element={
-                <ProtectedRoute>
-                  <AdminProductos />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/cupones"
-              element={
-                <ProtectedRoute>
-                  <AdminCupones />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/visitas"
-              element={
-                <ProtectedRoute>
-                  <AdminVisitas />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/festin/:slug" element={<Festin />} />
-            <Route
-              path="/admin/festines"
-              element={<ProtectedRoute><AdminFestines /></ProtectedRoute>}
-            />
-            <Route
-              path="/admin/festines/:id/pedidos"
-              element={<ProtectedRoute><AdminFestinPedidos /></ProtectedRoute>}
-            />
-            <Route path="*" element={<NotFound />} />
-            <Route path="/bitacora/personaje" element={<Personaje />} />
-            <Route path="/bitacora" element={<Bitacora />} />
-            <Route path="/bitacora/cronica" element={<Cronica />} />
-            </Routes>
-          </div>
-        </main>
-        <Footer />
-        <BackToTop />
-        <WhatsAppFloat />
-      </WishlistProvider>
+        <WishlistProvider>
+          <VisitTracker />
+          <SvgDefs />
+          <Navbar />
+          <AdminBar /> {/* <-- Añadido aquí para que sea global */}
+          
+          <main>
+            <div key={location.pathname} className="zz-page-fade">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/grimorio" element={<Grimorio />} />
+                <Route path="/bazar" element={<Bazar />} />
+                <Route path="/baul" element={<Baul />} />
+                <Route path="/bazar/:id" element={<ProductoDetalle />} />
+                <Route path="/carrito" element={<Carrito />} />
+                <Route path="/favoritos" element={<Favoritos />} />
+                <Route path="/pedido-personalizado" element={<PedidoPersonalizado />} />
+                <Route path="/seguimiento" element={<Seguimiento />} />
+                <Route path="/politica-envios" element={<PoliticaEnvios />} />
+                <Route path="/terminos" element={<Terminos />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/instagram" element={<Instagram />} />
+                <Route path="/sorteos" element={<Sorteos />} />
+                <Route path="/cuidados" element={<Cuidados />} />
+                <Route path="/cuenta/login" element={<CuentaLogin />} />
+                <Route path="/cuenta" element={<CuentaPerfil />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
+                
+                <Route
+                  path="/admin/pedidos"
+                  element={
+                    <ProtectedRoute>
+                      <AdminPedidos />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/pedidos/:id"
+                  element={
+                    <ProtectedRoute>
+                      <AdminPedidoDetalle />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/productos"
+                  element={
+                    <ProtectedRoute>
+                      <AdminProductos />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/cupones"
+                  element={
+                    <ProtectedRoute>
+                      <AdminCupones />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/visitas"
+                  element={
+                    <ProtectedRoute>
+                      <AdminVisitas />
+                    </ProtectedRoute>
+                  }
+                />
+                
+                <Route path="/festin/:slug" element={<Festin />} />
+                <Route
+                  path="/admin/festines"
+                  element={
+                    <ProtectedRoute>
+                      <AdminFestines />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/festines/:id/pedidos"
+                  element={
+                    <ProtectedRoute>
+                      <AdminFestinPedidos />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/bitacora/editar"
+                  element={
+                    <ProtectedRoute>
+                      <EditorPanel />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Panel principal de edición de la Bitácora */}
+                <Route
+                  path="/bitacora/editar"
+                  element={
+                    <ProtectedRoute>
+                      <EditorPanel />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Rutas para Crónicas (Crear nueva y Editar existente) */}
+                <Route
+                  path="/bitacora/editar/cronica/nueva"
+                  element={
+                    <ProtectedRoute>
+                      <EditarCronica />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/bitacora/editar/cronica/:id"
+                  element={
+                    <ProtectedRoute>
+                      <EditarCronica />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Rutas para Personajes (Crear nuevo y Editar existente) */}
+                <Route
+                  path="/bitacora/editar/personaje/nuevo"
+                  element={
+                    <ProtectedRoute>
+                      <EditarPersonaje />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/bitacora/editar/personaje/:id"
+                  element={
+                    <ProtectedRoute>
+                      <EditarPersonaje />
+                    </ProtectedRoute>
+                  }
+                />
+                
+                <Route path="/bitacora" element={<Bitacora />} />
+                <Route path="/bitacora/personaje/:slug" element={<Personaje />} />
+                <Route path="/bitacora/cronica/:slug" element={<Cronica />} />
+                <Route path="/admin/editores" element={<AdminEditores />} />
+                
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+          </main>
+          <Footer />
+          <BackToTop />
+          <WhatsAppFloat />
+        </WishlistProvider>
       </CartProvider>
     </AuthProvider>
   );

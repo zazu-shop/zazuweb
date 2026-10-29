@@ -33,6 +33,15 @@ export default function Personaje() {
   const xp = p ? sumarXp(p.dnd_xp_log) : 0;
   const ficha = useMemo(() => (p ? calcularFicha(p, xp) : null), [p, xp]);
 
+  // Cálculo de peso acumulado de equipamiento
+  const pesoTotalEquipment = useMemo(() => {
+    if (!p?.equipment) return 0;
+    return p.equipment.reduce(
+      (acc, item) => acc + (Number(item.weight || 0) * Number(item.qty || 1)),
+      0
+    );
+  }, [p]);
+
   if (estado === "cargando") {
     return (
       <section className="section container">
@@ -53,6 +62,7 @@ export default function Personaje() {
 
   const puedeEditar = Boolean(session && (p.user_id === session.user.id || esAdmin));
   const subtitulo = [p.class_name, p.species, p.background, p.alignment].filter(Boolean).join(" · ");
+  const limiteCargaLbs = (p.str_score || 10) * 15;
 
   return (
     <section className="section zz-bit">
@@ -76,19 +86,37 @@ export default function Personaje() {
           </div>
         </header>
 
+        {/* CAJAS PRINCIPALES DE ESTADÍSTICAS */}
         <div className="zz-bit__cajas">
-          <div className="zz-bit__caja"><span>Clase de armadura</span><strong>{p.ac}</strong></div>
+          <div className="zz-bit__caja"><span>Clase de armadura</span><strong>{p.ac ?? 10}</strong></div>
           <div className="zz-bit__caja"><span>Iniciativa</span><strong>{conSigno(ficha.iniciativa)}</strong></div>
-          <div className="zz-bit__caja">
-            <span>Puntos de vida</span><strong>{p.hp_current} / {p.hp_max}</strong>
+          <div className={`zz-bit__caja ${p.hp_current <= 0 ? 'zz-bit__caja--muerto' : ''}`}>
+            <span>Puntos de vida</span>
+            <strong>{p.hp_current} / {p.hp_max}</strong>
+            {p.hp_current <= 0 ? (
+              <small style={{ color: '#ff4d4d', fontWeight: 'bold', display: 'block', marginTop: '0.2rem' }}>
+                💀 CAÍDO / MUERTO
+              </small>
+            ) : (
+              <small style={{ color: 'var(--zz-gold-bright)', display: 'block', marginTop: '0.2rem' }}>
+                💚 CONSCIENTE
+              </small>
+            )}
           </div>
           <div className="zz-bit__caja"><span>Dado de golpe</span><strong>{p.hit_die || "—"}</strong></div>
           <div className="zz-bit__caja"><span>Competencia</span><strong>{conSigno(ficha.prof)}</strong></div>
-          <div className="zz-bit__caja"><span>Percepción pasiva</span><strong>{ficha.percepcionPasiva}</strong></div>
-          <div className="zz-bit__caja"><span>Velocidad</span><strong style={{ fontSize: "1rem" }}>{p.speed || "—"}</strong></div>
-          <div className="zz-bit__caja"><span>Talla</span><strong style={{ fontSize: "1rem" }}>{p.size || "—"}</strong></div>
+          <div className="zz-bit__caja"><span>Velocidad</span><strong style={{ fontSize: "1rem" }}>{p.speed || "30 pies"}</strong></div>
+          <div className="zz-bit__caja"><span>Talla</span><strong style={{ fontSize: "1rem" }}>{p.size || "Mediano"}</strong></div>
         </div>
 
+        {/* PUNTUACIONES PASIVAS (D&D 2024 / SHARD TABLETOP) */}
+        <div className="zz-bit__pasivas-bar">
+          <span>👁️ Percepción Pasiva: <strong>{ficha.percepcionPasiva}</strong></span>
+          <span>🧠 Perspicacia Pasiva: <strong>{ficha.perspicaciaPasiva}</strong></span>
+          <span>🔍 Investigación Pasiva: <strong>{ficha.investigacionPasiva}</strong></span>
+        </div>
+
+        {/* ATRIBUTOS Y MODIFICADORES */}
         <div className="zz-bit__habilidades">
           {ABILITIES.map((a) => (
             <div className="zz-bit__habilidad" key={a.key}>
@@ -99,6 +127,27 @@ export default function Personaje() {
           ))}
         </div>
 
+        {/* GUÍA RÁPIDA DE LEYENDA */}
+        <div 
+          className="zz-bit__panel" 
+          style={{ 
+            borderLeft: "3px solid var(--zz-gold)", 
+            background: "rgba(255, 255, 255, 0.02)",
+            padding: "1rem 1.2rem" 
+          }}
+        >
+          <h2 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--zz-gold-bright)", marginBottom: "0.5rem" }}>
+            📖 ¿Cómo leer esta ficha?
+          </h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "0.6rem 1.2rem", fontSize: "0.82rem", color: "var(--zz-parchment-dim)" }}>
+            <div><strong style={{ color: "var(--zz-gold)" }}>●</strong> <strong>Competente:</strong> Entrenado en esta tirada (suma +{ficha.prof} de competencia al d20).</div>
+            <div><strong style={{ color: "var(--zz-gold)" }}>◆</strong> <strong>Experiencia:</strong> Pericia total (duplica el bono de competencia a +{ficha.prof * 2}).</div>
+            <div><strong style={{ color: "var(--zz-parchment-dim)" }}>○</strong> <strong>Sin competencia:</strong> Solo suma/resta el modificador natural del atributo.</div>
+            <div><strong style={{ color: "var(--zz-gold-bright)" }}>+X / -X</strong> <strong>Modificador:</strong> Número final a sumar o restar a tu tirada de dado d20.</div>
+          </div>
+        </div>
+
+        {/* SALVACIONES, COMPETENCIAS Y HABILIDADES */}
         <div className="zz-bit__dos-col">
           <div>
             <div className="zz-bit__panel">
@@ -115,10 +164,16 @@ export default function Personaje() {
             </div>
 
             <div className="zz-bit__panel zz-bit__datos-texto">
-              <h2>Competencias</h2>
+              <h2>Competencias y Dominios</h2>
               {p.languages && <p><strong>Idiomas:</strong> {p.languages}</p>}
               {p.armor_prof && <p><strong>Armaduras:</strong> {p.armor_prof}</p>}
               {p.weapon_prof && <p><strong>Armas:</strong> {p.weapon_prof}</p>}
+              {p.weapon_mastery && (
+                <p>
+                  <strong>Maestría de Armas:</strong>{" "}
+                  <span style={{ color: "var(--zz-gold-bright)" }}>{p.weapon_mastery}</span>
+                </p>
+              )}
               {p.tool_prof && <p><strong>Herramientas:</strong> {p.tool_prof}</p>}
             </div>
           </div>
@@ -137,6 +192,7 @@ export default function Personaje() {
           </div>
         </div>
 
+        {/* ATAQUES Y ARMAS */}
         {p.attacks?.length > 0 && (
           <div className="zz-bit__panel">
             <h2>Armas y ataques</h2>
@@ -161,9 +217,10 @@ export default function Personaje() {
           </div>
         )}
 
+        {/* RASGOS DE CLASE, ESPECIE Y TRASFONDO */}
         {p.features?.length > 0 && (
           <div className="zz-bit__panel">
-            <h2>Rasgos y habilidades de clase</h2>
+            <h2>Rasgos y habilidades</h2>
             {p.features.map((r, i) => (
               <div className="zz-bit__rasgo" key={i}>
                 <h3>{r.name}</h3>
@@ -173,27 +230,39 @@ export default function Personaje() {
           </div>
         )}
 
+        {/* EQUIPO Y REGISTRO DE CARGA */}
         <div className="zz-bit__panel">
-          <h2>Equipo</h2>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", marginBottom: "0.5rem" }}>
+            <h2>Equipo e Inventario</h2>
+            {pesoTotalEquipment > 0 && (
+              <span className="zz-bit__nota">
+                Peso acumulado: <strong>{pesoTotalEquipment} lbs</strong> / {limiteCargaLbs} lbs máx
+              </span>
+            )}
+          </div>
+
           {p.equipment?.length > 0 ? (
             <ul className="zz-bit__lista-simple">
               {p.equipment.map((e, i) => (
                 <li key={i}>
                   <span className="zz-bit__bonus">×{e.qty || 1}</span>
-                  {e.name}
+                  <span>{e.name}</span>
+                  {e.weight && <small>({e.weight * (e.qty || 1)} lbs)</small>}
                 </li>
               ))}
             </ul>
           ) : (
             <p className="zz-bit__nota">Sin equipo registrado.</p>
           )}
+
           <div className="zz-bit__monedas">
-            <span>{p.gp} po</span>
-            <span>{p.sp} pp</span>
-            <span>{p.cp} pc</span>
+            <span>{p.gp || 0} po</span>
+            <span>{p.sp || 0} pp</span>
+            <span>{p.cp || 0} pc</span>
           </div>
         </div>
 
+        {/* HISTORIA Y NOTAS */}
         {p.notes && (
           <div className="zz-bit__panel">
             <h2>Historia y notas</h2>
@@ -201,6 +270,7 @@ export default function Personaje() {
           </div>
         )}
 
+        {/* HISTORIAL DE EXPERIENCIA */}
         <div className="zz-bit__panel">
           <h2>Historial de experiencia</h2>
           {p.dnd_xp_log.length === 0 ? (
@@ -223,6 +293,7 @@ export default function Personaje() {
           )}
         </div>
 
+        {/* CRÓNICAS VINCULADAS */}
         {cronicas.length > 0 && (
           <div className="zz-bit__seccion">
             <p className="eyebrow">Su historia</p>

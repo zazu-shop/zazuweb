@@ -6,9 +6,14 @@
 
 .zz-adminbar__inner {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
+  align-items: center; /* Alinea los botones verticalmente */
+  flex-wrap: nowrap;   /* Obliga a mantener todo en una sola fila */
+  gap: 0.5rem;         /* Reduce el espacio entre botones si es necesario */
+}
+
+/* Opcional: Empujar el botón de cerrar sesión hacia la extrema derecha */
+.zz-adminbar__salir {
+  margin-left: auto; 
 }
 
 .zz-adminbar__link {

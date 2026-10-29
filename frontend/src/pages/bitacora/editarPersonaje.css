@@ -1,0 +1,403 @@
+/* ---- Estilos exclusivos para la edición de personajes ---- */
+
+.zz-edper-container {
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+/* Cabecera */
+.zz-edper__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.zz-edper__badge-nivel {
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-gold);
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  text-align: right;
+  font-family: var(--font-mono);
+}
+
+.zz-edper__badge-nivel small {
+  display: block;
+  color: var(--zz-gold-bright);
+}
+
+/* Tarjetas */
+.zz-edper__card {
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 12px;
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.zz-edper__card-title {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--zz-gold);
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ALINEACIÓN HORIZONTAL DE CAMPOS */
+.zz-edper__field {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.zz-edper__field label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--zz-parchment-dim);
+  min-height: 1.8rem; /* 🛑 Fuerza que todas las etiquetas midan lo mismo */
+  display: flex;
+  align-items: flex-end; /* 🛑 Empuja el texto hacia la base */
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.zz-edper__field input,
+.zz-edper__field select {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+.zz-edper__subtext {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--zz-gold-bright);
+  margin-top: 0.3rem;
+  min-height: 1rem;
+}
+
+/* 1. Identidad: 4 Columnas perfectas */
+.zz-edper__grid-identidad {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: var(--space-md);
+  width: 100%;
+  align-items: start;
+}
+
+.zz-edper__field--span2 {
+  grid-column: span 2;
+}
+
+/* 2. Atributos: 6 Columnas */
+.zz-edper__grid-atributos {
+  display: grid !important;
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.zz-edper__stat-card {
+  background: var(--zz-void-3);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 10px;
+  padding: 0.6rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+.zz-edper__stat-head {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--zz-parchment-dim);
+  margin-bottom: 0.3rem;
+  white-space: nowrap;
+}
+
+.zz-edper__info-icon {
+  color: var(--zz-gold);
+  cursor: help;
+}
+
+.zz-edper__stat-card input {
+  width: 100% !important;
+  text-align: center;
+  font-size: 1.1rem;
+  font-family: var(--font-mono);
+  font-weight: bold;
+  padding: 0.3rem 0;
+}
+
+.zz-edper__mod-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--zz-parchment-dim);
+  margin-top: 0.3rem;
+}
+
+.zz-edper__mod-badge strong {
+  color: var(--zz-gold-bright);
+}
+
+/* 3. Combate: 5 Columnas */
+.zz-edper__grid-combate {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: var(--space-md);
+  width: 100%;
+  align-items: start;
+}
+
+/* 4. Salvaciones y Habilidades */
+.zz-edper__grid-salvaciones {
+  display: grid !important;
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.zz-edper__grid-habilidades {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 0.5rem var(--space-md);
+  width: 100%;
+}
+
+.zz-edper__skill-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: var(--zz-void-3);
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--zz-line-soft);
+  min-width: 0;
+}
+
+.zz-edper__skill-name {
+  font-size: 0.82rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zz-edper__skill-item select {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.78rem;
+  width: auto !important;
+}
+
+.zz-edper__skill-bonus {
+  font-family: var(--font-mono);
+  color: var(--zz-gold-bright);
+  font-size: 0.85rem;
+  min-width: 2rem;
+  text-align: right;
+}
+
+/* Monedas */
+.zz-edper__grid-monedas {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+/* Módulos Colapsables */
+.zz-edper__details {
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 12px;
+  margin-bottom: var(--space-md);
+  overflow: hidden;
+}
+
+.zz-edper__summary {
+  padding: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: bold;
+  color: var(--zz-gold);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.02);
+  user-select: none;
+}
+
+.zz-edper__summary:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.zz-edper__details-body {
+  padding: var(--space-md);
+  border-top: 1px solid var(--zz-line-soft);
+}
+
+.zz-edper__tag-opt {
+  color: var(--zz-parchment-dim);
+  font-size: 0.68rem;
+  font-weight: normal;
+  text-transform: none;
+}
+
+.zz-edper__explicacion {
+  font-size: 0.82rem;
+  color: var(--zz-parchment-dim);
+  margin-bottom: var(--space-sm);
+}
+
+/* Responsivo */
+@media (max-width: 850px) {
+  .zz-edper__grid-identidad,
+  .zz-edper__grid-combate {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .zz-edper__grid-atributos,
+  .zz-edper__grid-salvaciones {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .zz-edper__grid-habilidades {
+    grid-template-columns: 1fr !important;
+  }
+
+  .zz-edper__field--span2 {
+    grid-column: span 1;
+  }
+}
+
+/* ---- Tarjeta de Leyenda de Símbolos ---- */
+.zz-edper__leyenda-box {
+  background: rgba(255, 215, 0, 0.03);
+  border: 1px solid var(--zz-line-soft);
+  border-left: 3px solid var(--zz-gold);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.zz-edper__leyenda-titulo {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--zz-gold-bright);
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.zz-edper__leyenda-items {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important;
+  gap: 0.6rem 1rem;
+}
+
+.zz-edper__leyenda-item {
+  font-size: 0.82rem;
+  color: var(--zz-parchment-dim);
+  line-height: 1.35;
+}
+
+.zz-edper__leyenda-item code {
+  color: var(--zz-gold);
+  font-weight: bold;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  margin-right: 0.2rem;
+}
+
+.zz-edper__badge-puntos {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid var(--zz-gold);
+  color: var(--zz-gold-bright);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+.zz-edper__badge-puntos--excedido {
+  background: rgba(255, 0, 0, 0.15);
+  border-color: #ff4d4d;
+  color: #ff4d4d;
+}
+
+/* ---- Controles del Panel del DM (EditorPanel) ---- */
+
+.zz-bit__selector-recurso {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  background: var(--zz-void-3);
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--zz-line-soft);
+}
+
+.zz-bit__check--active {
+  color: var(--zz-gold-bright) !important;
+  font-weight: bold;
+}
+
+/* Insignia de Point Buy para la tabla de personajes */
+.zz-edper__badge-puntos {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid var(--zz-gold);
+  color: var(--zz-gold-bright);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.zz-edper__badge-puntos--excedido {
+  background: rgba(255, 0, 0, 0.15);
+  border-color: #ff4d4d;
+  color: #ff4d4d;
+}
+
+/* Campo numérico de límite editable en la ficha */
+.zz-edper__input-max-puntos {
+  width: 2.2rem !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px dashed var(--zz-gold) !important;
+  color: var(--zz-gold-bright) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.78rem !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  padding: 0 !important;
+  margin: 0 0.1rem !important;
+  outline: none !important;
+}
+
+.zz-edper__badge-puntos--excedido .zz-edper__input-max-puntos {
+  border-bottom-color: #ff4d4d !important;
+  color: #ff4d4d !important;
+}

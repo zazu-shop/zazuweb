@@ -80,12 +80,6 @@ export default function AdminPedidos() {
           <p className="eyebrow">Panel de administración</p>
           <h1>Pedidos</h1>
         </div>
-        <div className="zz-admin__header-acciones">
-          <Link to="/admin/productos" className="btn btn-ghost">Gestionar productos</Link>
-          <Link to="/admin/cupones" className="btn btn-ghost">Cupones</Link>
-          <Link to="/admin/visitas" className="btn btn-ghost">Visitas</Link>
-          <button className="btn btn-ghost" onClick={logout}>Cerrar sesión</button>
-        </div>
       </div>
 
       {estado === "cargando" && <p className="zz-bazar__status">Cargando pedidos…</p>}

@@ -46,11 +46,6 @@ export default function AdminVisitas() {
           <p className="eyebrow">Panel de administración</p>
           <h1>Visitas recientes</h1>
         </div>
-        <div className="zz-admin__header-acciones">
-          <Link to="/admin/pedidos" className="btn btn-ghost">Pedidos</Link>
-          <Link to="/admin/productos" className="btn btn-ghost">Productos</Link>
-          <button className="btn btn-ghost" onClick={logout}>Cerrar sesión</button>
-        </div>
       </div>
 
       {estado === "cargando" && <p className="zz-bazar__status">Cargando visitas…</p>}

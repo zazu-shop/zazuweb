@@ -7,14 +7,14 @@ const COLUMNAS_PERSONAJE = [
   "name", "class_name", "species", "background", "alignment", "size", "speed", "portrait_url",
   "hit_die", "hp_max", "hp_current", "ac", "initiative_bonus",
   "str_score", "dex_score", "con_score", "int_score", "wis_score", "cha_score",
-  "saves", "skills", "languages", "armor_prof", "weapon_prof", "tool_prof",
-  "features", "attacks", "equipment", "cp", "sp", "gp", "notes", "published",
+  "saves", "skills", "languages", "armor_prof", "weapon_prof", "weapon_mastery", "tool_prof",
+  "features", "attacks", "equipment", "cp", "sp", "gp", "max_point_buy", "notes", "published",
 ];
 
 const COLUMNAS_NUMERICAS = [
   "hp_max", "hp_current", "ac", "initiative_bonus",
   "str_score", "dex_score", "con_score", "int_score", "wis_score", "cha_score",
-  "cp", "sp", "gp",
+  "cp", "sp", "gp", "max_point_buy",
 ];
 
 function lanzar(error) {
@@ -37,13 +37,16 @@ export async function listarPersonajes({ userId = null, soloPublicados = true } 
 }
 
 async function obtenerPersonaje(columna, valor) {
+  // Guardia: Evita enviar "nuevo", undefined o valores nulos a Supabase
+  if (!valor || valor === "nuevo") return null;
+
   const { data, error } = await supabase
     .from("dnd_characters")
     .select("*, dnd_xp_log(*, dnd_posts(slug, title))")
     .eq(columna, valor)
     .maybeSingle();
   lanzar(error);
-  if (data) {
+  if (data && data.dnd_xp_log) {
     data.dnd_xp_log.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   }
   return data;
@@ -58,7 +61,10 @@ export async function guardarPersonaje(datos, userId) {
     fila[c] = COLUMNAS_NUMERICAS.includes(c) ? Number(datos[c]) || 0 : datos[c];
   });
 
-  if (datos.id) {
+  // Solo es edición si existe un ID real y distinto de "nuevo"
+  const esEdicion = Boolean(datos.id && datos.id !== "nuevo");
+
+  if (esEdicion) {
     const { data, error } = await supabase
       .from("dnd_characters")
       .update({ ...fila, updated_at: new Date().toISOString() })
@@ -69,6 +75,7 @@ export async function guardarPersonaje(datos, userId) {
     return data;
   }
 
+  // Creación de nuevo personaje
   const { data, error } = await supabase
     .from("dnd_characters")
     .insert([{ ...fila, user_id: userId, slug: crearSlug(datos.name) }])
@@ -79,15 +86,58 @@ export async function guardarPersonaje(datos, userId) {
 }
 
 export async function eliminarPersonaje(id) {
+  if (!id || id === "nuevo") return;
   const { error } = await supabase.from("dnd_characters").delete().eq("id", id);
   lanzar(error);
 }
 
-/* ---------------- Experiencia ---------------- */
+/* ---------------- Experiencia y Recursos ---------------- */
 
 export async function agregarXp(filas) {
-  const { error } = await supabase.from("dnd_xp_log").insert(filas);
+  // Asegura que post_id sea un UUID válido o null
+  const filasLimpias = filas.map((f) => ({
+    ...f,
+    post_id: f.post_id || null,
+  }));
+  const { error } = await supabase.from("dnd_xp_log").insert(filasLimpias);
   lanzar(error);
+}
+
+/**
+ * Actualiza el presupuesto máximo de Point Buy del personaje
+ */
+export async function actualizarMaxPointBuy(characterId, nuevoMax) {
+  const { data, error } = await supabase
+    .from("dnd_characters")
+    .update({ max_point_buy: nuevoMax })
+    .eq("id", characterId);
+
+  lanzar(error);
+  return data;
+}
+
+/**
+ * Suma oro (PO) a un personaje
+ */
+export async function agregarOroPersonaje(characterId, oroSumar) {
+  const { data: pj, error: errFetch } = await supabase
+    .from("dnd_characters")
+    .select("gp")
+    .eq("id", characterId)
+    .single();
+
+  lanzar(errFetch);
+
+  const oroActual = Number(pj?.gp || 0);
+  const nuevoOro = Math.max(0, oroActual + oroSumar);
+
+  const { data, error } = await supabase
+    .from("dnd_characters")
+    .update({ gp: nuevoOro })
+    .eq("id", characterId);
+
+  lanzar(error);
+  return data;
 }
 
 /* ---------------- Crónicas ---------------- */
@@ -109,12 +159,14 @@ export async function listarCronicas({ userId = null, soloPublicadas = true, per
 const SELECCION_CRONICA = "*, dnd_characters(id, name, slug, portrait_url, class_name, species)";
 
 export async function obtenerCronicaPorSlug(slug) {
+  if (!slug || slug === "nueva") return null;
   const { data, error } = await supabase.from("dnd_posts").select(SELECCION_CRONICA).eq("slug", slug).maybeSingle();
   lanzar(error);
   return data;
 }
 
 export async function obtenerCronicaPorId(id) {
+  if (!id || id === "nueva") return null;
   const { data, error } = await supabase.from("dnd_posts").select(SELECCION_CRONICA).eq("id", id).maybeSingle();
   lanzar(error);
   return data;
@@ -125,11 +177,13 @@ export async function guardarCronica(datos, userId) {
     title: datos.title.trim(),
     body: datos.body,
     cover_url: datos.cover_url || null,
-    character_id: datos.character_id || null,
+    character_id: datos.character_id ? datos.character_id : null,
     published: datos.published,
   };
 
-  if (datos.id) {
+  const esEdicion = Boolean(datos.id && datos.id !== "nueva");
+
+  if (esEdicion) {
     const { data, error } = await supabase
       .from("dnd_posts")
       .update({ ...fila, updated_at: new Date().toISOString() })
@@ -150,13 +204,13 @@ export async function guardarCronica(datos, userId) {
 }
 
 export async function eliminarCronica(id) {
+  if (!id || id === "nueva") return;
   const { error } = await supabase.from("dnd_posts").delete().eq("id", id);
   lanzar(error);
 }
 
 /* ---------------- Fotos ---------------- */
 
-// Reduce la foto antes de subirla (máx. 900 px por lado) para no llenar el almacenamiento.
 function reducirImagen(archivo, maxLado = 900, calidad = 0.85) {
   return new Promise((resolve, reject) => {
     const img = new Image();

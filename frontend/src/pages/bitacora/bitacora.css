@@ -514,3 +514,33 @@
   gap: var(--space-sm);
   margin-bottom: var(--space-md);
 }
+
+/* ---- Barra de Puntuaciones Pasivas (D&D 2024 / Shard Tabletop) ---- */
+.zz-bit__pasivas-bar {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  background: var(--zz-void-2);
+  border: 1px solid var(--zz-line-soft);
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  margin-bottom: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--zz-parchment-dim);
+}
+
+.zz-bit__pasivas-bar strong {
+  color: var(--zz-gold-bright);
+}
+
+/* Resaltado cuando el personaje está a 0 HP */
+.zz-bit__caja--muerto {
+  border-color: #ff4d4d !important;
+  background: rgba(255, 77, 77, 0.1) !important;
+}
+
+.zz-bit__caja--muerto strong {
+  color: #ff4d4d !important;
+}
