@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   obtenerPersonajePorId,
@@ -20,7 +20,8 @@ import {
   calcularFicha,
   conSigno,
   modificador,
-  calcularPuntosPointBuy
+  calcularPuntosPointBuy,
+  sincronizarRasgosAuto
 } from "../../lib/dndRules";
 import ImageUpload from "../../components/ImageUpload";
 import "./bitacora.css";
@@ -35,7 +36,7 @@ const AYUDA_ATRIBUTOS = {
   cha: "Afecta: Persuasión, Engaño, Intimidación, Rendimiento y Magia de Bardo/Brujo.",
 };
 
-function ListaEditable({ items, onChange, campos, vacio, textoAgregar, ayuda }) {
+function ListaEditable({ items = [], onChange, campos, vacio, textoAgregar, ayuda }) {
   const cambiar = (i, campo, valor) =>
     onChange(items.map((it, idx) => (idx === i ? { ...it, [campo]: valor } : it)));
   const quitar = (i) => onChange(items.filter((_, idx) => idx !== i));
@@ -91,12 +92,30 @@ export default function EditarPersonaje() {
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState(null);
 
-  const modificarMonedas = (tipo, cantidad) => {
-    setF((prev) => ({
-      ...prev,
-      [tipo]: Math.max(0, (Number(prev[tipo]) || 0) + cantidad),
-    }));
-  };
+  const especieAnterior = useRef(f.species);
+  const trasfondoAnterior = useRef(f.background);
+
+  // EFECTO REACTIVO: Sincroniza rasgos autogenerados al cambiar especie o trasfondo
+  useEffect(() => {
+    if (
+      f.species !== especieAnterior.current ||
+      f.background !== trasfondoAnterior.current
+    ) {
+      const nuevosRasgos = sincronizarRasgosAuto(
+        f.features || [],
+        f.species,
+        f.background
+      );
+
+      setF((prev) => ({
+        ...prev,
+        features: nuevosRasgos,
+      }));
+
+      especieAnterior.current = f.species;
+      trasfondoAnterior.current = f.background;
+    }
+  }, [f.species, f.background]);
 
   useEffect(() => {
     if (esNuevo) {
@@ -109,7 +128,7 @@ export default function EditarPersonaje() {
         if (!p) {
           setError("No se encontró este personaje.");
         } else {
-          setF({
+          const base = {
             ...PERSONAJE_VACIO,
             ...p,
             saves: p.saves || [],
@@ -117,7 +136,14 @@ export default function EditarPersonaje() {
             features: p.features || [],
             attacks: p.attacks || [],
             equipment: p.equipment || [],
-          });
+          };
+
+          // Garantiza la sincronización de rasgos al cargar el personaje por primera vez
+          base.features = sincronizarRasgosAuto(base.features, base.species, base.background);
+
+          setF(base);
+          especieAnterior.current = base.species;
+          trasfondoAnterior.current = base.background;
           setXp(sumarXp(p.dnd_xp_log));
         }
         setCargando(false);
@@ -143,11 +169,23 @@ export default function EditarPersonaje() {
   };
 
   const seleccionarEspecie = (nombre) => {
-    setF((prev) => aplicarPlantilla2024(prev, { especieNombre: nombre }));
+    setF((prev) => {
+      const actual = aplicarPlantilla2024(prev, { especieNombre: nombre });
+      return {
+        ...actual,
+        features: sincronizarRasgosAuto(actual.features, nombre, actual.background)
+      };
+    });
   };
 
   const seleccionarTrasfondo = (nombre) => {
-    setF((prev) => aplicarPlantilla2024(prev, { trasfondoNombre: nombre }));
+    setF((prev) => {
+      const actual = aplicarPlantilla2024(prev, { trasfondoNombre: nombre });
+      return {
+        ...actual,
+        features: sincronizarRasgosAuto(actual.features, actual.species, nombre)
+      };
+    });
   };
 
   const cargarConjuntoEstandar = () => {
@@ -170,9 +208,9 @@ export default function EditarPersonaje() {
     try {
       const limpio = {
         ...f,
-        features: f.features.filter((x) => x.name?.trim()),
-        attacks: f.attacks.filter((x) => x.name?.trim()),
-        equipment: f.equipment.filter((x) => x.name?.trim()),
+        features: (f.features || []).filter((x) => x.name?.trim()),
+        attacks: (f.attacks || []).filter((x) => x.name?.trim()),
+        equipment: (f.equipment || []).filter((x) => x.name?.trim()),
       };
 
       if (esNuevo || !limpio.id || limpio.id === "nuevo") {
@@ -235,7 +273,7 @@ export default function EditarPersonaje() {
               <div className="zz-edper__field zz-edper__field--span2">
                 <label>Nombre del aventurero *</label>
                 <input
-                  value={f.name}
+                  value={f.name || ""}
                   onChange={(e) => set("name", e.target.value)}
                   placeholder="Ej. Bruenor"
                   required
@@ -294,7 +332,7 @@ export default function EditarPersonaje() {
             </div>
           </div>
 
-          {/* MÓDULO 2: ATRIBUTOS DE CARACTERÍSTICA */}
+          {/* MÓDULO 2: ATRIBUTOS */}
           <div className="zz-edper__card">
             <div className="zz-edper__card-title">
               <span>2. Puntuaciones de Característica</span>
@@ -322,7 +360,7 @@ export default function EditarPersonaje() {
                     type="number"
                     min="1"
                     max="30"
-                    value={f[a.col]}
+                    value={f[a.col] ?? 10}
                     onChange={(e) => set(a.col, e.target.value)}
                   />
                   <div className="zz-edper__mod-badge">
@@ -336,62 +374,18 @@ export default function EditarPersonaje() {
           {/* MÓDULO 3: COMBATE */}
           <div className="zz-edper__card">
             <div className="zz-edper__card-title">3. Estadísticas de Combate y Protección</div>
-            
             <div className="zz-edper__grid-combate">
 
-              {/* Selector de Armadura Equipada */}
-              <div className="zz-edper__field">
-                <label>Armadura Equipada</label>
-                <select 
-                  value={f.armor_type || "ninguna"} 
-                  onChange={(e) => {
-                    const tipo = e.target.value;
-                    const nuevaCA = calcularCAAutomatico(tipo, ficha.mods.dex, f.has_shield);
-                    setF((prev) => ({ ...prev, armor_type: tipo, ac: nuevaCA }));
-                  }}
-                >
-                  <option value="ninguna">Sin Armadura (10 + DES)</option>
-                  <option value="cuero">Cuero (11 + DES)</option>
-                  <option value="cuero_tachonado">Cuero Tachonado (12 + DES)</option>
-                  <option value="cota_escamas">Cota de Escamas (14 + DES máx +2)</option>
-                  <option value="coraza">Coraza (15 + DES máx +2)</option>
-                  <option value="cota_malla">Cota de Malla (16 Fijo)</option>
-                  <option value="placas">Placas (18 Fijo)</option>
-                </select>
-                <span className="zz-edper__subtext">Afecta cálculo de CA</span>
-              </div>
-
-              {/* Checkbox de Escudo */}
-              <div className="zz-edper__field" style={{ justifyContent: "center" }}>
-                <label className="zz-bit__check" style={{ marginTop: "1.2rem" }}>
-                  <input 
-                    type="checkbox" 
-                    checked={Boolean(f.has_shield)} 
-                    onChange={(e) => {
-                      const tieneEscudo = e.target.checked;
-                      const nuevaCA = calcularCAAutomatico(f.armor_type || "ninguna", ficha.mods.dex, tieneEscudo);
-                      setF((prev) => ({ ...prev, has_shield: tieneEscudo, ac: nuevaCA }));
-                    }} 
-                  />
-                  Lleva Escudo (+2 CA)
-                </label>
-                <span className="zz-edper__subtext"></span>
-              </div>
-
-              {/* CA Resultante (Editable por si hay objetos mágicos) */}
               <div className="zz-edper__field">
                 <label>Clase de Armadura (CA)</label>
-                <input type="number" value={f.ac} onChange={(e) => set("ac", e.target.value)} />
-                <span className="zz-edper__subtext">Calculada: <strong>{f.ac}</strong></span>
+                <input type="number" value={f.ac ?? 10} onChange={(e) => set("ac", e.target.value)} />
               </div>
 
               <div className="zz-edper__field">
                 <label>Vida Máxima (PG)</label>
-                <input type="number" value={f.hp_max} onChange={(e) => set("hp_max", e.target.value)} />
-                <span className="zz-edper__subtext"></span>
+                <input type="number" value={f.hp_max ?? 10} onChange={(e) => set("hp_max", e.target.value)} />
               </div>
 
-              {/* VIDA ACTUAL (NUEVO CAMPO) */}
               <div className="zz-edper__field">
                 <label>Vida Actual (HP Current)</label>
                 <input
@@ -413,7 +407,6 @@ export default function EditarPersonaje() {
               <div className="zz-edper__field">
                 <label>Dado de Golpe</label>
                 <input value={f.hit_die || ""} onChange={(e) => set("hit_die", e.target.value)} placeholder="1d8" />
-                <span className="zz-edper__subtext"></span>
               </div>
 
             </div>
@@ -425,7 +418,6 @@ export default function EditarPersonaje() {
               4. Competencias: Tiradas de Salvación y Habilidades
             </summary>
             <div className="zz-edper__details-body">
-              {/* LEYENDA CON ESTRUCTURA LIMPIA */}
               <div className="zz-edper__leyenda-box">
                 <p className="zz-edper__leyenda-titulo">💡 Guía rápida de símbolos y modificadores:</p>
                 <div className="zz-edper__leyenda-items">
@@ -478,88 +470,72 @@ export default function EditarPersonaje() {
             </div>
           </details>
 
-          {/* MÓDULO 5: DOMINIOS Y COMPETENCIAS ADICIONALES */}
+          {/* MÓDULO 5: DOMINIOS */}
           <details className="zz-edper__details">
-          <summary className="zz-edper__summary">
-            5. Idiomas y Competencias de Equipo <span className="zz-edper__tag-opt">(Autocompletado según Plantilla)</span>
-          </summary>
-          <div className="zz-edper__details-body">
-            <p className="zz-edper__explicacion">
-              Estos dominios se configuran automáticamente al elegir tu Clase, Especie y Trasfondo.
-            </p>
-
-            <div className="zz-edper__grid-identidad">
-              
-              <div className="zz-edper__field">
-                <label>Idiomas Conocidos</label>
-                <input 
-                  value={f.languages || ""} 
-                  onChange={(e) => set("languages", e.target.value)} 
-                  placeholder="Ej. Común, Élfico, Jerga de ladrones" 
-                />
-                <span className="zz-edper__subtext">Otorgado por Especie y Trasfondo</span>
+            <summary className="zz-edper__summary">
+              5. Idiomas y Competencias de Equipo
+            </summary>
+            <div className="zz-edper__details-body">
+              <div className="zz-edper__grid-identidad">
+                <div className="zz-edper__field">
+                  <label>Idiomas Conocidos</label>
+                  <input 
+                    value={f.languages || ""} 
+                    onChange={(e) => set("languages", e.target.value)} 
+                    placeholder="Ej. Común, Élfico" 
+                  />
+                </div>
+                <div className="zz-edper__field">
+                  <label>Competencia en Armaduras</label>
+                  <input 
+                    value={f.armor_prof || ""} 
+                    onChange={(e) => set("armor_prof", e.target.value)} 
+                    placeholder="Ej. Armadura Ligera" 
+                  />
+                </div>
+                <div className="zz-edper__field">
+                  <label>Armas Permitidas</label>
+                  <input 
+                    value={f.weapon_prof || ""} 
+                    onChange={(e) => set("weapon_prof", e.target.value)} 
+                    placeholder="Ej. Simples, Marciales" 
+                  />
+                </div>
+                <div className="zz-edper__field">
+                  <label>Dominio de Armas (Weapon Mastery)</label>
+                  <input 
+                    value={f.weapon_mastery || ""} 
+                    onChange={(e) => set("weapon_mastery", e.target.value)} 
+                    placeholder="Ej. Daga (Nick), Estoque (Vex)" 
+                  />
+                </div>
+                <div className="zz-edper__field">
+                  <label>Herramientas y Juegos</label>
+                  <input 
+                    value={f.tool_prof || ""} 
+                    onChange={(e) => set("tool_prof", e.target.value)} 
+                    placeholder="Ej. Herramientas de Ladrón" 
+                  />
+                </div>
               </div>
-
-              <div className="zz-edper__field">
-                <label>Competencia en Armaduras</label>
-                <input 
-                  value={f.armor_prof || ""} 
-                  onChange={(e) => set("armor_prof", e.target.value)} 
-                  placeholder="Ej. Armadura Ligera" 
-                />
-                <span className="zz-edper__subtext">Otorgado por tu Clase</span>
-              </div>
-
-              <div className="zz-edper__field">
-                <label>Armas Permitidas</label>
-                <input 
-                  value={f.weapon_prof || ""} 
-                  onChange={(e) => set("weapon_prof", e.target.value)} 
-                  placeholder="Ej. Simples, Marciales, Sutiles" 
-                />
-                <span className="zz-edper__subtext">Otorgado por tu Clase</span>
-              </div>
-
-              <div className="zz-edper__field">
-                <label>Dominio de Armas (Weapon Mastery)</label>
-                <input 
-                  value={f.weapon_mastery || ""} 
-                  onChange={(e) => set("weapon_mastery", e.target.value)} 
-                  placeholder="Ej. Daga (Nick), Estoque (Vex)" 
-                />
-                <span className="zz-edper__subtext">Propiedades tácticas D&D 2024</span>
-              </div>
-
-              <div className="zz-edper__field">
-                <label>Herramientas y Juegos</label>
-                <input 
-                  value={f.tool_prof || ""} 
-                  onChange={(e) => set("tool_prof", e.target.value)} 
-                  placeholder="Ej. Herramientas de Ladrón" 
-                />
-                <span className="zz-edper__subtext">Otorgado por Clase y Trasfondo</span>
-              </div>
-
             </div>
-          </div>
-        </details>
-          
+          </details>
 
           {/* MÓDULO 6: RASGOS Y ATAQUES */}
-          <details className="zz-edper__details">
+          <details className="zz-edper__details" open>
             <summary className="zz-edper__summary">
               6. Rasgos, Ataques e Inventario
             </summary>
             <div className="zz-edper__details-body">
 
               <ListaEditable
-                ayuda="Habilidades especiales, talentos de origen y capacidades de clase."
-                items={f.features}
+                ayuda="Habilidades especiales, talentos de origen (autogenerados según tu Especie y Trasfondo)."
+                items={f.features || []}
                 onChange={(v) => set("features", v)}
                 vacio={{ name: "", text: "" }}
-                textoAgregar="+ Agregar rasgo"
+                textoAgregar="+ Agregar rasgo manual"
                 campos={[
-                  { key: "name", placeholder: "Nombre del rasgo (ej. Segundo Aliento)" },
+                  { key: "name", placeholder: "Nombre del rasgo (ej. Suerte)" },
                   { key: "text", placeholder: "Descripción o efecto…", tipo: "textarea" },
                 ]}
               />
@@ -568,7 +544,7 @@ export default function EditarPersonaje() {
 
               <ListaEditable
                 ayuda="Ataques con armas y hechizos."
-                items={f.attacks}
+                items={f.attacks || []}
                 onChange={(v) => set("attacks", v)}
                 vacio={{ name: "", range: "", bonus: "", damage: "", notes: "" }}
                 textoAgregar="+ Agregar arma"
@@ -585,7 +561,7 @@ export default function EditarPersonaje() {
 
               <ListaEditable
                 ayuda="Mochila y objetos."
-                items={f.equipment}
+                items={f.equipment || []}
                 onChange={(v) => set("equipment", v)}
                 vacio={{ name: "", qty: 1 }}
                 textoAgregar="+ Agregar objeto"
@@ -598,29 +574,27 @@ export default function EditarPersonaje() {
               <div className="zz-edper__grid-monedas">
                 <div className="zz-edper__field">
                   <label>Oro (po)</label>
-                  <input type="number" min="0" value={f.gp} onChange={(e) => set("gp", e.target.value)} />
+                  <input type="number" min="0" value={f.gp ?? 0} onChange={(e) => set("gp", e.target.value)} />
                 </div>
                 <div className="zz-edper__field">
                   <label>Plata (pp)</label>
-                  <input type="number" min="0" value={f.sp} onChange={(e) => set("sp", e.target.value)} />
+                  <input type="number" min="0" value={f.sp ?? 0} onChange={(e) => set("sp", e.target.value)} />
                 </div>
                 <div className="zz-edper__field">
                   <label>Cobre (pc)</label>
-                  <input type="number" min="0" value={f.cp} onChange={(e) => set("cp", e.target.value)} />
+                  <input type="number" min="0" value={f.cp ?? 0} onChange={(e) => set("cp", e.target.value)} />
                 </div>
               </div>
 
             </div>
           </details>
-          
 
-          {/* MÓDULO 7: HISTORIA Y PUBLICACIÓN */}
+          {/* MÓDULO 7: RETRATO Y NOTAS */}
           <details className="zz-edper__details">
             <summary className="zz-edper__summary">
               7. Retrato, Historia y Visibilidad
             </summary>
             <div className="zz-edper__details-body">
-
               <div className="zz-edper__field">
                 <label>Foto de Retrato</label>
                 <ImageUpload
@@ -644,16 +618,14 @@ export default function EditarPersonaje() {
               <label className="zz-bit__check" style={{ marginTop: "1rem" }}>
                 <input
                   type="checkbox"
-                  checked={f.published}
+                  checked={Boolean(f.published)}
                   onChange={(e) => set("published", e.target.checked)}
                 />
                 Publicado (visible para todos en la bitácora)
               </label>
-
             </div>
           </details>
 
-          {/* ACCIONES */}
           <div className="zz-bit__acciones" style={{ marginTop: "var(--space-lg)" }}>
             <button className="btn" type="submit" disabled={guardando}>
               {guardando ? "Guardando…" : "Guardar personaje"}

@@ -7,6 +7,7 @@ import XpBar from "../../components/XpBar";
 import Sigil from "../../components/Sigil";
 import { fechaCorta } from "./Bitacora";
 import "./bitacora.css";
+import { exportarFichaPdf, exportarFichaPng } from "../../lib/fichaExport";
 
 export default function Personaje() {
   const { slug } = useParams();
@@ -41,6 +42,21 @@ export default function Personaje() {
       0
     );
   }, [p]);
+
+  const [exportando, setExportando] = useState(false);
+
+  const manejarExportar = async (formato) => {
+    if (!p || exportando) return;
+    setExportando(true);
+    try {
+      if (formato === "png") await exportarFichaPng(p, xp);
+      else await exportarFichaPdf(p, xp);
+    } catch (err) {
+      alert("Error al exportar la ficha: " + err.message);
+    } finally {
+      setExportando(false);
+    }
+  };
 
   if (estado === "cargando") {
     return (
@@ -81,6 +97,20 @@ export default function Personaje() {
             {puedeEditar && (
               <div className="zz-bit__acciones">
                 <Link to={`/bitacora/editar/personaje/${p.id}`} className="btn btn-ghost">Editar hoja</Link>
+                <button 
+                  className="btn btn-ghost" 
+                  onClick={() => manejarExportar("pdf")} 
+                  disabled={exportando}
+                >
+                  {exportando ? "Generando…" : "📄 Exportar PDF"}
+                </button>
+                <button 
+                  className="btn btn-ghost" 
+                  onClick={() => manejarExportar("png")} 
+                  disabled={exportando}
+                >
+                  {exportando ? "Generando…" : "🖼️ Exportar PNG"}
+                </button>
               </div>
             )}
           </div>

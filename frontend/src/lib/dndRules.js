@@ -602,23 +602,83 @@ export function calcularPuntosPointBuy(personaje) {
   return totalPuntos;
 }
 
+/* ---------------- CATÁLOGO D&D 2024: ESPECIES Y TRASFONDOS ---------------- */
+
+export const RASGOS_ESPECIE = {
+  Humano: [
+    { name: "Recurso Humano", text: "Ganas Inspiración Heroica siempre que finalices un Descanso Largo." },
+    { name: "Ambicioso", text: "Ganas un Talento de Origen adicional a tu elección." },
+    { name: "Versátil", text: "Ganas competencia en una habilidad adicional a tu elección." }
+  ],
+  Elfo: [
+    { name: "Visión en la Oscuridad", text: "Puedes ver en la penumbra a 60 pies como si fuera luz brillante y en la oscuridad como si fuera penumbra." },
+    { name: "Ancestros Feéricos", text: "Tienes ventaja en las tiradas de salvación que hagas para evitar o terminar la condición de Encantado." },
+    { name: "Trance", text: "No necesitas dormir. Meditar durante 4 horas te otorga los mismos beneficios que un Descanso Largo." }
+  ],
+  Mediano: [
+    { name: "Corajudo", text: "Tienes ventaja en las tiradas de salvación que hagas para evitar o terminar la condición de Asustado." },
+    { name: "Agilidad de Mediano", text: "Puedes moverte a través del espacio de cualquier criatura que sea de un tamaño mayor que el tuyo." },
+    { name: "Suerte", text: "Cuando saques un 1 en el d20 en una prueba, ataque o salvación, puedes volver a tirar el dado." },
+    { name: "Sigiloso por Naturaleza", text: "Puedes intentar esconderte incluso cuando solo estás oculto por una criatura más grande que tú." }
+  ],
+  Enano: [
+    { name: "Visión en la Oscuridad", text: "Puedes ver en la penumbra a 60 pies como si fuera luz brillante y en la oscuridad como si fuera penumbra." },
+    { name: "Resistencia Enana", text: "Tienes ventaja en salvaciones contra veneno y resistencia al daño de veneno." },
+    { name: "Dureza Enana", text: "Tu máximo de puntos de vida aumenta en 1, y aumenta en 1 más cada vez que ganas un nivel." }
+  ],
+  Gnomo: [
+    { name: "Visión en la Oscuridad Superior", text: "Puedes ver en la penumbra y oscuridad hasta un alcance de 60 pies." },
+    { name: "Cultura Gnomica", text: "Tienes ventaja en todas las tiradas de salvación de Inteligencia, Sabiduría y Carisma contra magia." }
+  ],
+  Goliat: [
+    { name: "Ancestros Gigantescos", text: "Posees una habilidad especial de linaje de gigante (fuerza sobrenatural, resistencia al frío o teleportación menor)." },
+    { name: "Gran Corpulencia", text: "Cuentas como un tamaño más grande al determinar tu capacidad de carga y peso que puedes empujar o levantar." }
+  ],
+  Dracónido: [
+    { name: "Ataque de Aliento", text: "Puedes exhalar energía destructiva según tu ancestro dragón en un cono o línea." },
+    { name: "Resistencia Elemental", text: "Tienes resistencia al tipo de daño asociado a tu ancestro dragónico." }
+  ],
+  Orco: [
+    { name: "Visión en la Oscuridad", text: "Puedes ver en la penumbra a 60 pies como si fuera luz brillante y en la oscuridad como si fuera penumbra." },
+    { name: "Embestida Adrenalínica", text: "Puedes usar tu acción de Bonificación para Correr hacia un enemigo y ganar Puntos de Vida Temporales." },
+    { name: "Tenacidad Feroz", text: "Cuando caes a 0 Puntos de Vida sin morir al instante, puedes optar por quedar a 1 Punto de Vida en su lugar." }
+  ]
+};
+
+export const RASGOS_TRASFONDO = {
+  Acólito: [
+    { name: "Talento de Origen: Iniciado en la Magia (Clérigo)", text: "Conoces dos trucos y un conjuro de nivel 1 de la lista del Clérigo." }
+  ],
+  Criminal: [
+    { name: "Talento de Origen: Alerta", text: "Ganas tu Bono de Competencia a las tiradas de Iniciativa. Al inicio del combate, puedes intercambiar tu iniciativa con un aliado dispuesto." }
+  ],
+  Soldado: [
+    { name: "Talento de Origen: Combatiente Calentado", text: "Ganas un bonificador táctico de combate cuerpo a cuerpo y maniobras de campo." }
+  ],
+  Granjero: [
+    { name: "Talento de Origen: Dureza", text: "Tu máximo de Puntos de Vida aumenta en 2 por cada nivel que tengas." }
+  ],
+  Erudito: [
+    { name: "Talento de Origen: Hábil", text: "Ganas competencia en tres habilidades o herramientas adicionales a tu elección." }
+  ]
+};
+
 /**
- * Calcula el valor total en Piezas de Oro y el peso total del monedero
+ * Filtra y actualiza automáticamente el arreglo de rasgos sin duplicar
  */
-export function calcularRiqueza(personaje) {
-  const gp = Number(personaje.gp || 0);
-  const sp = Number(personaje.sp || 0);
-  const cp = Number(personaje.cp || 0);
+export function sincronizarRasgosAuto(featuresActuales = [], nuevaEspecie, nuevoTrasfondo, viejaEspecie, viejoTrasfondo) {
+  // Nombres de rasgos que pertenecen a alguna especie o trasfondo conocido
+  const todosAutoNombres = new Set([
+    ...Object.values(RASGOS_ESPECIE).flatMap(arr => arr.map(r => r.name)),
+    ...Object.values(RASGOS_TRASFONDO).flatMap(arr => arr.map(r => r.name)),
+  ]);
 
-  // Conversión oficial: 10 pp = 1 po | 100 pc = 1 po
-  const valorTotalEnPo = gp + (sp / 10) + (cp / 100);
-  
-  // Peso oficial: 50 monedas = 1 lb
-  const totalMonedas = gp + sp + cp;
-  const pesoMonedasLbs = (totalMonedas / 50).toFixed(1);
+  // Conservar solo los rasgos propios creados manualmente por el usuario
+  const rasgosManuales = featuresActuales.filter(r => !todosAutoNombres.has(r.name));
 
-  return {
-    valorTotalEnPo: valorTotalEnPo.toFixed(2),
-    pesoMonedasLbs: Number(pesoMonedasLbs)
-  };
+  // Obtener los nuevos rasgos oficiales
+  const autoEspecie = RASGOS_ESPECIE[nuevaEspecie] || [];
+  const autoTrasfondo = RASGOS_TRASFONDO[nuevoTrasfondo] || [];
+
+  return [...autoEspecie, ...autoTrasfondo, ...rasgosManuales];
 }

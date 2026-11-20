@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuth } from "../../lib/AuthContext";
+import { exportarPedidosFestinExcel } from "../../lib/festinExcel";
 import "./admin.css";
 import "./adminFestines.css";
 
@@ -108,12 +109,25 @@ export default function AdminFestinPedidos() {
     setPedidos((prev) => prev.map((p) => (p.id === pedido.id ? { ...p, status: nuevo } : p)));
   };
 
+  // Exporta TODOS los pedidos del festín (no solo los que dejó la búsqueda).
+  const exportarExcel = () => {
+    try {
+      exportarPedidosFestinExcel(festin, pedidos);
+    } catch (err) {
+      alert("No se pudo generar el Excel: " + err.message);
+    }
+  };
+
   return (
     <section className="section container">
       <div className="zz-admin__header">
         <div>
           <p className="eyebrow">Pedidos del festín</p>
           <h1>{festin ? festin.title : "Festín"}</h1>
+        </div>
+        <div className="zz-admin__header-acciones">
+          <Link to="/admin/festines" className="btn btn-ghost">← Festines</Link>
+          <button className="btn btn-ghost" onClick={logout}>Cerrar sesión</button>
         </div>
       </div>
 
@@ -158,6 +172,9 @@ export default function AdminFestinPedidos() {
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
             />
+            <button className="btn" onClick={exportarExcel} disabled={pedidos.length === 0}>
+              Exportar a Excel
+            </button>
           </div>
 
           {filtrados.length === 0 ? (
@@ -182,6 +199,14 @@ export default function AdminFestinPedidos() {
                     <tr key={p.id} className={p.status === "cancelado" ? "zz-admin__fila--inactiva" : ""}>
                       <td>
                         <span className="zz-admin__tabla-codigo">{p.order_number}</span>
+                        {p.updated_at && (
+                          <div className="zz-admin__compromiso">
+                            Actualizado{" "}
+                            {new Date(p.updated_at).toLocaleString("es-PE", {
+                              day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit",
+                            })}
+                          </div>
+                        )}
                         {p.pay_later && p.status === "pendiente_verificacion" && p.commitment_date && (
                           <div
                             className={`zz-admin__compromiso ${
